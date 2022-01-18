@@ -1,0 +1,56 @@
+{
+  "private": true,
+  "name": "remix-app-template",
+  "description": "",
+  "license": "",
+  "scripts": {
+    "build": "remix build",
+    "dev": "remix dev",
+    "lint": "TIMING=1 eslint \"{app,lib,test}/**/*.{ts,tsx}\" --fix",
+    "postinstall": "remix setup node",
+    "start": "remix-serve build",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@prisma/client": "^3.7.0",
+    "@remix-run/react": "^1.1.1",
+    "@remix-run/serve": "^1.1.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "remix": "^1.1.1"
+  },
+  "devDependencies": {
+    "@remix-run/dev": "^1.1.1",
+    "@types/node": "^16.0.0",
+    "@types/react": "^17.0.24",
+    "@types/react-dom": "^17.0.9",
+    "@typescript-eslint/eslint-plugin": "^5.9.0",
+    "@typescript-eslint/parser": "^5.9.0",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "husky": ">=6",
+    "lint-staged": ">=10",
+    "prettier": "^2.3.2",
+    "prisma": "^3.7.0",
+    "typescript": "^4.1.2"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "sideEffects": false,
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --quiet --fix"
+    ],
+    "*.{json,md,html,js,jsx,ts,tsx}": [
+      "prettier --write"
+    ],
+    "*.{ts,tsx}": [
+      "bash -c tsc --noEmit"
+    ]
+  }
+}
