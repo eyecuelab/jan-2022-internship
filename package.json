@@ -4,9 +4,9 @@
   "description": "",
   "license": "",
   "scripts": {
-    "build": "node -r dotenv/config node_modules/.bin/remix dev",
-    "dev": "remix dev",
-    "lint": "TIMING=1 eslint \"{app,lib,test}/**/*.{ts,tsx}\" ",
+    "build": "remix build",
+    "dev": "node -r dotenv/config node_modules/.bin/remix dev",
+    "lint": "TIMING=1 eslint \"{app,lib,test}/**/*.{ts,tsx}\" --fix",
     "postinstall": "remix setup node",
     "start": "remix-serve build",
     "prepare": "husky install"
