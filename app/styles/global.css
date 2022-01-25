@@ -1,0 +1,32 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+body {
+  background: #000;
+}
+
+.movies {
+  display: grid;
+  justify-content: center;
+}
+
+.movies li {
+  list-style: none;
+  margin: 10px;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  background: #272727;
+}
+
+.movies li img {
+  max-width: 300px;
+  border-radius: 12px;
+}
+
+.movies li h4 {
+  color: #fff;
+  font-size: 1.8em;
+  padding: 15px 10px 0;
+  margin-top: auto;
+  font-family: Roboto, sans-serif;
+}

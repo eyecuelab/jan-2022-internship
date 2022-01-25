@@ -6,6 +6,8 @@ import {
   Scripts,
   ScrollRestoration,
 } from "remix";
+
+
 import type { MetaFunction } from "remix";
 
 export const meta: MetaFunction = () => {
@@ -13,6 +15,7 @@ export const meta: MetaFunction = () => {
 };
 
 export default function App() {
+  const API_KEY = '';
   return (
     <html lang="en">
       <head>
@@ -26,6 +29,7 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === "development" && <LiveReload />}
+        {process.env.API_KEY}
       </body>
     </html>
   );
