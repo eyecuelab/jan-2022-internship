@@ -29,7 +29,6 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === "development" && <LiveReload />}
-        {process.env.API_KEY}
       </body>
     </html>
   );

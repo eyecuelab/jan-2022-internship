@@ -13,4 +13,5 @@ datasource db {
 model Movie {
   id    String @id @default(uuid())
   title String
+  plot  String
 }
