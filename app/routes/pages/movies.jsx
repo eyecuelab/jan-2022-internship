@@ -1,20 +1,19 @@
-import { useLoaderData } from "remix";
+import { useLoaderData, Link } from "remix";
 import globalStylesUrl from "~/styles/global.css";
+//import * as dotenv from "dotenv";
 
-console.log(process.env.NODE_ENV);
+//console.log(process.env.NODE_ENV);
 export const links = () => [{ rel: "stylesheet", href: globalStylesUrl }];
 
 const IMG_URL = "https://image.tmdb.org/t/p/w500";
 
 export async function loader() {
-  const API_KEY = process.env.API_KEY;
-  console.log(process.env.API_KEY);
+  //dotenv.config();
+  //const API_KEY = process.env.API_KEY;
+  console.log(API_KEY);
   const BASE_URL = "https://api.themoviedb.org/3";
   const API_URL =
-    BASE_URL +
-    "/discover/movie?sort_by=popularity.desc&" +
-    "api_key=" +
-    API_KEY;
+    BASE_URL + "/discover/movie?sort_by=popularity.desc&api_key=" + API_KEY;
   let res = await fetch(API_URL);
   return res.json();
 }
@@ -22,13 +21,16 @@ export async function loader() {
 export default function showMovies() {
   const list = useLoaderData();
   const movies = list.results;
-  console.log(list);
-  console.log(movies);
+  //console.log(list);
+  //console.log(movies);
 
   return (
     <div className="container">
       <div className="movies">
         <h1>All Movies</h1>
+        <div>
+          <Link to="/pages/moviesdb">Back to Movies from DB</Link>
+        </div>
         <ul>
           {movies &&
             movies.map((item) => {

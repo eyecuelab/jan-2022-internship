@@ -3,7 +3,7 @@ const db = new PrismaClient();
 
 async function seed() {
   await Promise.all(
-    getMovies().map((joke) => {
+    getMovies().map((movie) => {
       return db.movie.create({ data: movie });
     })
   );
