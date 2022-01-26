@@ -30,6 +30,11 @@ export const loader = async () => {
   return dbMovies;
 };
 
+// export async function getMovieById(movieId: string){
+//   const movies = useLoaderData();
+//   return movieId
+// }
+
 // This is the react component that renders on the client:
 export default function Movies() {
   const movies = useLoaderData();
