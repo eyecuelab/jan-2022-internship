@@ -14,5 +14,5 @@ model Movie {
   id    String @id @default(uuid())
   title String
   overview  String
-  posterPath String
+  posterPath String?
 }

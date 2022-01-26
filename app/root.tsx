@@ -7,7 +7,6 @@ import {
   ScrollRestoration,
 } from "remix";
 
-
 import type { MetaFunction } from "remix";
 
 export const meta: MetaFunction = () => {
@@ -15,7 +14,6 @@ export const meta: MetaFunction = () => {
 };
 
 export default function App() {
-  const API_KEY = '';
   return (
     <html lang="en">
       <head>
