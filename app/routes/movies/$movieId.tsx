@@ -32,11 +32,14 @@ export default function Movie() {
       <div>
         {movie.id && (
           <form method='POST'>
-            <input type='hidden' name='_method' value='delete' />
-            <button>Delete</button>
+            <input type='hidden' name='_method' value='yes' />
+            <button>Yes</button>
+            <input type='hidden' name='_method' value='no' />
+            <button>No</button>
           </form>
         )}
       </div>
     </div>
   )
 }
+
