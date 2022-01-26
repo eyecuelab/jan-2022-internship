@@ -1,4 +1,6 @@
+import { Link } from "react-router-dom";
 import { useLoaderData } from "remix";
+//import { getMovies } from "~/api/getmovies";
 import { db } from "~/utils/db.server";
 
 // This function happens on the server, so we have access to the server environment files.
@@ -7,8 +9,11 @@ export const loader = async () => {
   // Get movies from the movie db API:
   const BASE_URL = "https://api.themoviedb.org/3";
   const API_URL = `${BASE_URL}/discover/movie?sort_by=popularity.desc&api_key=${process.env.API_KEY}`;
+  
   const res = await fetch(API_URL);
   const moviesFromAPI = await res.json();
+  // const movies = await getMovies();
+  // const moviesFromAPI = movies.results;
 
   // Delete all movies in db and then write the newly fetched movies to database:
   await db.movie.deleteMany({});
@@ -39,10 +44,12 @@ export default function Movies() {
             movies.map((movie: any) => {
               const poster = IMG_URL + movie.posterPath;
               return (
-                <li key={movie.id}>
+                <Link key={movie.id} to={movie.id}>
+                  <li>
                   <img src={poster} />
                   <h4>{movie.title}</h4>
-                </li>
+                  </li>
+                </Link>
               );
             })}
         </ul>
