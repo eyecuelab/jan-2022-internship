@@ -3,6 +3,7 @@ import { Link, Outlet, useLoaderData } from "remix";
 import { db } from "~/utils/db.server";
 import stylesUrl from "~/styles/global.css";
 
+
 export const links: LinksFunction = () => {
   return [
     {
@@ -43,11 +44,14 @@ export default function MoviesRoute() {
       <main>
         <div className="container">
           <div>
-            <Link to="/pages/movies">Pulling form API</Link>
+            <Link to="/pages/moviesapi">Pulling form API</Link>
             <ul>
               {data.movieListItems.map(movie => (
                 <li key={movie.id}>
-                  <Link to={movie.id}>{movie.title}</Link>
+                  <Link to={movie.id}>
+                    <h3>{movie.title}</h3>
+                    <p>{movie.plot}</p>
+                  </Link>
                 </li>
               ))}
             </ul>

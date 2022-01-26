@@ -1,5 +1,6 @@
 import { useLoaderData, Link } from "remix";
 import globalStylesUrl from "~/styles/global.css";
+import { writeToDB } from "./movies.server";
 //import * as dotenv from "dotenv";
 
 //console.log(process.env.NODE_ENV);
@@ -18,11 +19,34 @@ export async function loader() {
   return res.json();
 }
 
+// const { PrismaClient } = require("@prisma/client");
+// const prisma = new PrismaClient();
+
+// async function writeToDB() {
+//   const data = useLoaderData();
+//   console.log(data.results);
+
+//   const movieTitle = data.results.title;
+
+//   await prisma.movie.create({
+//     data: {
+//       id: data.id,
+//       title: "Scary Movie",
+//       plot: "Scary Plot",
+//       // title: movieTitle,
+//       // plot: data.overview,
+
+//       //id: id,
+//       // title: "New Movie",
+//       // plot: "New Plot",
+//     },
+//   });
+// }
+
 export default function showMovies() {
   const list = useLoaderData();
   const movies = list.results;
-  //console.log(list);
-  //console.log(movies);
+  writeToDB();
 
   return (
     <div className="container">
