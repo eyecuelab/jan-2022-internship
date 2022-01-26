@@ -7,7 +7,7 @@ export default function getMovies() {
       <p>Feel free to look around.</p>
       <ul>
         <li>
-          <Link to="pages/movies">Begin</Link>
+          <Link to="movies">Begin</Link>
         </li>
       </ul>
     </div>

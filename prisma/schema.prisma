@@ -13,5 +13,6 @@ datasource db {
 model Movie {
   id    String @id @default(uuid())
   title String
-  plot  String
+  overview  String
+  posterPath String?
 }
