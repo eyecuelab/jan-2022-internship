@@ -4,15 +4,27 @@ import { db } from "~/utils/db.server";
 export async function action({ request, params }) {
   const formData = await request.formData();
   let value = Object.fromEntries(formData)
-  return value;
+
+  const updatedTaste = await db.movie.update({
+    where: { id: params.movieId },
+    data: { tasteProfile: value.actionType }
+  })
+
+  if (!value) throw new Error('No input was provided')
+  const data = { updatedTaste }
+  console.log(data);
+  redirect(`/movies/`);
+  return updatedTaste;
+  //return value;
 }
 
-// export async function updateDB(){
-//     const params = useLoaderData()
-//     const value = useActionData();
-//     const updatedTaste = await db.movie.update({
+// export async function updateDB() {
+//   const params = useLoaderData()
+//   const value = useActionData();
+
+//   const updatedTaste = await db.movie.update({
 //     where: { id: params.movieId },
-//     data: { tasteProfile: value}
+//     data: { tasteProfile: value }
 //   })
 
 //   if (!value) throw new Error('No input was provided')
@@ -20,7 +32,7 @@ export async function action({ request, params }) {
 //   console.log(data);
 //   redirect(`/movies/`);
 //   return updatedTaste;
-//  }
+// }
 
 export const loader = async ({ params }) => {
   const movie = await db.movie.findUnique({
@@ -29,7 +41,6 @@ export const loader = async ({ params }) => {
   if (!movie) throw new Error('Movie not found')
   const data = { movie }
   return data
-
 }
 
 export default function Movie() {
@@ -38,7 +49,6 @@ export default function Movie() {
   const poster = IMG_URL + movie.posterPath;
   const vote = useActionData();
   console.log(vote);
-  //updateDB();
 
   return (
     <div>
@@ -62,6 +72,13 @@ export default function Movie() {
           <h1>{movie.title}</h1>
           <h3>{movie.id}</h3>
           <img src={poster} />
+        </div>
+        <div>
+          {vote?.errors ? (
+            <p style={{ color: "red" }}>
+              {vote.errors}
+            </p>
+          ) : null}
         </div>
       </div>
     </div>

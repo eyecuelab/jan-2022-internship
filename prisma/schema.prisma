@@ -15,5 +15,5 @@ model Movie {
   title        String
   overview     String
   posterPath   String?
-  tasteProfile Boolean @default(false)
+  tasteProfile String?
 }
