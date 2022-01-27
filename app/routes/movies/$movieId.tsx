@@ -5,14 +5,16 @@ import { db } from "~/utils/db.server";
 export const loader = async ({ params }) => {
   console.log(params.movieId);
   
-  const movies = await db.movie.findUnique({
+  const movie = await db.movie.findUnique({
     where: { id: params.movieId },
   })
 
-  if (!movies) throw new Error('Movie not found')
+  if (!movie) throw new Error('Movie not found')
 
-  const data = { movies }
+  const data = { movie }
+  console.log(data);
   return data
+  
 }
 
 export default function Movie() {
@@ -24,7 +26,8 @@ export default function Movie() {
     <div>
       <div className='page-header'>
         <h1>{movie.title}</h1>
-        <Link to='/'>
+        <h3>{movie.id}</h3>
+        <Link to='/movies'>
           Back
         </Link>
       </div>
