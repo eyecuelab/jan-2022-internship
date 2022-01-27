@@ -32,7 +32,7 @@ module.exports = {
   rules: {
     "@typescript-eslint/interface-name-prefix": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "error",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-floating-promises": 2, // 2 === "error"
     "react/react-in-jsx-scope": "off",
@@ -40,6 +40,12 @@ module.exports = {
       "error",
       {
         endOfLine: "auto",
+      },
+    ],
+    "@typescript-eslint/consistent-type-imports": [
+      `error`,
+      {
+        prefer: `type-imports`,
       },
     ],
   },

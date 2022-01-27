@@ -8,12 +8,13 @@ import {
 } from "remix";
 
 import type { MetaFunction } from "remix";
+import type { FC } from "react";
 
 export const meta: MetaFunction = () => {
   return { title: "New Remix App" };
 };
 
-export default function App() {
+const App: FC = () => {
   return (
     <html lang="en">
       <head>
@@ -30,4 +31,6 @@ export default function App() {
       </body>
     </html>
   );
-}
+};
+
+export default App;

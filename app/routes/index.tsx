@@ -1,6 +1,7 @@
+import type { FC } from "react";
 import { Link } from "remix";
 
-export default function getMovies() {
+const Index: FC = () => {
   return (
     <div>
       <h1>Lets pick a movie</h1>
@@ -12,4 +13,6 @@ export default function getMovies() {
       </ul>
     </div>
   );
-}
+};
+
+export default Index;
