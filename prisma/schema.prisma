@@ -11,8 +11,9 @@ datasource db {
 }
 
 model Movie {
-  id    String @id @default(uuid())
-  title String
-  overview  String
-  posterPath String?
+  id           String  @id @default(uuid())
+  title        String
+  overview     String
+  posterPath   String?
+  tasteProfile Boolean @default(false)
 }
