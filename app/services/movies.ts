@@ -1,5 +1,4 @@
 import type { Movie } from "@prisma/client";
-import { json } from "remix";
 import { db } from "~/utils/db.server";
 import { getAndTransformApiMovies } from "./api";
 
@@ -22,9 +21,10 @@ export const syncMovies = async (): Promise<number> => {
     return movieInputs.length;
   } catch (error) {
     // throw an error if something goes wrong
-    // throwing as json lets remix handle the response
+    // throwing as Response lets remix handle the response
     // to the client
-    throw json(error, 500);
+    console.error(error);
+    throw new Response(`${error}`, { status: 500 });
   }
 };
 
@@ -35,7 +35,7 @@ export const getMovies = async (): Promise<Movie[]> => {
 export const getMovie = async (id: string): Promise<Movie> => {
   const movie = await db.movie.findUnique({ where: { id } });
   if (!movie) {
-    throw json("Movie not found", 404);
+    throw new Response("Movie not found", { status: 404 });
   }
   return movie;
 };
@@ -55,7 +55,7 @@ export const updateTasteProfile = async (
     data: { tasteProfile },
   });
   if (!movie) {
-    throw json("Movie not found", 404);
+    throw new Response("Movie not found", { status: 404 });
   }
   return movie;
 };

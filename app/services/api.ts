@@ -7,7 +7,9 @@ async function handleRequest<T>(
 ): Promise<T> {
   const response = await fetch(input, init);
   if (!response.ok) {
-    throw new Error(`${response.status} ${response.statusText}`);
+    throw new Response(`${response.status} ${response.statusText}`, {
+      status: response.status,
+    });
   }
   return response.json();
 }

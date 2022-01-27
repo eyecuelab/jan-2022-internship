@@ -1,7 +1,7 @@
 import type { Movie } from "@prisma/client";
 import type { FC } from "react";
 import type { ActionFunction, LoaderFunction } from "remix";
-import { json, Link, useActionData, useLoaderData } from "remix";
+import { Link, useActionData, useLoaderData } from "remix";
 import { getMovie, updateTasteProfile } from "~/services/movies";
 
 enum ActionTypes {
@@ -13,10 +13,10 @@ export const action: ActionFunction = async ({ request, params }) => {
   const formData = await request.formData();
   const actionType = formData.get("actionType");
   if (typeof actionType !== "string") {
-    throw json("Invalid action type", 400);
+    throw new Response("Invalid action type", { status: 400 });
   }
   if (!params.movieId) {
-    throw json("Invalid movie id", 400);
+    throw new Response("Invalid movie id", { status: 400 });
   }
 
   switch (actionType) {
@@ -25,7 +25,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     case ActionTypes.Dislike:
       return updateTasteProfile(params.movieId, false);
     default:
-      throw json("Invalid action type", 400);
+      throw new Response("Invalid action type", { status: 400 });
   }
 };
 
@@ -35,7 +35,7 @@ export const loader: LoaderFunction = async ({
   params,
 }): Promise<LoaderData> => {
   if (!params.movieId) {
-    throw json("Bad Request", 400);
+    throw new Response("Bad Request", { status: 400 });
   }
   const movie = await getMovie(params.movieId);
 
