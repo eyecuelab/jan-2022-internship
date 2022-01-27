@@ -10,7 +10,7 @@
     "build": "remix build",
     "dev": "remix dev ",
     "lint": "TIMING=1 eslint \"{app,lib,test}/**/*.{ts,tsx}\" --fix",
-    "postinstall": "remix setup node",
+    "postinstall": "remix setup node && prisma generate",
     "start": "remix-serve build",
     "prepare": "husky install"
   },
