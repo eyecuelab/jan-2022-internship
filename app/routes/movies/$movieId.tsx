@@ -1,50 +1,51 @@
-import { Link, redirect, useActionData, useLoaderData } from "remix"
-import { db } from "~/utils/db.server";
+import type { Movie } from "@prisma/client";
+import type { FC } from "react";
+import type { ActionFunction, LoaderFunction } from "remix";
+import { json, Link, useActionData, useLoaderData } from "remix";
+import { getMovie, updateTasteProfile } from "~/api/moviesPrisma";
 
-export async function action({ request, params }) {
+enum ActionTypes {
+  Like = "like",
+  Dislike = "dislike",
+}
+
+export const action: ActionFunction = async ({ request, params }) => {
   const formData = await request.formData();
-  let value = Object.fromEntries(formData)
+  const actionType = formData.get("actionType");
+  if (typeof actionType !== "string") {
+    throw json("Invalid action type", 400);
+  }
+  if (!params.movieId) {
+    throw json("Invalid movie id", 400);
+  }
 
-  const updatedTaste = await db.movie.update({
-    where: { id: params.movieId },
-    data: { tasteProfile: value.actionType }
-  })
+  switch (actionType) {
+    case ActionTypes.Like:
+      return updateTasteProfile(params.movieId, true);
+    case ActionTypes.Dislike:
+      return updateTasteProfile(params.movieId, false);
+    default:
+      throw json("Invalid action type", 400);
+  }
+};
 
-  if (!value) throw new Error('No input was provided')
-  const data = { updatedTaste }
-  console.log(data);
-  redirect(`/movies/`);
-  return updatedTaste;
-  //return value;
-}
+type LoaderData = { movie: Movie };
 
-// export async function updateDB() {
-//   const params = useLoaderData()
-//   const value = useActionData();
+export const loader: LoaderFunction = async ({
+  params,
+}): Promise<LoaderData> => {
+  if (!params.movieId) {
+    throw json("Bad Request", 400);
+  }
+  const movie = await getMovie(params.movieId);
 
-//   const updatedTaste = await db.movie.update({
-//     where: { id: params.movieId },
-//     data: { tasteProfile: value }
-//   })
+  const data: LoaderData = { movie };
 
-//   if (!value) throw new Error('No input was provided')
-//   const data = { updatedTaste }
-//   console.log(data);
-//   redirect(`/movies/`);
-//   return updatedTaste;
-// }
+  return data;
+};
 
-export const loader = async ({ params }) => {
-  const movie = await db.movie.findUnique({
-    where: { id: params.movieId },
-  })
-  if (!movie) throw new Error('Movie not found')
-  const data = { movie }
-  return data
-}
-
-export default function Movie() {
-  const { movie } = useLoaderData()
+const Movie: FC = () => {
+  const { movie } = useLoaderData<LoaderData>();
   const IMG_URL = "https://image.tmdb.org/t/p/w500";
   const poster = IMG_URL + movie.posterPath;
   const vote = useActionData();
@@ -52,20 +53,22 @@ export default function Movie() {
 
   return (
     <div>
-      <div className='page-header'>
-        <Link to='/movies'>
-          Back
-        </Link>
+      <div className="page-header">
+        <Link to="/movies">Back</Link>
         {movie.id && (
           <>
-            <form method='post'>
-              <input type='hidden' name='actionType' value='true' />
+            <form method="post">
+              <input type="hidden" name="actionType" value={ActionTypes.Like} />
               <button type="submit">Yes</button>
-            </form >
-            <form method='post'>
-              <input type='hidden' name='actionType' value='false' />
+            </form>
+            <form method="post">
+              <input
+                type="hidden"
+                name="actionType"
+                value={ActionTypes.Dislike}
+              />
               <button type="submit">No</button>
-            </form >
+            </form>
           </>
         )}
         <div>
@@ -74,13 +77,11 @@ export default function Movie() {
           <img src={poster} />
         </div>
         <div>
-          {vote?.errors ? (
-            <p style={{ color: "red" }}>
-              {vote.errors}
-            </p>
-          ) : null}
+          {vote?.errors ? <p style={{ color: "red" }}>{vote.errors}</p> : null}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
+
+export default Movie;
