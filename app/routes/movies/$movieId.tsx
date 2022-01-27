@@ -1,4 +1,4 @@
-import type { Movie } from "@prisma/client";
+import { Movie } from "@prisma/client";
 import type { FC } from "react";
 import type { ActionFunction, LoaderFunction } from "remix";
 import { Link, useActionData, useLoaderData } from "remix";

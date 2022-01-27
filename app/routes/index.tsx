@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { Link, Outlet } from "remix";
+import { Link } from "remix";
 
 const Index: FC = () => {
   return (
