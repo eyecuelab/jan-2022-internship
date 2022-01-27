@@ -3,7 +3,7 @@ import type { FC } from "react";
 import type { LoaderFunction } from "remix";
 import { Link } from "react-router-dom";
 import { useLoaderData } from "remix";
-import { getMovies, syncMovies } from "~/api/moviesPrisma";
+import { getMovies, syncMovies } from "~/services/movies";
 
 type LoaderData = { movies: Movie[] };
 

@@ -2,7 +2,7 @@ import type { Movie } from "@prisma/client";
 import type { FC } from "react";
 import type { ActionFunction, LoaderFunction } from "remix";
 import { json, Link, useActionData, useLoaderData } from "remix";
-import { getMovie, updateTasteProfile } from "~/api/moviesPrisma";
+import { getMovie, updateTasteProfile } from "~/services/movies";
 
 enum ActionTypes {
   Like = "like",

@@ -1,7 +1,7 @@
 import type { Movie } from "@prisma/client";
 import { json } from "remix";
 import { db } from "~/utils/db.server";
-import { getAndTransformApiMovies } from "./moviesDbApi";
+import { getAndTransformApiMovies } from "./api";
 
 /**
  * Syncs database with the first page of
