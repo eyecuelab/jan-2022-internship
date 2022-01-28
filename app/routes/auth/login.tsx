@@ -2,21 +2,34 @@ import { useActionData, json, redirect } from "remix";
 import { db } from '~/utils/db.server'
 import { login, createUserSession, register } from '~/utils/session.server'
 
-function validateUsername(username) {
+function validateUsername(username: String) {
   if (typeof username !== "string" || username.length < 3) {
     return "Username must be at least 3 characters";
   }
 }
 
-function validatePassword(password) {
+function validatePassword(password: String) {
   if (typeof password !== "string" || password.length < 6) {
     return "Password must be at least 6 characters";
   }
 }
 
-function badRequest(data) {
+function badRequest(data: ActionData) {
   return json(data, { status: 400 });
 }
+
+type ActionData = {
+  formError?: string;
+  fieldErrors?: {
+    username: string | undefined;
+    password: string | undefined;
+  };
+  fields?: {
+    loginType: string;
+    username: string;
+    password: string;
+  };
+};
 
 export async function action({ request }) {
   const form = await request.formData();
@@ -83,7 +96,7 @@ export async function action({ request }) {
   return redirect("/movies");
 };
 export default function Login() {
-  const actionData = useActionData();
+  const actionData = useActionData<ActionData>();
 
   return (
     <div className="container">

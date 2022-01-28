@@ -1,9 +1,16 @@
 import bcrypt from 'bcrypt'
+import { Movie, User } from '@prisma/client';
+import type { Session } from 'remix';
 import {db} from './db.server'
 import { createCookieSessionStorage, redirect } from 'remix'
 
+type LoginForm = {
+  username: string;
+  password: string;
+};
+
 //login user
-export async function login({username, password}) {
+export async function login({username, password}: LoginForm): Promise<User | null> {
   const user = await db.user.findUnique({
     where: {
       username
@@ -21,12 +28,12 @@ export async function login({username, password}) {
 }
 
 //Register new user
-export async function register({username, password}) {
+export async function register({username, password}:LoginForm): Promise<User>  {
   const passwordHash = await bcrypt.hash(password, 10)
   return db.user.create({
     data: {
       username,
-      passwordHash
+      passwordHash,
     }
   })
 }
@@ -59,5 +66,10 @@ export async function createUserSession(userId: string, redirectTo: string){
       'Set-Cookie': await storage.commitSession(session)
     }
   })
+}
+
+//Get user session
+export function getUserSession(request: Request) {
+  return storage.getSession(request.headers.get('Cookie'))
 }
 
