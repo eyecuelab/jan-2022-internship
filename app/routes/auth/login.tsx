@@ -40,14 +40,19 @@ export const action: ActionFunction = async ({ request }) => {
   const loginType = form.get("loginType");
   const username = form.get("username");
   const password = form.get("password");
-  const redirectTo = form.get("redirectTo") || "/movies";
+  const redirectTo = form.get("redirectTo") || "/trivia";
   if (
     typeof loginType !== "string" ||
     typeof username !== "string" ||
     typeof password !== "string" ||
     typeof redirectTo !== "string"
   ) {
-    throw badRequest({
+    return badRequest({
+      fields: {
+        username: "",
+        password: "",
+        loginType: "login",
+      },
       formError: `Form not submitted correctly.`,
     });
   }
@@ -63,52 +68,34 @@ export const action: ActionFunction = async ({ request }) => {
 
   switch (loginType) {
     case "login": {
-      //Find user
       const user = await login({ username, password });
-      //Check user
       if (!user) {
         return badRequest({
           fields,
-          formError: "Username or Password is incorrect",
+          formError: `Username/Password combination is incorrect`,
         });
       }
-
-      //Create user session
       return createUserSession(user.id, redirectTo);
     }
-
     case "register": {
-      //Check if user exists
       const userExists = await db.user.findFirst({
-        where: {
-          username,
-        },
+        where: { username },
       });
-
       if (userExists) {
         return badRequest({
           fields,
-          fieldErrors: {
-            username: `User ${username} already exists`,
-            password: undefined,
-          },
+          formError: `User with username ${username} already exists`,
         });
       }
-
-      //Create user
       const user = await register({ username, password });
-      if (!user) {
-        return badRequest({
-          fields,
-          formError: "Something went wrong",
-        });
-      }
-
-      //Create user session
       return createUserSession(user.id, redirectTo);
     }
-    default:
-      return badRequest({ fields, formError: "Login type invalid" });
+    default: {
+      return badRequest({
+        fields,
+        formError: `Login type invalid`,
+      });
+    }
   }
 };
 
@@ -218,7 +205,7 @@ export default function Login() {
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="/movies">Movies</Link>
+              <Link to="/trivia">Trivia</Link>
             </li>
           </ul>
         </div>
