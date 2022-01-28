@@ -40,7 +40,7 @@ export const action: ActionFunction = async ({ request }) => {
   const loginType = form.get("loginType");
   const username = form.get("username");
   const password = form.get("password");
-  const redirectTo = form.get("redirectTo") || "/trivia";
+  const redirectTo = form.get("redirectTo") || "/movies";
   if (
     typeof loginType !== "string" ||
     typeof username !== "string" ||
@@ -205,7 +205,7 @@ export default function Login() {
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="/trivia">Trivia</Link>
+              <Link to="/movies">Movies</Link>
             </li>
           </ul>
         </div>
