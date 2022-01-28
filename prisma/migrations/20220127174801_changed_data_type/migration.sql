@@ -1,4 +1,0 @@
--- AlterTable
-ALTER TABLE "Movie" ALTER COLUMN "tasteProfile" DROP NOT NULL,
-ALTER COLUMN "tasteProfile" DROP DEFAULT,
-ALTER COLUMN "tasteProfile" SET DATA TYPE TEXT;

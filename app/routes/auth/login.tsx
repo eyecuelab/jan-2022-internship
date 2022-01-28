@@ -1,21 +1,23 @@
-import { useActionData, json, redirect } from "remix";
-import { db } from '~/utils/db.server'
-import { login, createUserSession, register } from '~/utils/session.server'
+import type { ActionFunction, LinksFunction } from "remix";
+import { useActionData, json, Link, useSearchParams } from "remix";
+import { db } from "~/utils/db.server";
+import { createUserSession, login, register } from "~/utils/session.server";
+import stylesUrl from "../../styles/login.css";
 
-function validateUsername(username: String) {
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: stylesUrl }];
+};
+
+function validateUsername(username: unknown) {
   if (typeof username !== "string" || username.length < 3) {
-    return "Username must be at least 3 characters";
+    return `Usernames must be at least 3 characters long`;
   }
 }
 
-function validatePassword(password: String) {
+function validatePassword(password: unknown) {
   if (typeof password !== "string" || password.length < 6) {
-    return "Password must be at least 6 characters";
+    return `Passwords must be at least 6 characters long`;
   }
-}
-
-function badRequest(data: ActionData) {
-  return json(data, { status: 400 });
 }
 
 type ActionData = {
@@ -31,19 +33,30 @@ type ActionData = {
   };
 };
 
-export async function action({ request }) {
+const badRequest = (data: ActionData) => json(data, { status: 400 });
+
+export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
-  const loginType = form.get('loginType')
-  const username = form.get('username')
-  const password = form.get('password')
+  const loginType = form.get("loginType");
+  const username = form.get("username");
+  const password = form.get("password");
+  const redirectTo = form.get("redirectTo") || "/movies";
+  if (
+    typeof loginType !== "string" ||
+    typeof username !== "string" ||
+    typeof password !== "string" ||
+    typeof redirectTo !== "string"
+  ) {
+    throw badRequest({
+      formError: `Form not submitted correctly.`,
+    });
+  }
 
-  const fields = { loginType, username, password }
-
+  const fields = { loginType, username, password };
   const fieldErrors = {
     username: validateUsername(username),
     password: validatePassword(password),
   };
-
   if (Object.values(fieldErrors).some(Boolean)) {
     return badRequest({ fieldErrors, fields });
   }
@@ -56,12 +69,12 @@ export async function action({ request }) {
       if (!user) {
         return badRequest({
           fields,
-          fieldErrors: { username: "Invalid Credentials" },
+          formError: "Username or Password is incorrect",
         });
       }
 
       //Create user session
-      return createUserSession(user.id, "/movies");
+      return createUserSession(user.id, redirectTo);
     }
 
     case "register": {
@@ -75,7 +88,10 @@ export async function action({ request }) {
       if (userExists) {
         return badRequest({
           fields,
-          fieldErrors: { username: `User ${username} already exists` },
+          fieldErrors: {
+            username: `User ${username} already exists`,
+            password: undefined,
+          },
         });
       }
 
@@ -88,70 +104,124 @@ export async function action({ request }) {
         });
       }
 
-      //Create user sessioni
-      return createUserSession(user.id, "/movies");
+      //Create user session
+      return createUserSession(user.id, redirectTo);
     }
+    default:
+      return badRequest({ fields, formError: "Login type invalid" });
   }
-
-  return redirect("/movies");
 };
+
 export default function Login() {
   const actionData = useActionData<ActionData>();
-
+  const [searchParams] = useSearchParams();
   return (
     <div className="container">
-      <div className="page-header movie">
-        <h3>Login or Register</h3>
-        <label>
+      <div className="content" data-light="">
+        <h1>Login/Register</h1>
+        <br />
+        <br />
+        <form
+          method="post"
+          aria-describedby={
+            actionData?.formError ? "form-error-message" : undefined
+          }
+        >
           <input
-            type="radio"
-            name="loginType"
-            value="login"
-            defaultChecked={
-              !actionData?.fields?.loginType ||
-              actionData?.fields?.loginType === "login"
-            }
+            type="hidden"
+            name="redirectTo"
+            value={searchParams.get("redirectTo") ?? undefined}
           />
-          Login
-        </label>
-
-        <label>
-          <input type="radio" name="loginType" value="register" />
-          Register
-        </label>
-      </div>
-      <br />
-
-      <div className="page-content">
-        <form action="" method="post">
+          <fieldset>
+            <label>
+              <input
+                type="radio"
+                name="loginType"
+                value="login"
+                defaultChecked={
+                  !actionData?.fields?.loginType ||
+                  actionData?.fields?.loginType === "login"
+                }
+              />{" "}
+              Login
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="loginType"
+                value="register"
+                defaultChecked={actionData?.fields?.loginType === "register"}
+              />{" "}
+              Register
+            </label>
+          </fieldset>
           <div>
-            <label htmlFor="username"><b>Username</b></label>
+            <label htmlFor="username-input">Username</label>
             <input
               type="text"
+              id="username-input"
               name="username"
-              id="username"
               defaultValue={actionData?.fields?.username}
+              aria-invalid={Boolean(actionData?.fieldErrors?.username)}
+              aria-describedby={
+                actionData?.fieldErrors?.username ? "username-error" : undefined
+              }
             />
-            <div className="error">
-              {actionData?.fieldErrors?.username &&
-                actionData?.fieldErrors?.username}
-            </div>
-            <br />
-            <label htmlFor="password"><b>Password</b></label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              defaultValue={actionData?.fields?.password}
-            />
-            <div className="error">
-              {actionData?.fieldErrors?.password &&
-                actionData?.fieldErrors?.password}
-            </div>
-            <br />
-            <button type="submit">Login</button>
+            {actionData?.fieldErrors?.username ? (
+              <p
+                className="form-validation-error"
+                role="alert"
+                id="username-error"
+              >
+                {actionData?.fieldErrors.username}
+              </p>
+            ) : null}
           </div>
+          <div>
+            <label htmlFor="password-input">Password</label>
+            <input
+              id="password-input"
+              name="password"
+              defaultValue={actionData?.fields?.password}
+              type="password"
+              aria-invalid={
+                Boolean(actionData?.fieldErrors?.password) || undefined
+              }
+              aria-describedby={
+                actionData?.fieldErrors?.password ? "password-error" : undefined
+              }
+            />
+            {actionData?.fieldErrors?.password ? (
+              <p
+                className="form-validation-error"
+                role="alert"
+                id="password-error"
+              >
+                {actionData?.fieldErrors.password}
+              </p>
+            ) : null}
+          </div>
+          <div id="form-error-message">
+            {actionData?.formError ? (
+              <p className="form-validation-error" role="alert">
+                {actionData?.formError}
+              </p>
+            ) : null}
+          </div>
+          <button type="submit" className="button">
+            Submit
+          </button>
         </form>
+        <div className="links">
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/movies">Movies</Link>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );

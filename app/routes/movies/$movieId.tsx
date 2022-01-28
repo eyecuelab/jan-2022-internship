@@ -1,22 +1,32 @@
-import { Link, redirect, useActionData, useLoaderData } from "remix"
+import {
+  ActionFunction,
+  Link,
+  LoaderFunction,
+  redirect,
+  useActionData,
+  useLoaderData,
+} from "remix";
 import { db } from "~/utils/db.server";
 
-export async function action({ request, params }) {
+export const action: ActionFunction = async ({ request, params }) => {
   const formData = await request.formData();
-  let value = Object.fromEntries(formData)
+  const actionType = formData.get("actionType");
+
+  if (typeof actionType !== "string") {
+    return redirect("/login");
+  }
 
   const updatedTaste = await db.movie.update({
     where: { id: params.movieId },
-    data: { tasteProfile: value.actionType }
-  })
+    data: { tasteProfile: actionType },
+  });
 
-  if (!value) throw new Error('No input was provided')
-  const data = { updatedTaste }
+  const data = { updatedTaste };
   console.log(data);
   redirect(`/movies/`);
   return updatedTaste;
   //return value;
-}
+};
 
 // export async function updateDB() {
 //   const params = useLoaderData()
@@ -34,17 +44,17 @@ export async function action({ request, params }) {
 //   return updatedTaste;
 // }
 
-export const loader = async ({ params }) => {
+export const loader: LoaderFunction = async ({ params }) => {
   const movie = await db.movie.findUnique({
     where: { id: params.movieId },
-  })
-  if (!movie) throw new Error('Movie not found')
-  const data = { movie }
-  return data
-}
+  });
+  if (!movie) throw new Error("Movie not found");
+  const data = { movie };
+  return data;
+};
 
 export default function Movie() {
-  const { movie } = useLoaderData()
+  const { movie } = useLoaderData();
   const IMG_URL = "https://image.tmdb.org/t/p/w500";
   const poster = IMG_URL + movie.posterPath;
   const vote = useActionData();
@@ -52,20 +62,18 @@ export default function Movie() {
 
   return (
     <div>
-      <div className='page-header'>
-        <Link to='/movies'>
-          Back
-        </Link>
+      <div className="page-header">
+        <Link to="/movies">Back</Link>
         {movie.id && (
           <>
-            <form method='post'>
-              <input type='hidden' name='actionType' value='true' />
+            <form method="post">
+              <input type="hidden" name="actionType" value="true" />
               <button type="submit">Yes</button>
-            </form >
-            <form method='post'>
-              <input type='hidden' name='actionType' value='false' />
+            </form>
+            <form method="post">
+              <input type="hidden" name="actionType" value="false" />
               <button type="submit">No</button>
-            </form >
+            </form>
           </>
         )}
         <div>
@@ -74,13 +82,9 @@ export default function Movie() {
           <img src={poster} />
         </div>
         <div>
-          {vote?.errors ? (
-            <p style={{ color: "red" }}>
-              {vote.errors}
-            </p>
-          ) : null}
+          {vote?.errors ? <p style={{ color: "red" }}>{vote.errors}</p> : null}
         </div>
       </div>
     </div>
-  )
+  );
 }
