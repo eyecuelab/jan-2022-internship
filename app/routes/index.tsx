@@ -9,6 +9,9 @@ export default function getMovies() {
         <li>
           <Link to="movies">Begin</Link>
         </li>
+        <li>
+          <Link to="/auth/login">Login</Link>
+        </li>
       </ul>
     </div>
   );

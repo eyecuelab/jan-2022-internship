@@ -10,10 +10,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  likes        Movie[]
+}
+
 model Movie {
   id           String  @id @default(uuid())
   title        String
   overview     String
   posterPath   String?
   tasteProfile String?
+  User         User?   @relation(fields: [userId], references: [id])
+  userId       String?
 }

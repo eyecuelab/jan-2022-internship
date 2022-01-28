@@ -6,8 +6,10 @@ import {
   Scripts,
   ScrollRestoration,
 } from "remix";
-
+//import globalStyles from "~/styles/global.css";
 import type { MetaFunction } from "remix";
+
+//export const links = () => [{ rel: "stylesheet", href: globalStyles }];
 
 export const meta: MetaFunction = () => {
   return { title: "New Remix App" };
