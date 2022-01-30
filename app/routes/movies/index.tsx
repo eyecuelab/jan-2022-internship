@@ -1,19 +1,18 @@
 import { Link } from "react-router-dom";
 import { useLoaderData } from "remix";
-//import { getMovies } from "~/api/getmovies";
 import { db } from "~/utils/db.server";
-import { nanoid } from 'nanoid'
+
+
 
 //import Swiper, { SwiperOptions, SwiperSlide } from 'swiper';
-import { Swiper, SwiperSlide } from "swiper/react";
+//import { Swiper, SwiperSlide } from "swiper/react";
+
+// importing React icons.
+import { BsArrowLeftCircle, BsArrowLeftShort, BsArrowLeftSquareFill, BsArrowRight, BsArrowRightShort } from "react-icons/bs";
+import { BsArrowLeft } from "react-icons/bs";
+import { useState } from "react";
 
 
-
-
-
-
-const token = nanoid(3) //=> "V1StGXR8_Z5jdHi6B-myT"
-console.log(token);
 
 
 // This function happens on the server, so we have access to the server environment files.
@@ -43,53 +42,90 @@ export const loader = async () => {
   return dbMovies;
 };
 
-// export async function getMovieById(movieId: string){
-//   const movies = useLoaderData();
-//   return movieId
-// }
 
-// This is the react component that renders on the client:
 export default function Movies() {
-  const movies = useLoaderData();
+  // UseState with a default value of 0.
+
+  const data = useLoaderData();
+  const [value, setValue] = useState(0);
+
+  console.log(data.length);
+
   const IMG_URL = "https://image.tmdb.org/t/p/w500";
+  const poster = IMG_URL + data[value].posterPath;
+  //const data = data.results;
+
 
   return (
     <>
       <div className="container">
-        <div className="movies">
-          {/* <ul> */}
-          {/* <Swiper className="mySwiper" >
-              <SwiperSlide>Slide 1</SwiperSlide>
-              <SwiperSlide>Slide 2</SwiperSlide>
-              <SwiperSlide>Slide 3</SwiperSlide>
-              <SwiperSlide>Slide 4</SwiperSlide>
-              <SwiperSlide>Slide 5</SwiperSlide>
-              <SwiperSlide>Slide 6</SwiperSlide>
-              <SwiperSlide>Slide 7</SwiperSlide>
-              <SwiperSlide>Slide 8</SwiperSlide>
-              <SwiperSlide>Slide 9</SwiperSlide> */}
+        <img src={poster} alt={data[value].posterPath} />
+        <h2>{data[value].id}</h2>
+        <h3>{data[value].title}</h3>
+        <div>
+          <button type="button" onClick={() => value === 0 ? setValue(data.length - 1) : setValue(value - 1)}><BsArrowLeft /></button>
+          <button type="button" onClick={() => value === 0 ? setValue(data.length - 1) : setValue(value - 1)}><BsArrowRight /></button>
 
 
-          {movies &&
-            movies.map((movie: any) => {
-              const poster = IMG_URL + movie.posterPath;
-              return (
-                <Swiper className="mySwiper" >
-                  <SwiperSlide>
-                    <Link to={movie.id}>
-                      <img src={poster} />
-                      <h4>{movie.title}</h4>
-                    </Link>
-                  </SwiperSlide>
-                </Swiper>
-              );
-            })}
-
-          {/* </ul> */}
+          {/* <button type="button" onClick={() => value === 0 ? setValue(3) : setValue(value - 1)}><BsArrowLeft /></button>
+          <button type="button" onClick={() => value === 3 ? setValue(0) : setValue(value + 1)}><BsArrowRightShort /></button> */}
 
         </div>
       </div>
-
     </>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // This is the react component that renders on the client:
+// export default function Movies() {
+//   const data = useLoaderData();
+//   const IMG_URL = "https://image.tmdb.org/t/p/w500";
+//   const movies = data.results;
+
+//   return (
+//     <>
+//       <Swiper
+//         onSlideChange={() => console.log('slide change')}
+//         onSwiper={(swiper) => console.log(swiper)}
+//       >
+//         {movies &&
+//           movies.map((movie: any) => {
+//             const poster = IMG_URL + movie.posterPath;
+//             return (
+//               <SwiperSlide key={movie.id} className="swiperSlide">
+//                 {/* <Link to={movie.id}> */}
+//                 <img src={poster} />
+//                 <h4>{movie.title}</h4>
+//                 {/* </Link> */}
+//               </SwiperSlide>
+//             );
+//           })}
+//       </Swiper>
+
+//     </>
+//   );
+// }
