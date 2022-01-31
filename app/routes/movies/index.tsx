@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom";
-import { useActionData, useLoaderData, ActionFunction, redirect, LoaderFunction } from "remix";
+import { useActionData, useLoaderData, ActionFunction, redirect, LoaderFunction, Form, json, useCatch } from "remix";
 import { db } from "~/utils/db.server";
 //import Swiper, { SwiperOptions, SwiperSlide } from 'swiper';
 //import { Swiper, SwiperSlide } from "swiper/react";
@@ -37,39 +36,29 @@ export const loader: LoaderFunction = async () => {
 
 
 export const action: ActionFunction = async ({ request, params }) => {
-  const form = await request.formData();
-  const actionType = form.get("actionType");
+  try {
+    const form = await request.formData();
+    const id = form.get("id");
+    const actionType = form.get("actionType");
+    console.log(actionType);
+    console.log(id);
 
-  if (typeof actionType !== "string") {
-    return redirect("/auth/login");
+    if (typeof actionType !== 'string') {
+      throw new Error(`No action type found in form data.`);
+    }
+
+    const updatedTaste = await db.movie.update({
+      where: { id: id },
+      data: { tasteProfile: actionType },
+    });
+    return updatedTaste
+  } catch (e) {
+    console.error(e);
+    return json("Sorry, we couldn't post that", {
+      status: 500
+    });
   }
-
-  console.log(actionType);
-  return actionType;
-
-  // const updatedTaste = await db.movie.update({
-  //   where: { id: params.movieId },
-  //   data: { tasteProfile: actionType },
-  // });
-
-  // const data = { updatedTaste };
-  // return data;
 };
-
-
-// async function updateDB() {
-//   const params = useLoaderData()
-//   const value = useActionData();
-
-//   const updatedTaste = await db.movie.update({
-//     where: { id: params.movieId },
-//     data: { tasteProfile: value }
-//   })
-
-//   if (!value) throw new Error('No input was provided')
-//   const data = { updatedTaste }
-//   return data;
-// }
 
 
 export default function Movies() {
@@ -77,9 +66,6 @@ export default function Movies() {
   const data = useLoaderData();
   const [value, setValue] = useState(0);
   const actionData = useActionData();
-  console.log(actionData);
-  console.log(data.length);
-  console.log(value);
 
   const IMG_URL = "https://image.tmdb.org/t/p/w500";
   const poster = IMG_URL + data[value].posterPath;
@@ -105,15 +91,20 @@ export default function Movies() {
 
   return (
     <>
-      <form method="post">
+      <Form method="post">
         <div>
           <input type="hidden" name="actionType" value="true" />
-          <button type="button" onClick={() => handleDbUpdateLike()}><BsArrowLeft />Yes click</button>
-
-          <input type="hidden" name="actionType" value="false" />
-          <button type="button" onClick={() => handleDbUpdateDisLike()}><BsArrowRight />No click</button>
+          <input type="hidden" name="id" value={data[value].id}></input>
+          <button type="submit" onClick={() => handleDbUpdateLike()}><BsArrowLeft />Yes click</button>
         </div>
-      </form>
+      </Form>
+      <Form method="post">
+        <div>
+          <input type="hidden" name="actionType" value="false" />
+          <input type="hidden" name="id" value={data[value].id}></input>
+          <button type="submit" onClick={() => handleDbUpdateDisLike()}><BsArrowRight />No click</button>
+        </div>
+      </Form>
       <img src={poster} alt={data[value].posterPath} />
       <h2>{data[value].id}</h2>
       <h3>{data[value].title}</h3>
@@ -124,56 +115,3 @@ export default function Movies() {
   );
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // This is the react component that renders on the client:
-// export default function Movies() {
-//   const data = useLoaderData();
-//   const IMG_URL = "https://image.tmdb.org/t/p/w500";
-//   const movies = data.results;
-
-//   return (
-//     <>
-//       <Swiper
-//         onSlideChange={() => console.log('slide change')}
-//         onSwiper={(swiper) => console.log(swiper)}
-//       >
-//         {movies &&
-//           movies.map((movie: any) => {
-//             const poster = IMG_URL + movie.posterPath;
-//             return (
-//               <SwiperSlide key={movie.id} className="swiperSlide">
-//                 {/* <Link to={movie.id}> */}
-//                 <img src={poster} />
-//                 <h4>{movie.title}</h4>
-//                 {/* </Link> */}
-//               </SwiperSlide>
-//             );
-//           })}
-//       </Swiper>
-
-//     </>
-//   );
-// }
