@@ -24,25 +24,11 @@ export const action: ActionFunction = async ({ request, params }) => {
   const data = { updatedTaste };
   console.log(data);
   redirect(`/movies/`);
-  return updatedTaste;
+  return data;
   //return value;
 };
 
-// export async function updateDB() {
-//   const params = useLoaderData()
-//   const value = useActionData();
 
-//   const updatedTaste = await db.movie.update({
-//     where: { id: params.movieId },
-//     data: { tasteProfile: value }
-//   })
-
-//   if (!value) throw new Error('No input was provided')
-//   const data = { updatedTaste }
-//   console.log(data);
-//   redirect(`/movies/`);
-//   return updatedTaste;
-// }
 
 export const loader: LoaderFunction = async ({ params }) => {
   const movie = await db.movie.findUnique({
