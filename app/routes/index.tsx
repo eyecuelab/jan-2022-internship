@@ -6,14 +6,19 @@ export default function getMovies() {
       <h1>Lets pick a movie</h1>
       <p>Feel free to look around.</p>
       <Outlet />
-      {/* <ul>
+      <ul>
         <li>
           <Link to="movies">Begin</Link>
         </li>
         <li>
-          <Link to="/auth/login">Login</Link>
+          <Link to="movies/login">Login</Link>
         </li>
-      </ul> */}
+        <li>
+          <Link to="movies/checkin">
+            Check-in
+          </Link>
+        </li>
+      </ul>
     </div>
   );
 }

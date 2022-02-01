@@ -16,15 +16,51 @@ model User {
   passwordHash String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  likes        Movie[]
+  //likes        Movie[]
+  //Players      Players[]
+  Movie        Movie[]
 }
 
 model Movie {
-  id           String  @id @default(uuid())
+  id           String      @id @default(uuid())
   title        String
   overview     String
   posterPath   String?
-  tasteProfile String?
-  user         User?   @relation(fields: [userId], references: [id])
+  tasteProfile Int         @default(0)
+  user         User?       @relation(fields: [userId], references: [id])
   userId       String?
+  MovieGame    MovieGame[]
 }
+
+model MovieGame {
+  id         String @id @default(uuid())
+  // createdAt     DateTime @default(now())
+  // updatedAt     DateTime @updatedAt
+  // slug          String?  @unique
+  // token         String?
+  // game          Games?   @relation(fields: [gameId], references: [id])
+  // gameId        String?
+  // movie         Movie?   @relation(fields: [movieId], references: [id])
+  // movieId       String?
+  //totalDislikes Int?
+  totalLikes Int?
+  movie      Movie  @relation(fields: [movieId], references: [id])
+  movieId    String
+}
+
+// model Games {
+//   id           String      @id @default(uuid())
+//   createdAt    DateTime    @default(now())
+//   updatedAt    DateTime    @updatedAt
+//   currentRound Int?
+//   MovieGame    MovieGame[]
+//   Players      Players[]
+// }
+
+// model Players {
+//   id     String  @id @default(uuid())
+//   user   User?   @relation(fields: [userId], references: [id])
+//   userId String?
+//   game   Games   @relation(fields: [gameId], references: [id])
+//   gameId String
+// }

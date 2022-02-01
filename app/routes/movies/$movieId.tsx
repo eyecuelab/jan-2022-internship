@@ -16,10 +16,15 @@ export const action: ActionFunction = async ({ request, params }) => {
     return redirect("/login");
   }
 
-  const updatedTaste = await db.movie.update({
-    where: { id: params.movieId },
-    data: { tasteProfile: actionType },
-  });
+
+
+
+  // const updatedTaste = await db.movieGame.update({
+  //   where: { id: params.movieId },
+  //   data: {
+  //     totalLikes: 113,
+  //   }
+  //});
 
   const data = { updatedTaste };
   console.log(data);
@@ -53,11 +58,11 @@ export default function Movie() {
         {movie.id && (
           <>
             <form method="post">
-              <input type="hidden" name="actionType" value="true" />
+              <input type="hidden" name="actionType" value="1" />
               <button type="submit">Yes</button>
             </form>
             <form method="post">
-              <input type="hidden" name="actionType" value="false" />
+              <input type="hidden" name="actionType" value="-1" />
               <button type="submit">No</button>
             </form>
           </>
