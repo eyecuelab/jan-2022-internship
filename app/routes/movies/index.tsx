@@ -1,15 +1,17 @@
-import type { MovieGame } from '@prisma/client';
-import type { LoaderFunction } from 'remix';
-import { Link, useLoaderData } from 'remix';
-import { db } from '~/utils/db.server';
-import { getUser } from '~/utils/session.server';
+import type { MovieGame } from "@prisma/client";
+import type { LoaderFunction } from "remix";
+import { Link, useLoaderData } from "remix";
+import { db } from "~/utils/db.server";
+import { getPlayer } from "~/utils/session.server";
 
 type LoaderData = {
   username: string | null;
 };
 
-export const loader: LoaderFunction = async ({ request }): Promise<LoaderData> => {
-  const user = await getUser(request);
+export const loader: LoaderFunction = async ({
+  request,
+}): Promise<LoaderData> => {
+  const user = await getPlayer(request);
   const data: LoaderData = {
     username: null,
   };
@@ -29,9 +31,7 @@ export default function MovieIndexRoute() {
         <div>
           <Link to="login">You must be logged in to play</Link>
         </div>
-        <Link to="new">
-          Create A Game
-        </Link>
+        <Link to="new">Create A Game</Link>
       </div>
     );
   }
@@ -41,12 +41,8 @@ export default function MovieIndexRoute() {
       <div>
         <h2>My Movies</h2>
         <br />
-        <Link to="new">
-          New Game
-        </Link>
-        <Link to="checkin">
-          Checkin
-        </Link>
+        <Link to="new">New Game</Link>
+        <Link to="checkin">Checkin</Link>
       </div>
     </div>
   );

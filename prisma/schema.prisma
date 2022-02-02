@@ -10,14 +10,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id           String   @id @default(uuid())
-  username     String   @unique
+model Player {
+  id           String               @id @default(uuid())
+  username     String               @unique
   passwordHash String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
   //likes        Movie[]
   //Players      Players[]
+  gameMovie    PlayersInMovieGame[]
   Movie        Movie[]
 }
 
@@ -27,40 +28,72 @@ model Movie {
   overview     String
   posterPath   String?
   tasteProfile Int         @default(0)
-  user         User?       @relation(fields: [userId], references: [id])
-  userId       String?
-  MovieGame    MovieGame[]
+  player       Player?     @relation(fields: [playerId], references: [id])
+  playerId     String?
+  movie        String?
+  movieGame    MovieGame[]
 }
 
 model MovieGame {
-  id         String @id @default(uuid())
-  // createdAt     DateTime @default(now())
-  // updatedAt     DateTime @updatedAt
-  // slug          String?  @unique
-  // token         String?
-  // game          Games?   @relation(fields: [gameId], references: [id])
-  // gameId        String?
-  // movie         Movie?   @relation(fields: [movieId], references: [id])
-  // movieId       String?
-  //totalDislikes Int?
-  totalLikes Int?
-  movie      Movie  @relation(fields: [movieId], references: [id])
-  movieId    String
+  id            String               @id @default(uuid())
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  slug          String?              @unique
+  token         String?
+  game          Games?               @relation(fields: [gameId], references: [id])
+  gameId        String?
+  totalDislikes Int?
+  totalLikes    Int?
+  movieId       String
+  movie         Movie                @relation(fields: [movieId], references: [id])
+  //movie         Movie[]
+  players       PlayersInMovieGame[]
+  startedAt     DateTime?
+  endedAt       DateTime?
+  movieGame     MovieGame[]          @relation("MovieGameToMovieGame")
+  MovieGame     MovieGame?           @relation("MovieGameToMovieGame", fields: [movieGameId], references: [id])
+  movieGameId   String?
 }
 
-// model Games {
-//   id           String      @id @default(uuid())
-//   createdAt    DateTime    @default(now())
-//   updatedAt    DateTime    @updatedAt
-//   currentRound Int?
-//   MovieGame    MovieGame[]
-//   Players      Players[]
-// }
+model Games {
+  id           String               @id @default(uuid())
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  currentRound Int?
+  movieGame    MovieGame[]
+  players      PlayersInMovieGame[]
+}
+
+model PlayersInMovieGame {
+  player      Player                     @relation(fields: [playerId], references: [id])
+  playerId    String
+  movieGame   MovieGame                  @relation(fields: [movieGameId], references: [id])
+  movieGameId String
+  isHost      Boolean
+  votes       PlayersInMovieGamesVotes[]
+  //score        Int
+  //won          Boolean
+
+  Games   Games?  @relation(fields: [gamesId], references: [id])
+  gamesId String?
+  @@id([playerId, movieGameId])
+}
+
+model PlayersInMovieGamesVotes {
+  player      PlayersInMovieGame @relation(fields: [playerId, movieGameId], references: [playerId, movieGameId])
+  playerId    String
+  movieGameId String
+  // movie       Movie              @relation(fields: [movieGameId], references: [movieGameId])
+  //position    Int
+  //answer      String
+
+  @@id([playerId, movieGameId])
+}
 
 // model Players {
 //   id     String  @id @default(uuid())
-//   user   User?   @relation(fields: [userId], references: [id])
-//   userId String?
+//   user   User?   @relation(fields: [playerId], references: [id])
+//   playerId String?
 //   game   Games   @relation(fields: [gameId], references: [id])
 //   gameId String
 // }

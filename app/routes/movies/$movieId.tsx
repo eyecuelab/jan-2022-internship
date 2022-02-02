@@ -16,24 +16,18 @@ export const action: ActionFunction = async ({ request, params }) => {
     return redirect("/login");
   }
 
-
-
-
-  // const updatedTaste = await db.movieGame.update({
-  //   where: { id: params.movieId },
-  //   data: {
-  //     totalLikes: 113,
-  //   }
-  //});
+  const updatedTaste = await db.movie.update({
+    where: { id: params.movieId },
+    data: {
+      tasteProfile: { increment: parseInt(actionType) },
+    }
+  });
 
   const data = { updatedTaste };
-  console.log(data);
-  redirect(`/movies/`);
+  console.log(params);
+  //return redirect(`$movieId`);
   return data;
-  //return value;
 };
-
-
 
 export const loader: LoaderFunction = async ({ params }) => {
   const movie = await db.movie.findUnique({
@@ -49,7 +43,7 @@ export default function Movie() {
   const IMG_URL = "https://image.tmdb.org/t/p/w500";
   const poster = IMG_URL + movie.posterPath;
   const vote = useActionData();
-  console.log(vote);
+  //console.log(vote);
 
   return (
     <div>
@@ -59,6 +53,7 @@ export default function Movie() {
           <>
             <form method="post">
               <input type="hidden" name="actionType" value="1" />
+              <Link to={movie.id}>{movie.title}</Link>
               <button type="submit">Yes</button>
             </form>
             <form method="post">
