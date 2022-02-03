@@ -1,9 +1,15 @@
-import { Form } from "remix";
+import { Form, redirect } from "remix";
 
+export const action = async ({ request }) => {
+  const formData = await request.formData();
+  const code = formData.get("code");
+
+  return redirect(`/games/${code}`);
+};
 
 export default function Join() {
   return (
-    <form method="post" action="/game/<slug>">
+    <form method="post">
       <p>
         <label>
           Enter the code: <input name="code" type="text" />

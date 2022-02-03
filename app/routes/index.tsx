@@ -1,9 +1,31 @@
-import { Link } from "remix";
+import { Link, useLoaderData } from "remix";
+import { db } from "~/utils/db.server";
+
+export const loader = async () => {
+  const data = {
+    movies: await db.movie.findMany({
+      take: 7,
+      select: { id: true, title: true },
+    }),
+
+    games: await db.game.findMany({
+      take: 2,
+      select: { id: true, slug: true },
+    }),
+  };
+
+  console.log(data);
+
+  return data;
+};
 
 export default function index() {
+  const { ...data } = useLoaderData();
+  const code = data.games[0].slug;
+
   return <div>
     <ul>
-      <li><Link to="/game">Start the game</Link></li>
+      <li><Link to={`/games/${code}`}>Start the game</Link></li>
       <li><Link to="/join">Join the game</Link></li>
       <li><Link to="/auth/login">Login</Link></li>
     </ul>
