@@ -165,7 +165,7 @@ export async function getPlayer(request: Request): Promise<User | null> {
   }
 }
 
-export async function requireUserId(
+export async function requirePlayerId(
   request: Request,
   redirectTo: string = new URL(request.url).pathname
 ): Promise<string> {
@@ -182,7 +182,7 @@ export async function requireUser(
   request: Request,
   redirectTo: string = new URL(request.url).pathname
 ): Promise<User> {
-  const playerId = await requireUserId(request, redirectTo);
+  const playerId = await requirePlayerId(request, redirectTo);
   const user = await db.user.findUnique({ where: { id: playerId } });
   if (!user) {
     const searchPrams = new URLSearchParams([["redirectTo", redirectTo]]);

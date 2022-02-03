@@ -4,7 +4,8 @@ export default function index() {
   return <div>
     <ul>
       <li><Link to="/game">Start the game</Link></li>
-      <li><Link to="/game">Join the game</Link></li>
+      <li><Link to="/join">Join the game</Link></li>
+      <li><Link to="/auth/login">Login</Link></li>
     </ul>
   </div>;
 }

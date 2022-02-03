@@ -41,8 +41,12 @@ export default function Movie() {
     <div>
       <div>
         <h1>{movie.title}</h1>
-        <Link to="/game" className="btn btn-reverse">
+        <Link to="/game">
           Back
+        </Link>
+        <br />
+        <Link to={`/game/1b76e985-074a-497b-bee0-46f7581b1d66`}>
+          Next
         </Link>
       </div>
     </div>
