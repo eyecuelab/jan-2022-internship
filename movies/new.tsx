@@ -28,14 +28,14 @@ export const loader: LoaderFunction = async () => {
   const moviesFromAPI = await res.json();
 
   // Delete all movies in db and then write the newly fetched movies to database:
-  await db.movie.deleteMany({});
-  await db.movie.createMany({
-    data: moviesFromAPI.results.map((movie: any) => ({
-      title: movie.title,
-      overview: movie.overview,
-      posterPath: movie.poster_path,
-    })),
-  });
+  //await db.movie.deleteMany({});
+  // await db.movie.createMany({
+  //   data: moviesFromAPI.results.map((movie: any) => ({
+  //     title: movie.title,
+  //     overview: movie.overview,
+  //     posterPath: movie.poster_path,
+  //   })),
+  // });
 
   // Get the newly written movies from the DB and return them to the client:
   const dbMovies = await db.movie.findMany();

@@ -10,90 +10,51 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Player {
-  id           String               @id @default(uuid())
-  username     String               @unique
-  passwordHash String
-  createdAt    DateTime             @default(now())
-  updatedAt    DateTime             @updatedAt
-  //likes        Movie[]
-  //Players      Players[]
-  gameMovie    PlayersInMovieGame[]
-  Movie        Movie[]
-}
-
 model Movie {
-  id           String      @id @default(uuid())
-  title        String
-  overview     String
-  posterPath   String?
-  tasteProfile Int         @default(0)
-  player       Player?     @relation(fields: [playerId], references: [id])
-  playerId     String?
-  movie        String?
-  movieGame    MovieGame[]
+  id         String       @id @default(uuid())
+  title      String
+  overview   String
+  posterPath String?
+  movieScore Int          @default(0)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  MovieScore MovieScore[]
 }
 
-model MovieGame {
-  id            String               @id @default(uuid())
-  createdAt     DateTime             @default(now())
-  updatedAt     DateTime             @updatedAt
-  slug          String?              @unique
-  token         String?
-  game          Games?               @relation(fields: [gameId], references: [id])
-  gameId        String?
-  totalDislikes Int?
-  totalLikes    Int?
-  movieId       String
-  movie         Movie                @relation(fields: [movieId], references: [id])
-  //movie         Movie[]
-  players       PlayersInMovieGame[]
-  startedAt     DateTime?
-  endedAt       DateTime?
-  movieGame     MovieGame[]          @relation("MovieGameToMovieGame")
-  MovieGame     MovieGame?           @relation("MovieGameToMovieGame", fields: [movieGameId], references: [id])
-  movieGameId   String?
+model User {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  games        Game[]
 }
 
-model Games {
-  id           String               @id @default(uuid())
-  createdAt    DateTime             @default(now())
-  updatedAt    DateTime             @updatedAt
-  currentRound Int?
-  movieGame    MovieGame[]
-  players      PlayersInMovieGame[]
+model Game {
+  id           String       @id @default(uuid())
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  slug         String?      @unique
+  //createdBy    User         @relation(fields: [createdById], references: [id])
+  createdById  String
+  participants User[]
+  MovieScores  String[]
+  startedAt    DateTime?
+  endedAt      DateTime?
+  currentRound Int          @default(0)
+  MovieScore   MovieScore[]
 }
 
-model PlayersInMovieGame {
-  player      Player                     @relation(fields: [playerId], references: [id])
-  playerId    String
-  movieGame   MovieGame                  @relation(fields: [movieGameId], references: [id])
-  movieGameId String
-  isHost      Boolean
-  votes       PlayersInMovieGamesVotes[]
-  //score        Int
-  //won          Boolean
-
-  Games   Games?  @relation(fields: [gamesId], references: [id])
-  gamesId String?
-  @@id([playerId, movieGameId])
+model MovieScore {
+  id        String   @id @default(uuid())
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  position  Boolean  @default(false)
+  movieId   String
+  movie     Movie    @relation(fields: [movieId], references: [id])
+  game      Game     @relation(fields: [gameId], references: [id])
+  gameId    String
+  likes     Int
+  dislikes  Int
 }
-
-model PlayersInMovieGamesVotes {
-  player      PlayersInMovieGame @relation(fields: [playerId, movieGameId], references: [playerId, movieGameId])
-  playerId    String
-  movieGameId String
-  // movie       Movie              @relation(fields: [movieGameId], references: [movieGameId])
-  //position    Int
-  //answer      String
-
-  @@id([playerId, movieGameId])
-}
-
-// model Players {
-//   id     String  @id @default(uuid())
-//   user   User?   @relation(fields: [playerId], references: [id])
-//   playerId String?
-//   game   Games   @relation(fields: [gameId], references: [id])
-//   gameId String
-// }

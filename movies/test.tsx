@@ -9,9 +9,9 @@ export const loader: LoaderFunction = async () => {
       take: 7,
       select: { id: true, title: true },
       //orderBy: { createdAt: "desc" }
-    })
+    }),
   };
-  redirect('movies')
+  redirect("movies");
   return data;
 };
 
@@ -19,7 +19,7 @@ export default function Users() {
   const data = useLoaderData<LoaderData>();
   return (
     <ul>
-      {data.movies.map(item => (
+      {data.movies.map((item) => (
         <li key={item.id}>{item.title}</li>
       ))}
     </ul>

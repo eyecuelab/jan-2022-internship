@@ -4,6 +4,25 @@ import { db } from "~/utils/db.server";
 export const loader = async ({ request, params }) => {
   // we have movies in the db. (probably should fetch these
   // from the external API and create gameMovie entries when a user starts a game)
+  const movies = await db.movie.findMany({});
+  // we need a game: ideally this happens in an action function as a response to user "creating game"
+  const game = await db.games.create({ data: {} });
+  // we need to link the game to the movies: ideally this happens when the game starts
+  const gameMovies = await db.movieGame.createMany({
+    data: movies.map((movie) => ({
+      gameId: game.id,
+      movieId: movie.id,
+    }))
+  });
+  return gameMovies;
+};
+
+export const action = async ({ request, params }) => {
+  const formData = await request.formData();
+  const actionType = formData.get("_method");
+
+  // // we have movies in the db. (probably should fetch these
+  // // from the external API and create gameMovie entries when a user starts a game)
   // const movies = await db.movie.findMany({});
 
   // // we need a game: ideally this happens in an action function as a response to user "creating game"
@@ -14,32 +33,10 @@ export const loader = async ({ request, params }) => {
   //   data: movies.map((movie) => ({
   //     gameId: game.id,
   //     movieId: movie.id,
-  //   }))
+  //   })),
   // });
 
   // return gameMovies;
-}
-export const action = async ({ request, params }) => {
-  const formData = await request.formData();
-  const actionType = formData.get("_method");
-
-  // we have movies in the db. (probably should fetch these
-  // from the external API and create gameMovie entries when a user starts a game)
-  const movies = await db.movie.findMany({});
-
-  // we need a game: ideally this happens in an action function as a response to user "creating game"
-  const game = await db.games.create({ data: {} });
-
-  // we need to link the game to the movies: ideally this happens when the game starts
-  const gameMovies = await db.movieGame.createMany({
-    data: movies.map((movie) => ({
-      gameId: game.id,
-      movieId: movie.id,
-    }))
-  });
-
-  //return gameMovies;
-
 
   if (typeof actionType !== "string") {
     throw new Error(`No action type found in form data.`);

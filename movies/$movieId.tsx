@@ -20,7 +20,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     where: { id: params.movieId },
     data: {
       tasteProfile: { increment: parseInt(actionType) },
-    }
+    },
   });
 
   const data = { updatedTaste };
@@ -53,7 +53,6 @@ export default function Movie() {
           <>
             <form method="post">
               <input type="hidden" name="actionType" value="1" />
-              <Link to={movie.id}>{movie.title}</Link>
               <button type="submit">Yes</button>
             </form>
             <form method="post">
