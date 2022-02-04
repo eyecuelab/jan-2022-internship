@@ -41,7 +41,7 @@ export default function Movie() {
     <div>
       <div>
         <h1>{movie.title}</h1>
-        <Link to="/game">
+        <Link to="/games">
           Back
         </Link>
         <br />

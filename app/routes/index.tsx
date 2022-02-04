@@ -1,4 +1,4 @@
-import { Link, useLoaderData } from "remix";
+import { Form, Link, useLoaderData, useParams } from "remix";
 import { db } from "~/utils/db.server";
 
 export const loader = async () => {
@@ -15,20 +15,85 @@ export const loader = async () => {
   };
 
   console.log(data);
-
   return data;
 };
 
+// export const action: ActionFunction = async ({ request, params }) => {
+//   const { slug } = params;
+//   const form = await request.formData();
+//   const user = await requirePlayer(request);
+//   const game = await db.game.findUnique({
+//     where: { slug },
+//     //include: { players: true },
+//   });
+//   if (!game) {
+//     throw new Error(`No game found for slug: ${params.slug}`);
+//   }
+
+//   const actionType = form.get('_method');
+
+//   if (typeof actionType !== 'string') {
+//     throw new Error(`No action type found in form data.`);
+//   }
+
+//   switch (actionType) {
+//     case 'join': {
+//       await db.players.create({
+//         data: {
+//           player: { connect: { id: user.id } },
+//           game: { connect: { id: game.id } },
+//           isHost: false,
+//         },
+//       });
+//       throw redirect(`/movie/${slug}/lobby`);
+//     }
+//     case 'begin': {
+//       const isHost = game.players.some(({ playerId, isHost }) => playerId === user.id && isHost);
+//       if (!isHost) {
+//         throw new Error(`You are not the host of this game.`);
+//       }
+//       await db.game.update({ where: { slug }, data: { startedAt: new Date(), currentQuestion: 0 } });
+//       await db.question.update({
+//         where: { position_triviaGameId: { position: 0, triviaGameId: game.id } },
+//         data: { startedAt: addSeconds(new Date(), 5), endedAt: addSeconds(new Date(), 20) },
+//       });
+
+//       throw redirect(`/game/${slug}/play`);
+//     }
+//     default: {
+//       throw json('Invalid action type.', 400);
+//     }
+//   }
+// };
+
 export default function index() {
   const { ...data } = useLoaderData();
+  //const { slug } = useParams();
   const code = data.games[0].slug;
 
   return <div>
+
+    {/* <Form method="post">
+      <>
+        <input type="hidden" name="_method" value="begin" />
+        <button className="button" type="submit">
+          Start the game
+        </button>
+      </>
+      <br />
+      <>
+        <input type="hidden" name="_method" value="join" />
+        <button type="submit">
+          Join the game
+        </button>
+      </>
+    </Form> */}
     <ul>
-      <li><Link to={`/games/${code}`}>Start the game</Link></li>
+      <li><Link to={`/game/${code}/lobby`}>Start the game</Link></li>
       <li><Link to="/join">Join the game</Link></li>
       <li><Link to="/auth/login">Login</Link></li>
     </ul>
+
   </div>;
 }
 

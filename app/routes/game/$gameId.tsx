@@ -39,7 +39,7 @@ export default function DisplayMovies() {
       <ul>
         {movies.map((movie) => (
           <li key={movie.id}>
-            <Link to={movie.id}>
+            <Link to={`/games/${code}/movies/${movie.id}`}>
               <h3>{movie.title}</h3>
             </Link>
           </li>

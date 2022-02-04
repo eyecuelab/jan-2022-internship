@@ -1,6 +1,6 @@
 import { Outlet } from "remix";
 
-function Posts() {
+function Game() {
   return (
     <>
       <Outlet />
@@ -8,4 +8,4 @@ function Posts() {
   );
 }
 
-export default Posts;
+export default Game;

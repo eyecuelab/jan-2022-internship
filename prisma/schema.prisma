@@ -27,7 +27,8 @@ model User {
   passwordHash String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  games        Game[]
+  Games        Game[]
+  GamesOwned   Game[]   @relation(name: "GamesOwned")
 }
 
 model Game {
@@ -35,13 +36,11 @@ model Game {
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
   slug         String?      @unique
-  createdBy    String? //@relation(fields: [createdById], references: [id])
-  createdById  String?
-  participants User[] //@relation(fields: [], references: [])
-  MovieScores  String[]
+  createdBy    User         @relation(name: "GamesOwned", fields: [id], references: id)
   startedAt    DateTime?
   endedAt      DateTime?
   currentRound Int          @default(0)
+  Participants User[]
   MovieScore   MovieScore[]
 }
 
@@ -58,8 +57,3 @@ model MovieScore {
   likes     Int
   dislikes  Int
 }
-
-// model Participants {
-//   user      User      @relation(fields: [userId], references: [id])
-//   userId    String
-// }

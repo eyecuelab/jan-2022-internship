@@ -4,7 +4,7 @@ export const action = async ({ request }) => {
   const formData = await request.formData();
   const code = formData.get("code");
 
-  return redirect(`/games/${code}`);
+  return redirect(`/game/${code}/lobby`);
 };
 
 export default function Join() {
