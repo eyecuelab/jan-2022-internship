@@ -16,8 +16,8 @@ export async function createMovieGame({ userId }: MovieGameData): Promise<Game> 
   //const questions = await getQuestions(apiToken, categoryId, questionCount);
   return db.game.create({
     data: {
-      slug: nanoid(6),
-      currentRound: 0,
+      slug: nanoid(4),
+      //currentRound: 0,
       // category: {
       //   connect: {
       //     apiId: categoryId,

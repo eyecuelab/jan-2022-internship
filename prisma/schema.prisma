@@ -22,26 +22,28 @@ model Movie {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  username     String   @unique
-  passwordHash String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  Games        Game[]
-  GamesOwned   Game[]   @relation(name: "GamesOwned")
+  id             String           @id @default(uuid())
+  username       String           @unique
+  passwordHash   String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  Games          Game[]
+  GamesOwned     Game[]           @relation(name: "GamesOwned")
+  playersInGames PlayersInGames[]
 }
 
 model Game {
-  id           String       @id @default(uuid())
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-  slug         String?      @unique
-  createdBy    User         @relation(name: "GamesOwned", fields: [id], references: id)
+  id           String           @id @default(uuid())
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  slug         String?          @unique
+  createdBy    User             @relation(name: "GamesOwned", fields: [id], references: id)
   startedAt    DateTime?
   endedAt      DateTime?
-  currentRound Int          @default(0)
+  currentRound Int              @default(0)
   Participants User[]
   MovieScore   MovieScore[]
+  players      PlayersInGames[]
 }
 
 model MovieScore {
@@ -56,4 +58,14 @@ model MovieScore {
   gameId    String
   likes     Int
   dislikes  Int
+}
+
+model PlayersInGames {
+  player   User    @relation(fields: [playerId], references: [id])
+  playerId String  @unique
+  game     Game    @relation(fields: [gameId], references: [id])
+  gameId   String
+  isHost   Boolean
+  vote     String
+
 }
