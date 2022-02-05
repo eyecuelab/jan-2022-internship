@@ -17,34 +17,14 @@ export async function createMovieGame({ userId }: MovieGameData): Promise<Game> 
   return db.game.create({
     data: {
       slug: nanoid(4),
-      //currentRound: 0,
-      // category: {
-      //   connect: {
-      //     apiId: categoryId,
-      //   },
-      // },
-      participants: {
+      players: {
         create: [
           {
-            //score: 0,
-            //won: false,
             player: { connect: { id: userId } },
-            //isHost: true,
+            isHost: true,
           },
         ],
       },
-      // questions: {
-      //   create: questions.map((question, i) => ({
-      //     question: question.question,
-      //     correctAnswer: question.correct_answer,
-      //     incorrectAnswers: question.incorrect_answers,
-      //     correctIndex: Math.floor(Math.random() * (question.incorrect_answers.length + 1)),
-      //     difficulty: question.difficulty,
-      //     type: question.type,
-      //     position: i,
-      //     category: { connect: { apiId: categoryId } },
-      //   })),
-      // },
     },
   });
 }

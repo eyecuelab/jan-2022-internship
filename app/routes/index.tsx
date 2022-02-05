@@ -1,5 +1,7 @@
-import { Form, Link, useLoaderData, useParams } from "remix";
+import { ActionFunction, Form, Link, redirect, useLoaderData, useParams } from "remix";
 import { db } from "~/utils/db.server";
+import { createMovieGame } from "~/utils/movieGame.server";
+import { requirePlayerId } from "~/utils/session.server";
 
 export const loader = async () => {
   const data = {
@@ -18,6 +20,16 @@ export const loader = async () => {
   return data;
 };
 
+export const action: ActionFunction = async ({ request }) => {
+  const playerId = await requirePlayerId(request);
+  const form = await request.formData();
+
+  const game = await createMovieGame({
+    playerId
+  });
+
+  return redirect(`/game/${game.slug}/lobby`);
+};
 // export const action: ActionFunction = async ({ request, params }) => {
 //   const { slug } = params;
 //   const form = await request.formData();
@@ -67,13 +79,13 @@ export const loader = async () => {
 // };
 
 export default function index() {
-  const { ...data } = useLoaderData();
-  //const { slug } = useParams();
-  const code = data.games[0].slug;
+  // const { ...data } = useLoaderData();
+
+  //const code = data.games[0].slug;
 
   return <div>
 
-    {/* <Form method="post">
+    <Form method="post">
       <>
         <input type="hidden" name="_method" value="begin" />
         <button className="button" type="submit">
@@ -87,12 +99,12 @@ export default function index() {
           Join the game
         </button>
       </>
-    </Form> */}
-    <ul>
+    </Form>
+    {/* <ul>
       <li><Link to={`/game/${code}/lobby`}>Start the game</Link></li>
       <li><Link to="/join">Join the game</Link></li>
       <li><Link to="/auth/login">Login</Link></li>
-    </ul>
+    </ul> */}
 
   </div>;
 }

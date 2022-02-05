@@ -66,6 +66,4 @@ model PlayersInGames {
   game     Game    @relation(fields: [gameId], references: [id])
   gameId   String
   isHost   Boolean
-  vote     String
-
 }
