@@ -4,14 +4,14 @@ import { nanoid } from 'nanoid';
 import { json, redirect } from 'remix';
 import { db } from './db.server';
 import { requirePlayerId } from './session.server';
-//import { generateToken, getQuestions } from './triviaApi.server';
 
 export type MovieGameData = {
-  userId: string;
+  playerId: string;
   // categoryId: number;
   // questionCount: number;
 };
-export async function createMovieGame({ userId }: MovieGameData): Promise<Game> {
+
+export async function createMovieGame({ playerId }: MovieGameData): Promise<Game> {
   //const apiToken = await generateToken();
   //const questions = await getQuestions(apiToken, categoryId, questionCount);
   return db.game.create({
@@ -20,7 +20,7 @@ export async function createMovieGame({ userId }: MovieGameData): Promise<Game> 
       players: {
         create: [
           {
-            player: { connect: { id: userId } },
+            player: { connect: { id: playerId } },
             isHost: true,
           },
         ],

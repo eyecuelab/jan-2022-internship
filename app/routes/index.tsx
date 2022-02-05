@@ -22,6 +22,9 @@ export const loader = async () => {
 
 export const action: ActionFunction = async ({ request }) => {
   const playerId = await requirePlayerId(request);
+  console.log(playerId);
+
+
   const form = await request.formData();
 
   const game = await createMovieGame({

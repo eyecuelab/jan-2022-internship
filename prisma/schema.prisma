@@ -28,7 +28,7 @@ model User {
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   Games          Game[]
-  GamesOwned     Game[]           @relation(name: "GamesOwned")
+  //GamesOwned     Game[]           @relation(name: "GamesOwned")
   playersInGames PlayersInGames[]
 }
 
@@ -37,7 +37,7 @@ model Game {
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   slug         String?          @unique
-  createdBy    User             @relation(name: "GamesOwned", fields: [id], references: id)
+  //createdBy    User             @relation(name: "GamesOwned", fields: [id], references: id)
   startedAt    DateTime?
   endedAt      DateTime?
   currentRound Int              @default(0)
@@ -66,4 +66,6 @@ model PlayersInGames {
   game     Game    @relation(fields: [gameId], references: [id])
   gameId   String
   isHost   Boolean
+
+  @@id([playerId, gameId])
 }
