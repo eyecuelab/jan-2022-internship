@@ -1,95 +1,43 @@
-import { ActionFunction, Form, Link, redirect, useLoaderData, useParams } from "remix";
+import { ActionFunction, Form, Link, redirect, useActionData, useLoaderData, useParams } from "remix";
 import { db } from "~/utils/db.server";
 import { createMovieGame } from "~/utils/movieGame.server";
-import { requirePlayerId } from "~/utils/session.server";
+import { getPlayer, requirePlayerId } from "~/utils/session.server";
 
-export const loader = async () => {
+export const loader = async ({ request }) => {
+  //const { slug } = request;
   const data = {
     movies: await db.movie.findMany({
       take: 7,
       select: { id: true, title: true },
     }),
-
-    games: await db.game.findMany({
-      take: 2,
-      select: { id: true, slug: true },
-    }),
+    // games: await db.game.findMany({
+    //   take: 2,
+    //   select: { id: true, slug: true },
+    // }),
   };
 
-  console.log(data);
-  return data;
+  const player = await getPlayer(request);
+  return { data, player };
 };
 
 export const action: ActionFunction = async ({ request }) => {
   const playerId = await requirePlayerId(request);
-  console.log(playerId);
-
-
-  const form = await request.formData();
-
+  //const form = await request.formData();
   const game = await createMovieGame({
     playerId
   });
 
   return redirect(`/game/${game.slug}/lobby`);
 };
-// export const action: ActionFunction = async ({ request, params }) => {
-//   const { slug } = params;
-//   const form = await request.formData();
-//   const user = await requirePlayer(request);
-//   const game = await db.game.findUnique({
-//     where: { slug },
-//     //include: { players: true },
-//   });
-//   if (!game) {
-//     throw new Error(`No game found for slug: ${params.slug}`);
-//   }
-
-//   const actionType = form.get('_method');
-
-//   if (typeof actionType !== 'string') {
-//     throw new Error(`No action type found in form data.`);
-//   }
-
-//   switch (actionType) {
-//     case 'join': {
-//       await db.players.create({
-//         data: {
-//           player: { connect: { id: user.id } },
-//           game: { connect: { id: game.id } },
-//           isHost: false,
-//         },
-//       });
-//       throw redirect(`/movie/${slug}/lobby`);
-//     }
-//     case 'begin': {
-//       const isHost = game.players.some(({ playerId, isHost }) => playerId === user.id && isHost);
-//       if (!isHost) {
-//         throw new Error(`You are not the host of this game.`);
-//       }
-//       await db.game.update({ where: { slug }, data: { startedAt: new Date(), currentQuestion: 0 } });
-//       await db.question.update({
-//         where: { position_triviaGameId: { position: 0, triviaGameId: game.id } },
-//         data: { startedAt: addSeconds(new Date(), 5), endedAt: addSeconds(new Date(), 20) },
-//       });
-
-//       throw redirect(`/game/${slug}/play`);
-//     }
-//     default: {
-//       throw json('Invalid action type.', 400);
-//     }
-//   }
-// };
 
 export default function index() {
-  // const { ...data } = useLoaderData();
-
-  //const code = data.games[0].slug;
+  const data = useLoaderData();
+  const player = data.player.username;
 
   return <div>
-
     <Form method="post">
       <>
+        <h3>You are {player}</h3>
         <input type="hidden" name="_method" value="begin" />
         <button className="button" type="submit">
           Start the game
@@ -99,16 +47,10 @@ export default function index() {
       <>
         <input type="hidden" name="_method" value="join" />
         <button type="submit">
-          Join the game
+          <Link to="/join">Join the game</Link>
         </button>
       </>
     </Form>
-    {/* <ul>
-      <li><Link to={`/game/${code}/lobby`}>Start the game</Link></li>
-      <li><Link to="/join">Join the game</Link></li>
-      <li><Link to="/auth/login">Login</Link></li>
-    </ul> */}
-
   </div>;
 }
 

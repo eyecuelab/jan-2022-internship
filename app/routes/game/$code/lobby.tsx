@@ -12,6 +12,7 @@ export const loader = async () => {
       take: 2,
       select: { id: true, slug: true },
     }),
+
   };
 
   console.log(data);
