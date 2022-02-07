@@ -33,14 +33,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const movieId = movie.id;
 
-  const createMovieScore = await db.movieScore.create({
-    data: {
-      movieId,
-      gameId,
-      likes: 0,
-      dislikes: 0,
-    },
-  });
+  // const createMovieScore = await db.movieScore.create({
+  //   data: {
+  //     movieId,
+  //     gameId,
+  //     likes: 0,
+  //     dislikes: 0,
+  //   },
+  // });
 
   return { movie, player, game };
 };

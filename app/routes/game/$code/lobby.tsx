@@ -37,6 +37,17 @@ export const loader: ActionFunction = async ({ request, params }) => {
   });
   if (!movie) throw new Error("Movie not found");
 
+  const movieId = data.movies[1].id;
+
+  const createMovieScore = await db.movieScore.create({
+    data: {
+      movieId,
+      gameId,
+      likes: 0,
+      dislikes: 0,
+    },
+  });
+
   //get current user
   const player = await requireUser(request);
 
