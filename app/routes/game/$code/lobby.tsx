@@ -1,33 +1,58 @@
 import { Link, useLoaderData } from "remix";
+import Game from "~/routes/game";
 import { db } from "~/utils/db.server";
+import { getPlayer, requireUser } from "~/utils/session.server";
 
-export const loader = async () => {
+export const loader = async ({ request, params }) => {
+  const slug = params.code;
   const data = {
     movies: await db.movie.findMany({
       take: 7,
       select: { id: true, title: true },
     }),
-
-    games: await db.game.findMany({
-      take: 2,
-      select: { id: true, slug: true },
-    }),
-
   };
 
-  console.log(data);
+  const gamePlayers = await db.game.findMany({
+    where: { slug },
+    select: {
+      players: { include: { player: { select: { username: true } } } },
+    }
+  });
 
-  return data;
+  //get current user
+  const player = await requireUser(request);
+
+  //get all users playing the game
+  const { 0: { players: { ...playersObj } } } = gamePlayers;
+  const playersArr = Object.values(playersObj);
+
+  return { data, player, slug, playersArr }
 };
 
 export default function Lobby() {
-  const { ...data } = useLoaderData();
-  const code = data.games[0].slug;
-  //const movies = data.movies;
+  const { data, player, slug, playersArr } = useLoaderData();
 
   return <div>
-    <h3>You are: 'username'</h3>
-    <h3>Wait for everyone to join!</h3>
-    <h4><Link to={`/game/${code}/play`}>Start the game</Link></h4>
+    <pre>Game ID is: {slug}</pre>
+    <pre>You are: {player.username}</pre>
+    <br />
+    <pre>Wait for everyone to join!</pre>
+    <br />
+    <pre>Players in the room: </pre>
+    <ul>
+      {playersArr.map((player, i) => (
+        <li key={player.playerId}>
+          <pre>{playersArr[i].player.username}</pre>
+        </li>
+      ))}
+    </ul>
   </div>;
+}
+
+export function ErrorBoundary({ error }: { error: Error }) {
+  return (
+    <div className="error-container">
+      <pre>{error.message}</pre>
+    </div>
+  );
 }

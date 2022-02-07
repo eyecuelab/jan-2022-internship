@@ -29,7 +29,8 @@ model User {
   updatedAt      DateTime         @updatedAt
   Games          Game[]
   //GamesOwned     Game[]           @relation(name: "GamesOwned")
-  playersInGames PlayersInGames[]
+  playersInGames PlayersInGames[] @relation(name: "PlayersInGames")
+  PlayersInGames PlayersInGames[]
 }
 
 model Game {
@@ -62,10 +63,12 @@ model MovieScore {
 
 model PlayersInGames {
   player   User    @relation(fields: [playerId], references: [id])
-  playerId String  @unique
+  playerId String  @id
   game     Game    @relation(fields: [gameId], references: [id])
   gameId   String
   isHost   Boolean
+  User     User?   @relation("PlayersInGames", fields: [userId], references: [id])
+  userId   String?
 
-  @@id([playerId, gameId])
+  //@@id([playerId, gameId])
 }

@@ -13,7 +13,7 @@ export default function Welcome() {
 
   return (
     <div>
-      <h1>Welcome bud!</h1>
+      <h1>Welcome!</h1>
       <p>{player.username}</p>
     </div>);
 }
