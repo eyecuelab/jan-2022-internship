@@ -31,6 +31,8 @@ export const loader = async ({ request, params }) => {
 
 export default function Lobby() {
   const { data, player, slug, playersArr } = useLoaderData();
+  console.log(data.movies[0].id);
+
 
   return <div>
     <pre>Game ID is: {slug}</pre>
@@ -42,10 +44,12 @@ export default function Lobby() {
     <ul>
       {playersArr.map((player, i) => (
         <li key={player.playerId}>
-          <pre>{playersArr[i].player.username}</pre>
+          <pre >{playersArr[i].player.username}</pre >
         </li>
       ))}
     </ul>
+    <br />
+    <Link to={`/game/${slug}/${data.movies[0].id}`}>Lets GO</Link>
   </div>;
 }
 
