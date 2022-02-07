@@ -32,6 +32,18 @@ export const loader = async ({ request, params }) => {
   const player = await getPlayer(request);
   console.log(player);
 
+  const updateTaste = await db.movieScore.create({
+    //where: { score },
+    data: {
+      //slug: { '3lfy'},
+      likes: 0,
+      dislikes: 0,
+      movie: params.movie,
+      game: score.game,
+
+    },
+  });
+
   return { movie, player, score };
 };
 
