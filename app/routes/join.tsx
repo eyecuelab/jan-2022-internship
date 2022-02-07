@@ -1,9 +1,11 @@
 import { redirect, useActionData } from "remix";
 import { db } from "~/utils/db.server";
 import { createMovieGame } from "~/utils/movieGame.server";
-import { getPlayerId, requirePlayerId, requireUser } from "~/utils/session.server";
-
-
+import {
+  getPlayerId,
+  requirePlayerId,
+  requireUser,
+} from "~/utils/session.server";
 
 export const action = async ({ request, params }) => {
   const formData = await request.formData();
@@ -17,10 +19,8 @@ export const action = async ({ request, params }) => {
 
   console.log(user.id);
 
-
   const code = formData.get("code");
   const slug = code;
-
 
   const game = await db.game.findUnique({
     where: { slug },
@@ -32,14 +32,13 @@ export const action = async ({ request, params }) => {
 
   console.log(game);
 
-
   const data = await db.playersInGames.create({
     data: {
       player: { connect: { id: user.id } },
       game: { connect: { id: game.id } },
       isHost: false,
     },
-  })
+  });
 
   return redirect(`/game/${code}/lobby`);
 };
@@ -47,7 +46,6 @@ export const action = async ({ request, params }) => {
 export default function Join() {
   const data = useActionData();
   //console.log(data);
-
 
   return (
     <form method="post">

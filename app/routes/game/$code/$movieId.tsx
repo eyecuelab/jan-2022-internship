@@ -1,10 +1,8 @@
-
 import {
   ActionFunction,
   Link,
   LoaderFunction,
   redirect,
-  ScrollRestoration,
   useActionData,
   useLoaderData,
 } from "remix";
@@ -12,29 +10,40 @@ import Game from "~/routes/game";
 import { db } from "~/utils/db.server";
 import { getPlayer } from "~/utils/session.server";
 
-export const loader = async ({ request, params }) => {
+export const loader: LoaderFunction = async ({ request, params }) => {
   const slug = params.code;
   console.log(slug);
 
-  const score = {
-    game: await db.game.findUnique({
-      where: { slug },
-      select: { id: true, MovieScore: true },
-    }),
-  };
+  const game = await db.game.findUnique({
+    where: { slug },
+    select: { id: true },
+  });
+
+  if (!game) throw new Error("Game not found");
+  const gameId = game.id;
+  console.log(gameId);
 
   const movie = await db.movie.findUnique({
     where: { id: params.movieId },
   });
   if (!movie) throw new Error("Movie not found");
-  //const data = { movie };
-  console.log(score);
+
+  console.log(game);
   const player = await getPlayer(request);
-  console.log(player);
 
-  return { movie, player, score };
+  const movieId = movie.id;
+
+  // const createMovieScore = await db.movieScore.create({
+  //   data: {
+  //     movieId,
+  //     gameId,
+  //     likes: 0,
+  //     dislikes: 0,
+  //   },
+  // });
+
+  return { movie, player, game };
 };
-
 
 export const action: ActionFunction = async ({ request, params }) => {
   const formData = await request.formData();
@@ -43,7 +52,6 @@ export const action: ActionFunction = async ({ request, params }) => {
   if (typeof actionType !== "string") {
     return redirect("/login");
   }
-
 
   // const updateTaste = await db.game.create({
   //   where: { id: score.game },
