@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { ActionFunction, json, Link, useLoaderData } from "remix";
 import Game from "~/routes/game";
 import { db } from "~/utils/db.server";
@@ -21,7 +20,7 @@ export const loader: ActionFunction = async ({ request, params }) => {
     },
   });
 
-  //get game's unique id
+  //get game's unique id and status
   const game = await db.game.findUnique({
     where: { slug },
     select: { id: true },
@@ -29,6 +28,14 @@ export const loader: ActionFunction = async ({ request, params }) => {
 
   if (!game) throw new Error("Game not found");
   const gameId = game.id;
+
+  //set game status as started
+  const gameStatus = await db.game.update({
+    where: { slug },
+    data: { isStarted: true },
+  });
+
+  const status = gameStatus.isStarted;
 
   //get movie's unique id
   const movie = await db.movie.findUnique({
@@ -47,10 +54,11 @@ export const loader: ActionFunction = async ({ request, params }) => {
   });
 
   //insert all movies in MovieScore table
-  allMovies.map(async (item) => {
+  allMovies.map(async (item, i) => {
     await db.movieScore.create({
       data: {
         movieId: item,
+        position: i + 1,
         gameId,
         likes: 0,
         dislikes: 0,
@@ -72,12 +80,12 @@ export const loader: ActionFunction = async ({ request, params }) => {
   } = gamePlayers;
   const playersArr = Object.values(playersObj);
 
-  return { data, player, slug, playersArr };
+  return { data, player, slug, playersArr, status };
 };
 
 export default function Lobby() {
-  const { data, player, slug, playersArr } = useLoaderData();
-  //console.log(data.movies[0].id);
+  const { data, player, slug, playersArr, status } = useLoaderData();
+  console.log(status);
 
   return (
     <div>
@@ -85,6 +93,8 @@ export default function Lobby() {
       <pre>You are: {player.username}</pre>
       <br />
       <pre>Wait for everyone to join!</pre>
+      <br />
+      <pre>Game started? : {`${status}`}</pre>
       <br />
       <pre>Players in the room: </pre>
       <ul>

@@ -83,7 +83,7 @@ export const action: ActionFunction = async ({ request, params }) => {
           ],
         },
         data: {
-          likes: { decrement: 1 },
+          dislikes: { increment: 1 },
         },
       });
       throw redirect(`/game/${slug}/${data.movies[2].id}`);

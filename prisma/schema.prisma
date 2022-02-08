@@ -39,6 +39,7 @@ model Game {
   updatedAt    DateTime         @updatedAt
   slug         String?          @unique
   //createdBy    User             @relation(name: "GamesOwned", fields: [id], references: id)
+  isStarted    Boolean          @default(false)
   startedAt    DateTime?
   endedAt      DateTime?
   currentRound Int              @default(0)
@@ -52,7 +53,7 @@ model MovieScore {
   //slug      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  position  Boolean  @default(false)
+  position  Int  @default(0)
   movieId   String
   movie     Movie    @relation(fields: [movieId], references: [id])
   game      Game     @relation("MovieScore", fields: [gameId], references: [id])
