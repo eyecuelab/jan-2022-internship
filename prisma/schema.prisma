@@ -43,7 +43,7 @@ model Game {
   endedAt      DateTime?
   currentRound Int              @default(0)
   Participants User[]
-  MovieScore   MovieScore[]
+  MovieScore   MovieScore[]     @relation(name: "MovieScore")
   players      PlayersInGames[]
 }
 
@@ -55,7 +55,7 @@ model MovieScore {
   position  Boolean  @default(false)
   movieId   String
   movie     Movie    @relation(fields: [movieId], references: [id])
-  game      Game     @relation(fields: [gameId], references: [id])
+  game      Game     @relation("MovieScore", fields: [gameId], references: [id])
   gameId    String
   likes     Int
   dislikes  Int

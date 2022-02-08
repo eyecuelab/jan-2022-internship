@@ -19,7 +19,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   const updatedTaste = await db.movie.update({
     where: { id: params.movieId },
     data: {
-      tasteProfile: { increment: parseInt(actionType) },
+      tasteProfile: { increment: parseInt({ actionType }) },
     },
   });
 
