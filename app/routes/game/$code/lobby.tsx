@@ -1,4 +1,5 @@
-import { ActionFunction, Link, useLoaderData } from "remix";
+import { useEffect } from "react";
+import { ActionFunction, json, Link, useLoaderData } from "remix";
 import Game from "~/routes/game";
 import { db } from "~/utils/db.server";
 import { requireUser } from "~/utils/session.server";
@@ -56,6 +57,9 @@ export const loader: ActionFunction = async ({ request, params }) => {
       },
     });
   });
+  if (!allMovies) {
+    throw json("Movies already added.", 404);
+  }
 
   //get current user
   const player = await requireUser(request);
@@ -96,13 +100,21 @@ export default function Lobby() {
   );
 }
 
-export function ErrorBoundary({ error }: { error: Error }) {
-  return (
-    <div className="error-container">
-      <pre>{error.message}</pre>
-    </div>
-  );
-}
-function movieIdArr(movieIdArr: any) {
+// export function ErrorBoundary({ error }: { error: Error }) {
+//   useEffect(
+//     getAllMovies(), // <- function that will run on every dependency update
+//     [] // <-- empty dependency array
+//   );
+
+//   return (
+//     <div className="error-container">
+//       <pre>{error.message}</pre>
+//     </div>
+//   );
+// }
+// function movieIdArr(movieIdArr: any) {
+//   throw new Error("Function not implemented.");
+// }
+function getAllMovies(): import("react").EffectCallback {
   throw new Error("Function not implemented.");
 }

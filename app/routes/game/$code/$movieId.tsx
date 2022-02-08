@@ -31,16 +31,24 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   console.log(game);
   const player = await getPlayer(request);
 
-  const movieId = movie.id;
+  console.log(gameId);
 
-  // const createMovieScore = await db.movieScore.create({
-  //   data: {
-  //     movieId,
-  //     gameId,
-  //     likes: 0,
-  //     dislikes: 0,
-  //   },
-  // });
+  //increment likes files by '1'
+  const updateMovieScore = await db.movieScore.updateMany({
+    where: {
+      game: { id: gameId },
+      AND: [
+        {
+          movie: { id: params.movieId },
+        },
+      ],
+    },
+    data: {
+      likes: { increment: 1 },
+    },
+  });
+
+  console.log(updateMovieScore);
 
   return { movie, player, game };
 };
@@ -52,18 +60,6 @@ export const action: ActionFunction = async ({ request, params }) => {
   if (typeof actionType !== "string") {
     return redirect("/login");
   }
-
-  // const updateTaste = await db.game.create({
-  //   where: { id: score.game },
-  //   data: {
-  //     MovieScore: {},
-  //   },
-  // });
-
-  //const data = { updateTaste };
-  //console.log(params);
-  //return redirect(`$movieId`);
-  //return data;
   return null;
 };
 
