@@ -28,6 +28,33 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   });
   if (!movie) throw new Error("Movie not found");
 
+  console.log(params.movieId);
+
+  const movieList = {
+    movies: await db.movieScore.findMany({
+      where: { game },
+      select: { id: true, position: true },
+      orderBy: {
+        position: "asc",
+      },
+    }),
+  };
+
+  console.log(movieList);
+
+  const movieQueue = await db.movieScore.findMany({
+    where: {
+      game: { id: game.id },
+      AND: [
+        {
+          movie: { id: params.movieId },
+        },
+      ],
+    },
+  });
+
+  console.log(movieQueue[0].position);
+
   const player = await getPlayer(request);
 
   return { movie, player, game };
