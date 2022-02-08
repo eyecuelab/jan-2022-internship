@@ -1,13 +1,4 @@
-import {
-  ActionFunction,
-  Form,
-  Link,
-  LoaderFunction,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useParams,
-} from "remix";
+import { ActionFunction, Form, Link, LoaderFunction, redirect } from "remix";
 import { db } from "~/utils/db.server";
 import { createMovieGame } from "~/utils/movieGame.server";
 import { getPlayer, requirePlayerId } from "~/utils/session.server";
@@ -19,21 +10,24 @@ export const loader: LoaderFunction = async ({ request }) => {
       take: 7,
       select: { id: true, title: true },
     }),
-    // games: await db.game.findMany({
-    //   take: 2,
-    //   select: { id: true, slug: true },
-    // }),
   };
 
   const player = await getPlayer(request);
   return { data, player };
 };
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request, params }) => {
   const playerId = await requirePlayerId(request);
   const game = await createMovieGame({
     playerId,
   });
+
+  // const gameId = game.id;
+
+  // const gameStatus = await db.game.update({
+  //   where: { id: gameId },
+  //   data: { isStarted: true },
+  // });
 
   return redirect(`/game/${game.slug}/lobby`);
 };

@@ -23,27 +23,20 @@ export const loader: ActionFunction = async ({ request, params }) => {
   //get game's unique id and status
   const game = await db.game.findUnique({
     where: { slug },
-    select: { id: true },
+    select: { id: true, isStarted: true },
   });
 
   if (!game) throw new Error("Game not found");
   const gameId = game.id;
-
-  //set game status as started
-  const gameStatus = await db.game.update({
-    where: { slug },
-    data: { isStarted: true },
-  });
-
-  const status = gameStatus.isStarted;
+  const gameStatus = game.isStarted;
+  const status = gameStatus;
+  console.log(status);
 
   //get movie's unique id
   const movie = await db.movie.findUnique({
     where: { id: data.movies[0].id },
   });
   if (!movie) throw new Error("Movie not found");
-
-  //const movieId = data.movies[1].id;
 
   const movieObj = await db.movie.findMany({
     select: { id: true },
@@ -53,20 +46,29 @@ export const loader: ActionFunction = async ({ request, params }) => {
     return item.id;
   });
 
-  //insert all movies in MovieScore table
-  allMovies.map(async (item, i) => {
-    await db.movieScore.create({
-      data: {
-        movieId: item,
-        position: i + 1,
-        gameId,
-        likes: 0,
-        dislikes: 0,
-      },
+  if (!status) {
+    //insert all movies in MovieScore table
+    allMovies.map(async (item, i) => {
+      await db.movieScore.create({
+        data: {
+          movieId: item,
+          position: i + 1,
+          gameId,
+          likes: 0,
+          dislikes: 0,
+        },
+      });
     });
-  });
-  if (!allMovies) {
-    throw json("Movies already added.", 404);
+
+    //const gameId = game.id;
+    await db.game.update({
+      where: { id: gameId },
+      data: { isStarted: true },
+    });
+  } else {
+    if (!allMovies) {
+      throw json("Movies already added.", 404);
+    }
   }
 
   //get current user
@@ -85,7 +87,6 @@ export const loader: ActionFunction = async ({ request, params }) => {
 
 export default function Lobby() {
   const { data, player, slug, playersArr, status } = useLoaderData();
-  console.log(status);
 
   return (
     <div>
