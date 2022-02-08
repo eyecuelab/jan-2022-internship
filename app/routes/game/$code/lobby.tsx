@@ -28,8 +28,6 @@ export const loader: ActionFunction = async ({ request, params }) => {
 
   if (!game) throw new Error("Game not found");
   const gameId = game.id;
-  console.log(gameId);
-  console.log(data.movies[0].id);
 
   //get movie's unique id
   const movie = await db.movie.findUnique({
@@ -37,15 +35,26 @@ export const loader: ActionFunction = async ({ request, params }) => {
   });
   if (!movie) throw new Error("Movie not found");
 
-  const movieId = data.movies[1].id;
+  //const movieId = data.movies[1].id;
 
-  const createMovieScore = await db.movieScore.create({
-    data: {
-      movieId,
-      gameId,
-      likes: 0,
-      dislikes: 0,
-    },
+  const movieObj = await db.movie.findMany({
+    select: { id: true },
+  });
+
+  const allMovies = movieObj.map((item) => {
+    return item.id;
+  });
+
+  //insert all movies in MovieScore table
+  allMovies.map(async (item) => {
+    await db.movieScore.create({
+      data: {
+        movieId: item,
+        gameId,
+        likes: 0,
+        dislikes: 0,
+      },
+    });
   });
 
   //get current user
@@ -64,7 +73,7 @@ export const loader: ActionFunction = async ({ request, params }) => {
 
 export default function Lobby() {
   const { data, player, slug, playersArr } = useLoaderData();
-  console.log(data.movies[0].id);
+  //console.log(data.movies[0].id);
 
   return (
     <div>
@@ -93,4 +102,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
       <pre>{error.message}</pre>
     </div>
   );
+}
+function movieIdArr(movieIdArr: any) {
+  throw new Error("Function not implemented.");
 }
