@@ -13,22 +13,16 @@ import { getPlayer } from "~/utils/session.server";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const slug = params.code;
-  console.log(slug);
-
   const game = await db.game.findUnique({
     where: { slug },
     select: { id: true },
   });
-
   if (!game) throw new Error("Game not found");
-  //const gameId = game.id;
 
   const movie = await db.movie.findUnique({
     where: { id: params.movieId },
   });
   if (!movie) throw new Error("Movie not found");
-
-  console.log(params.movieId);
 
   const movieList = {
     movies: await db.movieScore.findMany({
@@ -40,9 +34,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     }),
   };
 
-  console.log(movieList);
-
-  const movieQueue = await db.movieScore.findMany({
+  const currMoviePosition = await db.movieScore.findMany({
     where: {
       game: { id: game.id },
       AND: [
@@ -53,11 +45,21 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     },
   });
 
-  console.log(movieQueue[0].position);
+  console.log("Total number of movies:");
+  const totalMoviesNumber = Object.keys(movieList.movies).length;
+  console.log(totalMoviesNumber);
+  //console.log(movieList.movies);
+  console.log("Current movie position:");
+  console.log(currMoviePosition[0].position);
+  // console.log(currMoviePosition[0]);
+  // const nextPosition = currMoviePosition[0].position + 1;
+  // console.log("next position");
+  // console.log(nextPosition);
+  //console.log(Object.keys(movieList.movies).length);
 
   const player = await getPlayer(request);
 
-  return { movie, player, game };
+  return { movie, player, game, slug, movieList, currMoviePosition };
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -71,17 +73,35 @@ export const action: ActionFunction = async ({ request, params }) => {
   });
 
   if (!game) throw new Error("Game not found");
+
+  const currMoviePosition = await db.movieScore.findMany({
+    where: {
+      game: { id: game.id },
+      AND: [
+        {
+          movie: { id: params.movieId },
+        },
+      ],
+    },
+  });
+
+  const nextPosition = currMoviePosition[0].position;
+  console.log(nextPosition);
+
   const data = {
     movies: await db.movie.findMany({
       select: { id: true, title: true },
     }),
   };
+  if (!data) throw new Error("Game not found");
   const gameId = game.id;
 
   if (typeof actionType !== "string") {
     throw new Error(`No action type found in form data.`);
   }
 
+  //should return total number of movies provided in base table - Movies
+  //const totalMoviesNumber = Object.keys(data.movies).length;
   switch (actionType) {
     case "yes": {
       await db.movieScore.updateMany({
@@ -97,7 +117,8 @@ export const action: ActionFunction = async ({ request, params }) => {
           likes: { increment: 1 },
         },
       });
-      throw redirect(`/game/${slug}/${data.movies[1].id}`);
+      // throw redirect(`/game/${slug}/${data.movies[1].id}`);
+      throw redirect(`/game/${slug}/${data.movies[nextPosition].id}`);
     }
     case "no": {
       await db.movieScore.updateMany({
@@ -113,7 +134,8 @@ export const action: ActionFunction = async ({ request, params }) => {
           dislikes: { increment: 1 },
         },
       });
-      throw redirect(`/game/${slug}/${data.movies[2].id}`);
+      //throw redirect(`/game/${slug}/${data.movies[2].id}`);
+      throw redirect(`/game/${slug}/${data.movies[nextPosition].id}`);
     }
     default: {
       throw json("Invalid action type.", 400);
@@ -122,10 +144,12 @@ export const action: ActionFunction = async ({ request, params }) => {
 };
 
 export default function Movie() {
-  const { movie } = useLoaderData();
+  const { movie, movieList, slug, currMoviePosition } = useLoaderData();
   const IMG_URL = "https://image.tmdb.org/t/p/w500";
   const poster = IMG_URL + movie.posterPath;
   const vote = useActionData();
+
+  //console.log(currMoviePosition[0].position);
 
   return (
     <div>
@@ -139,7 +163,10 @@ export default function Movie() {
             </form>
             <form method="post">
               <input type="hidden" name="actionType" value="no" />
-              <button type="submit">No</button>
+              <button type="submit">
+                No
+                {/* <Link to={`/game/${slug}/${movieList.movies[3].id}`}>No</Link> */}
+              </button>
             </form>
           </>
         )}

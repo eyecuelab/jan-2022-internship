@@ -7,10 +7,17 @@ export const loader: ActionFunction = async ({ request, params }) => {
   const slug = params.code;
   const data = {
     movies: await db.movie.findMany({
-      take: 7,
       select: { id: true, title: true },
     }),
   };
+
+  //get game's unique id and status
+  const game = await db.game.findUnique({
+    where: { slug },
+    select: { id: true, isStarted: true },
+  });
+
+  if (!game) throw new Error("Game not found");
 
   //get all players in the game
   const gamePlayers = await db.game.findMany({
@@ -20,13 +27,6 @@ export const loader: ActionFunction = async ({ request, params }) => {
     },
   });
 
-  //get game's unique id and status
-  const game = await db.game.findUnique({
-    where: { slug },
-    select: { id: true, isStarted: true },
-  });
-
-  if (!game) throw new Error("Game not found");
   const gameId = game.id;
   const gameStatus = game.isStarted;
   const status = gameStatus;
@@ -37,6 +37,7 @@ export const loader: ActionFunction = async ({ request, params }) => {
     where: { id: data.movies[0].id },
   });
   if (!movie) throw new Error("Movie not found");
+  //const movieId = movie.id;
 
   const movieObj = await db.movie.findMany({
     select: { id: true },
@@ -51,12 +52,14 @@ export const loader: ActionFunction = async ({ request, params }) => {
     allMovies.map(async (item, i) => {
       await db.movieScore.create({
         data: {
+          //movie: { connect: { id: movieId } },
           movieId: item,
           position: i + 1,
           gameId,
           likes: 0,
           dislikes: 0,
         },
+        include: { movie: true },
       });
     });
 
@@ -82,6 +85,48 @@ export const loader: ActionFunction = async ({ request, params }) => {
   } = gamePlayers;
   const playersArr = Object.values(playersObj);
 
+  // ======================
+
+  //get ordered list of movies
+  const movieList = {
+    movies: await db.movieScore.findMany({
+      where: { game },
+      select: { id: true, position: true },
+      orderBy: {
+        position: "asc",
+      },
+    }),
+  };
+
+  console.log(movieList.movies);
+
+  // const movieQueue = await db.movieScore.findMany({
+  //   where: {
+  //     game: { id: game.id },
+  //     AND: [
+  //       {
+  //         movie: { id: params.movieId },
+  //       },
+  //     ],
+  //   },
+  // });
+
+  const movieQueue = await db.movieScore.findMany({
+    where: {
+      game: { id: game.id },
+      AND: [
+        {
+          movie: { id: params.movieId },
+        },
+      ],
+    },
+  });
+
+  console.log("current movie position:");
+  console.log(movieQueue[0].position);
+
+  // ======================
+
   return { data, player, slug, playersArr, status };
 };
 
@@ -106,16 +151,11 @@ export default function Lobby() {
         ))}
       </ul>
       <br />
+      {/* <Link to={`/game/${slug}/${data.movies[0].id}`}>Lets GO</Link> */}
       <Link to={`/game/${slug}/${data.movies[0].id}`}>Lets GO</Link>
     </div>
   );
 }
-
-// export function ErrorBoundary({ error }: { error: Error }) {
-//   useEffect(
-//     getAllMovies(), // <- function that will run on every dependency update
-//     [] // <-- empty dependency array
-//   );
 
 //   return (
 //     <div className="error-container">
