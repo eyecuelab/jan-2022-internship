@@ -1,7 +1,13 @@
 import { useActionData, redirect, json } from "remix";
 import { db } from "~/utils/db.server";
 import { createMovieGame } from "~/utils/movieGame.server";
-import { register, createUserSession, requirePlayerId, getPlayer, getPlayerId } from "~/utils/session.server";
+import {
+  register,
+  createUserSession,
+  requirePlayerId,
+  getPlayer,
+  getPlayerId,
+} from "~/utils/session.server";
 
 function validateUsername(username) {
   if (typeof username !== "string" || username.length < 3) {
@@ -18,7 +24,6 @@ export const loader = async ({ request }) => {
   return { player };
 };
 
-
 export const action = async ({ request }) => {
   const form = await request.formData();
   const loginType = form.get("loginType");
@@ -34,7 +39,6 @@ export const action = async ({ request }) => {
   if (Object.values(fieldErrors).some(Boolean)) {
     return badRequest({ fieldErrors, fields });
   }
-
 
   //Check if user exists
   const userExists = await db.user.findFirst({
@@ -60,10 +64,8 @@ export const action = async ({ request }) => {
   }
 
   //Create user sessioni
-  return createUserSession(user.id, "/");
-}
-
-
+  return createUserSession(user.id, "/new");
+};
 
 export default function Enter() {
   const actionData = useActionData();
@@ -76,7 +78,6 @@ export default function Enter() {
 
       <div className="page-content">
         <form method="POST">
-
           <div className="form-control">
             <label htmlFor="username">Username</label>
             <input
@@ -106,4 +107,3 @@ export function ErrorBoundary({ error }: { error: Error }) {
     </div>
   );
 }
-

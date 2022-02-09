@@ -118,10 +118,8 @@ export const action: ActionFunction = async ({ request, params }) => {
           likes: { increment: 1 },
         },
       });
-      // throw redirect(`/game/${slug}/${data.movies[1].id}`);
-      const nextMovie = data.movies[nextPosition];
-      console.log(nextMovie);
 
+      const nextMovie = data.movies[nextPosition];
       if (nextMovie === undefined) {
         throw redirect(`/game/${slug}/results`);
       } else {
@@ -142,8 +140,14 @@ export const action: ActionFunction = async ({ request, params }) => {
           dislikes: { increment: 1 },
         },
       });
-      //throw redirect(`/game/${slug}/${data.movies[2].id}`);
-      throw redirect(`/game/${slug}/${data.movies[nextPosition].id}`);
+
+      //throw redirect(`/game/${slug}/${data.movies[nextPosition].id}`);
+      const nextMovie = data.movies[nextPosition];
+      if (nextMovie === undefined) {
+        throw redirect(`/game/${slug}/results`);
+      } else {
+        throw redirect(`/game/${slug}/${data.movies[nextPosition].id}`);
+      }
     }
     default: {
       throw json("Invalid action type.", 400);
