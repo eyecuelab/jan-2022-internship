@@ -45,10 +45,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     },
   });
 
+  console.table(movieList.movies);
   console.log("Total number of movies:");
   const totalMoviesNumber = Object.keys(movieList.movies).length;
   console.log(totalMoviesNumber);
-  //console.log(movieList.movies);
   console.log("Current movie position:");
   console.log(currMoviePosition[0].position);
   // console.log(currMoviePosition[0]);
@@ -86,7 +86,6 @@ export const action: ActionFunction = async ({ request, params }) => {
   });
 
   const nextPosition = currMoviePosition[0].position;
-  console.log(nextPosition);
 
   const data = {
     movies: await db.movie.findMany({
@@ -102,6 +101,8 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   //should return total number of movies provided in base table - Movies
   //const totalMoviesNumber = Object.keys(data.movies).length;
+  //console.log(totalMoviesNumber);
+
   switch (actionType) {
     case "yes": {
       await db.movieScore.updateMany({
@@ -118,7 +119,14 @@ export const action: ActionFunction = async ({ request, params }) => {
         },
       });
       // throw redirect(`/game/${slug}/${data.movies[1].id}`);
-      throw redirect(`/game/${slug}/${data.movies[nextPosition].id}`);
+      const nextMovie = data.movies[nextPosition];
+      console.log(nextMovie);
+
+      if (nextMovie === undefined) {
+        throw redirect(`/game/${slug}/results`);
+      } else {
+        throw redirect(`/game/${slug}/${data.movies[nextPosition].id}`);
+      }
     }
     case "no": {
       await db.movieScore.updateMany({
@@ -144,12 +152,10 @@ export const action: ActionFunction = async ({ request, params }) => {
 };
 
 export default function Movie() {
-  const { movie, movieList, slug, currMoviePosition } = useLoaderData();
+  const { movie } = useLoaderData();
   const IMG_URL = "https://image.tmdb.org/t/p/w500";
   const poster = IMG_URL + movie.posterPath;
   const vote = useActionData();
-
-  //console.log(currMoviePosition[0].position);
 
   return (
     <div>

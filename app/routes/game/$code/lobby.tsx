@@ -37,7 +37,6 @@ export const loader: ActionFunction = async ({ request, params }) => {
     where: { id: data.movies[0].id },
   });
   if (!movie) throw new Error("Movie not found");
-  //const movieId = movie.id;
 
   const movieObj = await db.movie.findMany({
     select: { id: true },
