@@ -29,13 +29,13 @@ export const loader: LoaderFunction = async () => {
 
   // Delete all movies in db and then write the newly fetched movies to database:
   //await db.movie.deleteMany({});
-  // await db.movie.createMany({
-  //   data: moviesFromAPI.results.map((movie: any) => ({
-  //     title: movie.title,
-  //     overview: movie.overview,
-  //     posterPath: movie.poster_path,
-  //   })),
-  // });
+  await db.movie.createMany({
+    data: moviesFromAPI.results.map((movie: any) => ({
+      title: movie.title,
+      overview: movie.overview,
+      posterPath: movie.poster_path,
+    })),
+  });
 
   // Get the newly written movies from the DB and return them to the client:
   const dbMovies = await db.movie.findMany();
@@ -56,13 +56,13 @@ export const action: ActionFunction = async ({ request }) => {
       throw new Error(`No action type found in form data.`);
     }
 
-    const updatedTaste = await db.movie.update({
-      where: { id: id },
-      data: {
-        tasteProfile: { increment: parseInt(actionType) },
-        //data: { tasteProfile: actionType },
-      },
-    });
+    // const updatedTaste = await db.movie.update({
+    //   where: { id: id },
+    //   data: {
+    //     tasteProfile: { increment: parseInt(actionType) },
+    //     //data: { tasteProfile: actionType },
+    //   },
+    // });
 
     console.log(form);
     console.log(updatedTaste);

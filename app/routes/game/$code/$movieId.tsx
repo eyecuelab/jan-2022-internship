@@ -10,6 +10,9 @@ import {
 //import Game from "~/routes/game";
 import { db } from "~/utils/db.server";
 import { getPlayer } from "~/utils/session.server";
+import movieStyles from "~/styles/movie.css";
+
+export const links = () => [{ rel: "stylesheet", href: movieStyles }];
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const slug = params.code;
@@ -165,29 +168,38 @@ export default function Movie() {
     <div>
       <div className="page-header">
         <Link to="/">Back</Link>
+
+        <div>
+          <div className="movies">
+            <h1>{movie.title}</h1>
+            {/* <h3>{movie.id}</h3> */}
+            <img src={poster} className="poster" />
+          </div>
+          <div>
+            {vote?.errors ? (
+              <p style={{ color: "red" }}>{vote.errors}</p>
+            ) : null}
+          </div>
+        </div>
         {movie.id && (
           <>
-            <form method="post">
-              <input type="hidden" name="actionType" value="yes" />
-              <button type="submit">Yes</button>
-            </form>
-            <form method="post">
-              <input type="hidden" name="actionType" value="no" />
-              <button type="submit">
-                No
-                {/* <Link to={`/game/${slug}/${movieList.movies[3].id}`}>No</Link> */}
-              </button>
-            </form>
+            <div className="movies">
+              <form method="post">
+                <input type="hidden" name="actionType" value="yes" />
+                <button type="submit" className="btn">
+                  Yes
+                </button>
+              </form>
+              <form method="post">
+                <input type="hidden" name="actionType" value="no" />
+                <button type="submit" className="btn">
+                  No
+                  {/* <Link to={`/game/${slug}/${movieList.movies[3].id}`}>No</Link> */}
+                </button>
+              </form>
+            </div>
           </>
         )}
-        <div>
-          <h1>{movie.title}</h1>
-          <h3>{movie.id}</h3>
-          <img src={poster} />
-        </div>
-        <div>
-          {vote?.errors ? <p style={{ color: "red" }}>{vote.errors}</p> : null}
-        </div>
       </div>
     </div>
   );

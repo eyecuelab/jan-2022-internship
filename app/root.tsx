@@ -9,7 +9,6 @@ import {
 //import globalStyles from "~/styles/global.css";
 import type { MetaFunction } from "remix";
 import globalStyles from "~/styles/global.css";
-//import styles from "./styles/app.css";
 
 export const links = () => [{ rel: "stylesheet", href: globalStyles }];
 

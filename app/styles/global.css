@@ -12,7 +12,7 @@ body {
   top: 0px; */
 }
 
-.movies {
+/* .movies {
   display: grid;
   justify-content: center;
 }
@@ -116,7 +116,7 @@ input:focus::placeholder {
   text-align: center;
   text-decoration: none;
   display: inline-block;
-}
+} */
 
 /* 
 .movies li {

@@ -2,6 +2,9 @@ import { ActionFunction, json, Link, useLoaderData } from "remix";
 import Game from "~/routes/game";
 import { db } from "~/utils/db.server";
 import { requireUser } from "~/utils/session.server";
+import lobbyStyles from "~/styles/lobby.css";
+
+export const links = () => [{ rel: "stylesheet", href: lobbyStyles }];
 
 export const loader: ActionFunction = async ({ request, params }) => {
   const slug = params.code;
@@ -39,12 +42,19 @@ export const loader: ActionFunction = async ({ request, params }) => {
   if (!movie) throw new Error("Movie not found");
 
   const movieObj = await db.movie.findMany({
-    select: { id: true },
+    select: { id: true, title: true },
   });
 
   const allMovies = movieObj.map((item) => {
     return item.id;
   });
+
+  const allTitles = movieObj.map((item) => {
+    return item.title;
+  });
+
+  console.log(allTitles);
+  console.log(allMovies);
 
   if (!status) {
     //insert all movies in MovieScore table
@@ -97,7 +107,7 @@ export const loader: ActionFunction = async ({ request, params }) => {
     }),
   };
 
-  console.log(movieList.movies);
+  //console.log(movieList.movies);
 
   // const movieQueue = await db.movieScore.findMany({
   //   where: {

@@ -1,0 +1,45 @@
+.movies {
+  display: grid;
+  justify-content: center;
+}
+
+.poster {
+  max-width: 300px;
+  border-radius: 12px;
+}
+
+.movies h3 h1 {
+  font-size: 1.8em;
+  padding: 15px 10px 0;
+  margin-top: auto;
+}
+
+.btn-select {
+  display: grid;
+  justify-content: center;
+}
+
+.btn {
+  background-color: #1A2448;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  font-weight: 800;
+  font-size: 26px;
+  line-height: 43px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 1px solid #85CDED;
+  width: 312px;
+  transition: all 0.2s ease-in-out;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.glow-button:hover {
+  color: rgba(255, 255, 255, 1);
+  box-shadow: 0 5px 15px rgba(145, 92, 182, .4);
+}
