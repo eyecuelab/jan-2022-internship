@@ -45,7 +45,7 @@ body {
 
 .form-control label {
   display: block;
-  font-weight: 900;
+  font-weight: 700;
   font-size: 24px;
   line-height: 39px;
   text-align: center;
@@ -58,7 +58,11 @@ body {
   height: 40px;
   margin: 5px;
   padding: 3px 7px;
-  font-size: 18px;
+  color: #1A2448;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 28px;
   text-align: center;
   color: #1A2448;
   border: 1px solid #0A1039;
@@ -76,6 +80,10 @@ body {
   opacity: 1; 
 }
 
+input:focus::placeholder {
+  color: transparent;
+}
+
 .btn {
   background-color: #1A2448;
   border: none;
@@ -87,7 +95,6 @@ body {
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 8px;
@@ -103,6 +110,13 @@ body {
   box-shadow: 0 5px 15px rgba(145, 92, 182, .4);
 }
 
+.error-container {
+  color: red;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
 
 /* 
 .movies li {

@@ -91,7 +91,9 @@ export default function Enter() {
         <h5></h5>
         <Form method="post">
           <div className="form-control">
-            <label htmlFor="username">Get Started</label>
+            <label htmlFor="username">
+              <h4>To Get Started</h4>
+            </label>
             <input
               type="text"
               placeholder="Enter Username"
@@ -99,7 +101,7 @@ export default function Enter() {
               id="username"
               defaultValue={actionData?.fields?.username}
             />
-            <div>
+            <div className="error-container">
               {actionData?.fieldErrors?.username &&
                 actionData?.fieldErrors?.username}
             </div>

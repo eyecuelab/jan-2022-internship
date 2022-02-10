@@ -137,7 +137,7 @@ export const action: ActionFunction = async ({ request, params }) => {
           ],
         },
         data: {
-          dislikes: { increment: 1 },
+          likes: { increment: -1 },
         },
       });
 
