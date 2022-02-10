@@ -1,61 +1,11 @@
-// import { ActionFunction, Form, Link, LoaderFunction, redirect } from "remix";
-// import { db } from "~/utils/db.server";
-// import { createMovieGame } from "~/utils/movieGame.server";
-// import { getPlayer, requirePlayerId } from "~/utils/session.server";
-
-// export const loader: LoaderFunction = async ({ request }) => {
-//   //const { slug } = request;
-//   const data = {
-//     movies: await db.movie.findMany({
-//       take: 7,
-//       select: { id: true, title: true },
-//     }),
-//   };
-
-//   const player = await getPlayer(request);
-//   return { data, player };
-// };
-
-// export const action: ActionFunction = async ({ request, params }) => {
-//   const playerId = await requirePlayerId(request);
-//   const game = await createMovieGame({
-//     playerId,
-//   });
-
-//   // const gameId = game.id;
-
-//   // const gameStatus = await db.game.update({
-//   //   where: { id: gameId },
-//   //   data: { isStarted: true },
-//   // });
-
-//   return redirect(`/game/${game.slug}/lobby`);
-// };
-
-// export default function index() {
-//   return (
-//     <div>
-//       <Form method="post">
-//         <>
-//           {/* <h3>You are {player}</h3> */}
-//           <input type="hidden" name="loginType" value="begin" />
-//           <button className="button" type="submit">
-//             Host New Game
-//           </button>
-//         </>
-//         <br />
-//         <>
-//           <input type="hidden" name="loginType" value="join" />
-//           <button type="submit">
-//             <Link to="/join">Join game</Link>
-//           </button>
-//         </>
-//       </Form>
-//     </div>
-//   );
-// }
-
-import { useActionData, redirect, json, Form } from "remix";
+import {
+  useActionData,
+  redirect,
+  json,
+  Form,
+  LoaderFunction,
+  ActionFunction,
+} from "remix";
 import { db } from "~/utils/db.server";
 import { createMovieGame } from "~/utils/movieGame.server";
 import {
@@ -65,25 +15,29 @@ import {
   getPlayer,
   getPlayerId,
 } from "~/utils/session.server";
+import banner from "~/assets/svg/banner3.png";
 
-function validateUsername(username) {
+function validateUsername(username: string | any[]) {
   if (typeof username !== "string" || username.length < 3) {
     return "Username must be at least 3 characters";
   }
 }
 
-function badRequest(data) {
+function badRequest(data: {
+  fieldErrors?: { username: string | undefined } | { username: string };
+  fields: { username: any };
+  formError?: string;
+}) {
   return json(data, { status: 400 });
 }
 
-export const loader = async ({ request }) => {
+export const loader: LoaderFunction = async ({ request }) => {
   const player = await getPlayer(request);
   return { player };
 };
 
-export const action = async ({ request }) => {
+export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
-  //const loginType = form.get("loginType");
   const username = form.get("username");
   const password = "secretPassword";
 
@@ -128,17 +82,19 @@ export default function Enter() {
   const actionData = useActionData();
 
   return (
-    <div>
-      <div>
-        <h1>Enter your name:</h1>
+    <div className="grid-container">
+      <div className="item1">
+        <img src={banner} className="logo" />
       </div>
 
-      <div className="page-content">
+      <div className="item2">
+        <h5></h5>
         <Form method="post">
           <div className="form-control">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">Get Started</label>
             <input
               type="text"
+              placeholder="Enter Username"
               name="username"
               id="username"
               defaultValue={actionData?.fields?.username}
@@ -148,8 +104,8 @@ export default function Enter() {
                 actionData?.fieldErrors?.username}
             </div>
           </div>
-          <button className="btn btn-block" type="submit">
-            Submit
+          <button className="btn glow-button" type="submit">
+            Start
           </button>
         </Form>
       </div>
