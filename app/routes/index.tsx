@@ -20,9 +20,10 @@ import landingStyles from "~/styles/landing.css";
 
 export const links = () => [{ rel: "stylesheet", href: landingStyles }];
 
-function validateUsername(username: string | any[]) {
+function validateUsername(username: FormDataEntryValue | null) {
   if (typeof username !== "string" || username.length < 3) {
-    return "Username must be at least 3 characters";
+    //return "Username must be at least 3 characters";
+    throw json("Username must be at least 3 characters", { status: 400 });
   }
 }
 
@@ -46,12 +47,12 @@ export const action: ActionFunction = async ({ request }) => {
 
   const fields = { username };
 
-  const fieldErrors = {
-    username: validateUsername(username),
-  };
-
-  if (Object.values(fieldErrors).some(Boolean)) {
-    return badRequest({ fieldErrors, fields });
+  try {
+    validateUsername(username);
+  } catch (e) {
+    if (Object.values(fieldErrors).some(Boolean)) {
+      return badRequest({ fieldErrors, fields });
+    }
   }
 
   //Check if user exists

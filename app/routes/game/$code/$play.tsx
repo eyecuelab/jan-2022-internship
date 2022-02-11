@@ -32,9 +32,7 @@ export default function DisplayMovies() {
 
       <div className="page-header">
         <h1>Movies</h1>
-        <Link to={`/games/${code}`}>
-          The Game is On
-        </Link>
+        <Link to={`/games/${code}`}>The Game is On</Link>
       </div>
       <ul>
         {movies.map((movie) => (

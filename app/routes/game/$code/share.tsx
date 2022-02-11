@@ -3,9 +3,9 @@ import Game from "~/routes/game";
 import { db } from "~/utils/db.server";
 import { requireUser } from "~/utils/session.server";
 import { usePolling } from "~/hooks";
-import lobbyStyles from "~/styles/lobby.css";
+import shareStyles from "~/styles/share.css";
 
-export const links = () => [{ rel: "stylesheet", href: lobbyStyles }];
+export const links = () => [{ rel: "stylesheet", href: shareStyles }];
 
 export const loader: ActionFunction = async ({ request, params }) => {
   const slug = params.code;

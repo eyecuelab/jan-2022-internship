@@ -35,14 +35,14 @@ export const action: ActionFunction = async ({ request, params }) => {
   return redirect(`/game/${game.slug}/lobby`);
 };
 
-export default function index() {
+export default function New() {
   return (
     <div className="btns" style={{ marginTop: "200px" }}>
       <Form method="post">
         <>
           {/* <h3>You are {player}</h3> */}
           <input type="hidden" name="loginType" value="begin" />
-          <button className="button" type="submit" className="btn">
+          <button type="submit" className="btn">
             Host New Game
           </button>
         </>
