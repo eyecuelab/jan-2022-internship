@@ -32,7 +32,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   //   data: { isStarted: true },
   // });
 
-  return redirect(`/game/${game.slug}/lobby`);
+  return redirect(`/game/${game.slug}/share`);
 };
 
 export default function New() {

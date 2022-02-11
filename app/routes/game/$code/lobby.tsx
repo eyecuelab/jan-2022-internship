@@ -154,7 +154,7 @@ export default function Lobby() {
       </ul>
       <br />
       {/* <Link to={`/game/${slug}/${data.movies[0].id}`}>Lets GO</Link> */}
-      <Link to={`/game/${slug}/${data.movies[0].id}`}>Lets GO</Link>
+      <Link to={`/game/${slug}/${data.movies[0].id}`}>Begin Game</Link>
     </div>
   );
 }

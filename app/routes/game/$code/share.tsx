@@ -3,6 +3,7 @@ import Game from "~/routes/game";
 import { db } from "~/utils/db.server";
 import { requireUser } from "~/utils/session.server";
 import { usePolling } from "~/hooks";
+import letsplay from "~/assets/img/letsplay.png";
 import shareStyles from "~/styles/share.css";
 
 export const links = () => [{ rel: "stylesheet", href: shareStyles }];
@@ -136,26 +137,37 @@ export default function Lobby() {
   );
 
   return (
-    <div>
-      <pre>Game ID is: {slug}</pre>
-      <pre>You are: {player.username}</pre>
-      <br />
-      <pre>Wait for everyone to join!</pre>
-      <br />
-      <pre>Game started? : {`${status}`}</pre>
-      <br />
-      <pre>Players in the room: </pre>
-      <ul>
-        {playersArr.map((player, i) => (
-          <li key={player.playerId}>
-            <pre>{playersArr[i].player.username}</pre>
-          </li>
-        ))}
-      </ul>
-      <br />
-      {/* <Link to={`/game/${slug}/${data.movies[0].id}`}>Lets GO</Link> */}
-      <Link to={`/game/${slug}/${data.movies[0].id}`}>Lets GO</Link>
-    </div>
+    <>
+      <div className="header">
+        <img src={letsplay} alt="letsplay icon" />
+        <h2>Share This Code</h2>
+        <p>
+          Share this code with your friends so they can play along in finding
+          your perfect movie match.
+        </p>
+      </div>
+      <div className="container">
+        <div className="item1">
+          <button className="btn-code">
+            <h5>Your code </h5>
+            <h2 className="code">{slug}</h2>
+          </button>
+        </div>
+        <div className="item2">
+          <button className="btn-share glow-button">Share</button>
+        </div>
+      </div>
+      <div id="footer">
+        <button className="btn-lobby glow-button">
+          <Link
+            to={`/game/${slug}/lobby`}
+            style={{ textDecoration: "none", color: "#fff" }}
+          >
+            Got to Lobby
+          </Link>
+        </button>
+      </div>
+    </>
   );
 }
 
