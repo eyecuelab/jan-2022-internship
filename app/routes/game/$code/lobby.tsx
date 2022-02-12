@@ -3,6 +3,8 @@ import Game from "~/routes/game";
 import { db } from "~/utils/db.server";
 import { requireUser } from "~/utils/session.server";
 import { usePolling } from "~/hooks";
+import players from "~/assets/img/players.png";
+import check from "~/assets/img/check.png";
 import lobbyStyles from "~/styles/lobby.css";
 
 export const links = () => [{ rel: "stylesheet", href: lobbyStyles }];
@@ -136,26 +138,47 @@ export default function Lobby() {
   );
 
   return (
-    <div>
-      <pre>Game ID is: {slug}</pre>
-      <pre>You are: {player.username}</pre>
-      <br />
-      <pre>Wait for everyone to join!</pre>
-      <br />
-      <pre>Game started? : {`${status}`}</pre>
-      <br />
-      <pre>Players in the room: </pre>
-      <ul>
-        {playersArr.map((player, i) => (
-          <li key={player.playerId}>
-            <pre>{playersArr[i].player.username}</pre>
-          </li>
-        ))}
-      </ul>
-      <br />
-      {/* <Link to={`/game/${slug}/${data.movies[0].id}`}>Lets GO</Link> */}
-      <Link to={`/game/${slug}/${data.movies[0].id}`}>Begin Game</Link>
-    </div>
+    <>
+      <div className="header">
+        <img src={players} alt="players icon" />
+        <div className="call-for-act">Your Friends</div>
+        <p>These are the people you’re going to watch it with.</p>
+      </div>
+      <div className="wrapper">
+        <div className="container">
+          {/* <pre>Game ID is: {slug}</pre>
+        <pre>You are: {player.username}</pre> */}
+
+          {/* <pre>Wait for everyone to join!</pre> */}
+
+          {/* <pre>Game started? : {`${status}`}</pre> */}
+
+          <div className="list-item">
+            <ul>
+              {playersArr.map((player, i) => (
+                <li
+                  key={player.playerId}
+                  style={{ textDecoration: "none", color: "#fff" }}
+                >
+                  <img src={check} alt="check mark" />
+                  {playersArr[i].player.username}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div id="footer">
+        <button className="btn-lobby glow-button">
+          <Link
+            to={`/game/${slug}/${data.movies[0].id}`}
+            style={{ textDecoration: "none", color: "#fff" }}
+          >
+            Begin Game
+          </Link>
+        </button>
+      </div>
+    </>
   );
 }
 

@@ -79,6 +79,7 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   //Create user sessioni
+  //return createUserSession(user.id, "/new");
   return createUserSession(user.id, "/new");
 };
 
@@ -111,7 +112,7 @@ export default function Enter() {
             </div>
           </div>
           <button className="btn glow-button" type="submit">
-            Start
+            Next
           </button>
         </Form>
       </div>

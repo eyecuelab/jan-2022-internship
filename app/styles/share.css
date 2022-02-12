@@ -15,7 +15,7 @@
 }
 
 .header {
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -24,8 +24,19 @@
   background-color: #1A2448;
   height: 25vh;
   padding: 2rem 4rem 1rem 4rem;
-
 }
+
+.header p {
+  font-size: 16px;
+  line-height: 17px;
+}
+
+.header.div {
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 59px;
+}
+
 
 .code {
   letter-spacing: 8px;
@@ -47,7 +58,6 @@
   justify-content: center;
   background-color: #1A2448;
   height: 15vh;
-
 }
 
 .btn-code {
@@ -92,15 +102,13 @@
   color: #85CDED;
   padding: 15px 32px;
   font-weight: 800;
-  font-size: 20px;
-  line-height: 20px;
+  font-size: 18px;
+  line-height: 30px;
   text-align: center;
   text-decoration: none;
-  /* display: inline-block; */
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 8px;
-  /* border: 1px solid #85CDED; */
   border: 1px solid rgba(133, 205, 237, 0.2);
   width: 312px;
   transition: all 0.2s ease-in-out;
