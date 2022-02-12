@@ -4,7 +4,10 @@ import { db } from "~/utils/db.server";
 import { requireUser } from "~/utils/session.server";
 import { usePolling } from "~/hooks";
 import letsplay from "~/assets/img/letsplay.png";
+import home from "~/assets/img/home.png";
+import back from "~/assets/img/back.png";
 import shareStyles from "~/styles/share.css";
+import { Container, Col, Row } from "react-bootstrap";
 
 export const links = () => [{ rel: "stylesheet", href: shareStyles }];
 
@@ -66,7 +69,6 @@ export const loader: ActionFunction = async ({ request, params }) => {
     allMovies.map(async (item, i) => {
       await db.movieScore.create({
         data: {
-          //movie: { connect: { id: movieId } },
           movieId: item,
           position: i + 1,
           gameId,
@@ -138,7 +140,34 @@ export default function Lobby() {
 
   return (
     <>
+      {/* <Container>
+        <Row>
+          <Col xs={6} md={4}>
+            <nav className="btn-back">
+              <div>
+                <img src={back} alt="back button" />
+              </div>
+              <div className="btn-home">
+                <img src={home} alt="home button" />
+              </div>
+            </nav>
+          </Col>
+        </Row>
+      </Container> */}
+
       <div className="header">
+        <div className="flex-grid">
+          <div className="col1">
+            <Link to="/">
+              <img src={back} alt="back button" />
+            </Link>
+          </div>
+          <div className="col2">
+            <Link to="/">
+              <img src={home} alt="home button" />
+            </Link>
+          </div>
+        </div>
         <img src={letsplay} alt="letsplay icon" />
         <h2>Share This Code</h2>
         <p>

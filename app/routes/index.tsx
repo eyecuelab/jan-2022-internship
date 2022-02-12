@@ -21,14 +21,18 @@ import landingStyles from "~/styles/landing.css";
 export const links = () => [{ rel: "stylesheet", href: landingStyles }];
 
 function validateUsername(username: FormDataEntryValue | null) {
-  if (typeof username !== "string" || username.length < 3) {
+  if (
+    typeof username !== "string" ||
+    username.length < 3 ||
+    username === null
+  ) {
     //return "Username must be at least 3 characters";
     throw json("Username must be at least 3 characters", { status: 400 });
   }
 }
 
 function badRequest(data: {
-  fieldErrors?: { username: string | undefined } | { username: string };
+  fieldErrors?: { username: string | undefined | null } | { username: string };
   fields: { username: any };
   formError?: string;
 }) {
@@ -101,6 +105,7 @@ export default function Enter() {
             </label>
             <input
               type="text"
+              required
               placeholder="Enter Username"
               name="username"
               id="username"

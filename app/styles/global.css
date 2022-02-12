@@ -12,6 +12,21 @@ body {
   top: 0px; */
 }
 
+
+.flex-grid {
+  display: flex;
+  justify-content: space-between;
+}
+.col1 {
+  flex: 1;
+  padding-top:10px;
+}
+
+.col2 {
+  flex: 1;
+  text-align: right;
+}
+
 /* .movies {
   display: grid;
   justify-content: center;

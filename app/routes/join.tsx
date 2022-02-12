@@ -59,6 +59,7 @@ export default function Join() {
             <label>Code</label>
             <input
               type="text"
+              required
               placeholder="Enter Code"
               name="code"
               id="code"

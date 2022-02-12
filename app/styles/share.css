@@ -14,8 +14,22 @@
   height: 60vh;
 }
 
+@media (max-width: 400px) {
+  .flex-grid {
+    display: block;
+  }
+}
+
+.flex-grid-thirds {
+  display: flex;
+  justify-content: space-between;
+}
+.flex-grid-thirds .col {
+  width: 32%;
+}
+
 .header {
-  /* display: flex; */
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -23,7 +37,11 @@
   display: grid;
   background-color: #1A2448;
   height: 25vh;
-  padding: 2rem 4rem 1rem 4rem;
+  padding: 1rem 4rem 1rem 4rem;
+}
+
+.header > .btn-home {
+  align-items: right;
 }
 
 .header p {
@@ -36,7 +54,6 @@
   font-size: 36px;
   line-height: 59px;
 }
-
 
 .code {
   letter-spacing: 8px;

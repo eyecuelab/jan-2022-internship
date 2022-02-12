@@ -8,6 +8,7 @@ import {
 } from "remix";
 //import globalStyles from "~/styles/global.css";
 import type { MetaFunction } from "remix";
+import "bootstrap/dist/css/bootstrap.min.css";
 import globalStyles from "~/styles/global.css";
 
 export const links = () => [{ rel: "stylesheet", href: globalStyles }];
