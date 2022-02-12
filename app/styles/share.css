@@ -37,7 +37,7 @@
   display: grid;
   background-color: #1A2448;
   height: 25vh;
-  padding: 1rem 4rem 1rem 4rem;
+  padding: 1rem 2rem 1rem 2rem;
 }
 
 .header > .btn-home {
@@ -91,6 +91,7 @@
   margin-bottom: 2rem;
   border-radius: 8px;
   width: 312px;
+  cursor: pointer;
 }
 
 .btn-share {
@@ -104,7 +105,7 @@
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  margin-top: 300px;
+  /* margin-top: 300px; */
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 8px;
@@ -135,6 +136,11 @@
   justify-content: center;
 }
 
+.copy-icon {
+  position: relative;
+  display: inline-block;
+  left: 72px;
+}
 
 .glow-button:hover {
   color: rgba(255, 255, 255, 1);

@@ -7,7 +7,8 @@ import letsplay from "~/assets/img/letsplay.png";
 import home from "~/assets/img/home.png";
 import back from "~/assets/img/back.png";
 import shareStyles from "~/styles/share.css";
-import { Container, Col, Row } from "react-bootstrap";
+import copy from "~/assets/img/copy.png";
+import ReactTooltip from "react-tooltip";
 
 export const links = () => [{ rel: "stylesheet", href: shareStyles }];
 
@@ -140,21 +141,6 @@ export default function Lobby() {
 
   return (
     <>
-      {/* <Container>
-        <Row>
-          <Col xs={6} md={4}>
-            <nav className="btn-back">
-              <div>
-                <img src={back} alt="back button" />
-              </div>
-              <div className="btn-home">
-                <img src={home} alt="home button" />
-              </div>
-            </nav>
-          </Col>
-        </Row>
-      </Container> */}
-
       <div className="header">
         <div className="flex-grid">
           <div className="col1">
@@ -177,14 +163,26 @@ export default function Lobby() {
       </div>
       <div className="container">
         <div className="item1">
-          <button className="btn-code">
-            <h5>Your code </h5>
+          <button
+            onClick={() => navigator.clipboard.writeText(`${slug}`)}
+            data-tip
+            data-for="registerTip"
+            className="btn-share"
+          >
+            <h5>
+              Your code
+              <img src={copy} alt="copy icon" className="copy-icon" />
+            </h5>
+
             <h2 className="code">{slug}</h2>
           </button>
         </div>
         <div className="item2">
           <button className="btn-share glow-button">Share</button>
         </div>
+        <ReactTooltip id="registerTip" place="top" effect="solid">
+          Copied
+        </ReactTooltip>
       </div>
       <div id="footer">
         <button className="btn-lobby glow-button">
