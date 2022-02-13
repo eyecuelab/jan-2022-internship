@@ -6,11 +6,16 @@ import {
   redirect,
   useActionData,
   useLoaderData,
+  useTransition,
 } from "remix";
 //import Game from "~/routes/game";
 import { db } from "~/utils/db.server";
 import { getPlayer } from "~/utils/session.server";
 import movieStyles from "~/styles/movie.css";
+import back from "~/assets/img/back.png";
+import home from "~/assets/img/home.png";
+import like from "~/assets/img/like.png";
+import dislike from "~/assets/img/dislike.png";
 
 export const links = () => [{ rel: "stylesheet", href: movieStyles }];
 
@@ -60,9 +65,19 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   // console.log(nextPosition);
   //console.log(Object.keys(movieList.movies).length);
 
+  const moviesLeft = totalMoviesNumber - currMoviePosition[0].position;
+  console.log(moviesLeft);
   const player = await getPlayer(request);
 
-  return { movie, player, game, slug, movieList, currMoviePosition };
+  return {
+    movie,
+    player,
+    game,
+    slug,
+    movieList,
+    currMoviePosition,
+    moviesLeft,
+  };
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -159,20 +174,35 @@ export const action: ActionFunction = async ({ request, params }) => {
 };
 
 export default function Movie() {
-  const { movie } = useLoaderData();
+  const { movie, moviesLeft } = useLoaderData();
   const IMG_URL = "https://image.tmdb.org/t/p/w500";
   const poster = IMG_URL + movie.posterPath;
   const vote = useActionData();
 
   return (
-    <div>
-      <div className="page-header">
-        <Link to="/">Back</Link>
-
+    <>
+      <div className="header">
+        <div className="flex-grid">
+          <div className="col1">
+            <Link to="/">
+              <img src={back} alt="back button" />
+            </Link>
+          </div>
+          <div className="col2">
+            <Link to="/">
+              <img src={home} alt="home button" />
+            </Link>
+          </div>
+        </div>
+        <h2>Find Your Vibe</h2>
+        <p>
+          Judge a flick by its cover. In this timed speed round we’ll discover
+          what type of movie you feel like watching.
+        </p>
+      </div>
+      <div className="container">
         <div>
           <div className="movies">
-            <h1>{movie.title}</h1>
-            {/* <h3>{movie.id}</h3> */}
             <img src={poster} className="poster" />
           </div>
           <div>
@@ -181,26 +211,35 @@ export default function Movie() {
             ) : null}
           </div>
         </div>
-        {movie.id && (
-          <>
-            <div className="movies">
+      </div>
+      {movie.id && (
+        <>
+          <div id="footer">
+            <div className="flex-grid">
+              <div className="col1-footer">
+                <form method="post">
+                  <input type="hidden" name="actionType" value="no" />
+                  <button type="submit" className="btn glow-button">
+                    <img src={dislike} alt="dislike button" />
+                  </button>
+                </form>
+              </div>
+              <div className="col2-footer">
+                <button disabled className="btn-slide-n">
+                  {moviesLeft + 1}
+                </button>
+              </div>
+              <div className="col3-footer"></div>
               <form method="post">
                 <input type="hidden" name="actionType" value="yes" />
-                <button type="submit" className="btn">
-                  Yes
-                </button>
-              </form>
-              <form method="post">
-                <input type="hidden" name="actionType" value="no" />
-                <button type="submit" className="btn">
-                  No
-                  {/* <Link to={`/game/${slug}/${movieList.movies[3].id}`}>No</Link> */}
+                <button type="submit" className="btn glow-button">
+                  <img src={like} alt="like button" />
                 </button>
               </form>
             </div>
-          </>
-        )}
-      </div>
-    </div>
+          </div>
+        </>
+      )}
+    </>
   );
 }

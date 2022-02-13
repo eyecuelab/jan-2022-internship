@@ -12,6 +12,9 @@ body {
   top: 0px; */
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-weight:900;
+}
 
 .flex-grid {
   display: flex;
@@ -27,6 +30,22 @@ body {
   text-align: right;
 }
 
+.logo {
+  width: 250px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 10px;
+  padding: 10px;
+}
+
+.grid-container > div {
+  text-align: center;
+  padding: 20px 0;
+  font-size: 30px;
+}
 /* .movies {
   display: grid;
   justify-content: center;

@@ -7,8 +7,9 @@
   position: relative;
 }
 
+
 .header {
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
   align-items: center;
   justify-content: center; 
@@ -16,7 +17,16 @@
   display: grid;
   background-color: #1A2448;
   height: 25vh;
-  padding: 2rem 4rem 1rem 4rem;
+  /* padding: 2rem 4rem 1rem 4rem; */
+  padding: 1rem 2rem 1rem 2rem;
+}
+
+.play {
+  padding-top: 1em;
+}
+
+.header > .btn-home {
+  align-items: right;
 }
 
 .header p {
@@ -24,14 +34,16 @@
   line-height: 17px;
 }
 
-.call-for-act {
+.header h2 {
+  font-style: normal;
   font-weight: 900;
   font-size: 36px;
-  line-height: 59px;
+  line-height: 45px
 }
 
-.code {
-  letter-spacing: 8px;
+.header p {
+  font-size: 16px;
+  line-height: 17px;
 }
 
 .list-item {
@@ -40,6 +52,7 @@
   justify-content: center;
   column-count: 2;
   column-width: 8rem;
+  margin-top: 2em;
 }
 
 ul li {

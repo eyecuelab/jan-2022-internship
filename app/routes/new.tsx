@@ -2,6 +2,7 @@ import { ActionFunction, Form, Link, LoaderFunction, redirect } from "remix";
 import { db } from "~/utils/db.server";
 import { createMovieGame } from "~/utils/movieGame.server";
 import { getPlayer, requirePlayerId } from "~/utils/session.server";
+import banner from "~/assets/svg/banner3.png";
 import newStyles from "~/styles/new.css";
 
 export const links = () => [{ rel: "stylesheet", href: newStyles }];
@@ -37,29 +38,36 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 export default function New() {
   return (
-    <div className="btns" style={{ marginTop: "200px" }}>
-      <Form method="post">
-        <>
-          {/* <h3>You are {player}</h3> */}
-          <input type="hidden" name="loginType" value="begin" />
-          <button type="submit" className="btn glow-button">
-            Host New Game
-          </button>
-        </>
-        <br />
-        <>
-          <input type="hidden" name="loginType" value="join" />
-          <button type="submit" className="btn glow-button">
-            <Link
-              to="/join"
-              className="strip-decor"
-              style={{ textDecoration: "none", color: "#fff" }}
-            >
-              Join Game
-            </Link>
-          </button>
-        </>
-      </Form>
+    <div className="grid-container">
+      <div className="item1">
+        <img src={banner} className="logo" />
+      </div>
+      <div className="item2">
+        <div className="btns" style={{ marginTop: "40px" }}>
+          <Form method="post">
+            <>
+              {/* <h3>You are {player}</h3> */}
+              <input type="hidden" name="loginType" value="begin" />
+              <button type="submit" className="btn glow-button">
+                Host New Game
+              </button>
+            </>
+            <br />
+            <>
+              <input type="hidden" name="loginType" value="join" />
+              <button type="submit" className="btn glow-button">
+                <Link
+                  to="/join"
+                  className="strip-decor"
+                  style={{ textDecoration: "none", color: "#fff" }}
+                >
+                  Join Game
+                </Link>
+              </button>
+            </>
+          </Form>
+        </div>
+      </div>
     </div>
   );
 }

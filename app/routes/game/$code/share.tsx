@@ -139,6 +139,31 @@ export default function Lobby() {
     1000
   );
 
+  const handleShareButton = () => {
+    // Check if navigator.share is supported by the browser
+    if (navigator.share) {
+      console.log("Congrats! Your browser supports Web Share API");
+      navigator
+        .share({
+          //get link game lobby
+          //url: `/game/${slug}/lobby`,
+
+          //only code for now
+          title: `Your token is ${slug}`,
+          text: "Follow this link and join the game",
+          url: `/`,
+        })
+        .then(() => {
+          console.log("Sharing successfull");
+        })
+        .catch(() => {
+          console.log("Sharing failed");
+        });
+    } else {
+      console.log("Sorry! Your browser does not support Web Share API");
+    }
+  };
+
   return (
     <>
       <div className="header">
@@ -154,7 +179,7 @@ export default function Lobby() {
             </Link>
           </div>
         </div>
-        <img src={letsplay} alt="letsplay icon" />
+        <img src={letsplay} alt="letsplay icon" className="play" />
         <h2>Share This Code</h2>
         <p>
           Share this code with your friends so they can play along in finding
@@ -178,10 +203,15 @@ export default function Lobby() {
           </button>
         </div>
         <div className="item2">
-          <button className="btn-share glow-button">Share</button>
+          <button
+            onClick={handleShareButton}
+            className="btn-share glow-button share-button"
+          >
+            Share
+          </button>
         </div>
         <ReactTooltip id="registerTip" place="top" effect="solid">
-          Copied
+          Copy
         </ReactTooltip>
       </div>
       <div id="footer">

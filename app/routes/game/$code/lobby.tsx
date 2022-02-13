@@ -6,6 +6,8 @@ import { usePolling } from "~/hooks";
 import players from "~/assets/img/players.png";
 import check from "~/assets/img/check.png";
 import lobbyStyles from "~/styles/lobby.css";
+import back from "~/assets/img/back.png";
+import home from "~/assets/img/home.png";
 
 export const links = () => [{ rel: "stylesheet", href: lobbyStyles }];
 
@@ -140,19 +142,24 @@ export default function Lobby() {
   return (
     <>
       <div className="header">
+        <div className="flex-grid">
+          <div className="col1">
+            <Link to="/">
+              <img src={back} alt="back button" />
+            </Link>
+          </div>
+          <div className="col2">
+            <Link to="/">
+              <img src={home} alt="home button" />
+            </Link>
+          </div>
+        </div>
         <img src={players} alt="players icon" />
-        <div className="call-for-act">Your Friends</div>
+        <h2>Your Friends</h2>
         <p>These are the people you’re going to watch it with.</p>
       </div>
       <div className="wrapper">
         <div className="container">
-          {/* <pre>Game ID is: {slug}</pre>
-        <pre>You are: {player.username}</pre> */}
-
-          {/* <pre>Wait for everyone to join!</pre> */}
-
-          {/* <pre>Game started? : {`${status}`}</pre> */}
-
           <div className="list-item">
             <ul>
               {playersArr.map((player, i) => (
@@ -180,17 +187,4 @@ export default function Lobby() {
       </div>
     </>
   );
-}
-
-//   return (
-//     <div className="error-container">
-//       <pre>{error.message}</pre>
-//     </div>
-//   );
-// }
-// function movieIdArr(movieIdArr: any) {
-//   throw new Error("Function not implemented.");
-// }
-function getAllMovies(): import("react").EffectCallback {
-  throw new Error("Function not implemented.");
 }
