@@ -42,14 +42,14 @@ export default function New() {
         <>
           {/* <h3>You are {player}</h3> */}
           <input type="hidden" name="loginType" value="begin" />
-          <button type="submit" className="btn">
+          <button type="submit" className="btn glow-button">
             Host New Game
           </button>
         </>
         <br />
         <>
           <input type="hidden" name="loginType" value="join" />
-          <button type="submit" className="btn">
+          <button type="submit" className="btn glow-button">
             <Link
               to="/join"
               className="strip-decor"
