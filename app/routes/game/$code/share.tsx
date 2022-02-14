@@ -147,10 +147,9 @@ export default function Lobby() {
         .share({
           //get link game lobby
           //url: `/game/${slug}/lobby`,
-
           //only code for now
-          title: `Your token is ${slug}`,
-          text: "Follow this link and join the game",
+          title: `Your token: ${slug}`,
+          text: "Follow the link, join the game, enter the token.",
           url: `/`,
         })
         .then(() => {
@@ -159,6 +158,7 @@ export default function Lobby() {
         .catch(() => {
           console.log("Sharing failed");
         });
+      <br />;
     } else {
       console.log("Sorry! Your browser does not support Web Share API");
     }
@@ -228,15 +228,6 @@ export default function Lobby() {
   );
 }
 
-//   return (
-//     <div className="error-container">
-//       <pre>{error.message}</pre>
-//     </div>
-//   );
-// }
-// function movieIdArr(movieIdArr: any) {
-//   throw new Error("Function not implemented.");
-// }
 function getAllMovies(): import("react").EffectCallback {
   throw new Error("Function not implemented.");
 }
