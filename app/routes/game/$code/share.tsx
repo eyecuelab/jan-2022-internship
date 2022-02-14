@@ -6,8 +6,8 @@ import { usePolling } from "~/hooks";
 import letsplay from "~/assets/img/letsplay.png";
 import home from "~/assets/img/home.png";
 import back from "~/assets/img/back.png";
-import shareStyles from "~/styles/share.css";
 import copy from "~/assets/img/copy.png";
+import shareStyles from "~/styles/share.css";
 import ReactTooltip from "react-tooltip";
 
 export const links = () => [{ rel: "stylesheet", href: shareStyles }];

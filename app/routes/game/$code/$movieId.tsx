@@ -16,6 +16,8 @@ import back from "~/assets/img/back.png";
 import home from "~/assets/img/home.png";
 import like from "~/assets/img/like.png";
 import dislike from "~/assets/img/dislike.png";
+import rect1 from "~/assets/img/rect1.png";
+import rect2 from "~/assets/img/rect2.png";
 
 export const links = () => [{ rel: "stylesheet", href: movieStyles }];
 
@@ -204,6 +206,8 @@ export default function Movie() {
         <div>
           <div className="movies">
             <img src={poster} className="poster" />
+            {/* <img src={rect1} className="rect-img1" />
+            <img src={rect2} className="rect-img2" /> */}
           </div>
           <div>
             {vote?.errors ? (
