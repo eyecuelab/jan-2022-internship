@@ -10,9 +10,11 @@
     "build": "remix build",
     "dev": "remix dev ",
     "lint": "TIMING=1 eslint \"{app,lib,test}/**/*.{ts,tsx}\" --fix",
-    "postinstall": "remix setup node",
+    "postinstall": "remix setup node && prisma generate --schema=prisma/schema.prisma",
     "start": "remix-serve build",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "vercel-build": "prisma generate && prisma migrate deploy && remix build",
+    "prisma:generate": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^3.8.1",
@@ -58,7 +60,7 @@
     "lint-staged": ">=10",
     "postcss": "^8.4.6",
     "prettier": "^2.3.2",
-    "prisma": "^3.8.1",
+    "prisma": "^3.9.2",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.5"
   },
