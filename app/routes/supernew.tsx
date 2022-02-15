@@ -6,11 +6,8 @@ import {
   LoaderFunction,
   Form,
   json,
-  useCatch,
 } from "remix";
 import { db } from "~/utils/db.server";
-//import Swiper, { SwiperOptions, SwiperSlide } from 'swiper';
-//import { Swiper, SwiperSlide } from "swiper/react";
 
 // importing React icons.
 import { BsArrowRight } from "react-icons/bs";
@@ -55,19 +52,6 @@ export const action: ActionFunction = async ({ request }) => {
     if (typeof id !== "string") {
       throw new Error(`No action type found in form data.`);
     }
-
-    // const updatedTaste = await db.movie.update({
-    //   where: { id: id },
-    //   data: {
-    //     tasteProfile: { increment: parseInt(actionType) },
-    //     //data: { tasteProfile: actionType },
-    //   },
-    // });
-
-    console.log(form);
-    console.log(updatedTaste);
-
-    return updatedTaste;
   } catch (e) {
     console.error(e);
     return json("Sorry, we couldn't post that", {
@@ -126,8 +110,8 @@ export default function Movies() {
         </div>
       </Form>
       <img src={poster} alt={data[value].posterPath} />
-      <h2>{data[value].id}</h2>
-      <h3>{data[value].title}</h3>
+      {/* <h2>{data[value].id}</h2>
+      <h3>{data[value].title}</h3> */}
       <div>
         {actionData?.errors ? (
           <p style={{ color: "red" }}>{actionData.errors}</p>

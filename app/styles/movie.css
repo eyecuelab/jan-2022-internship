@@ -4,10 +4,13 @@
   justify-content: center;
 }
 
+.counter {
+  text-align: center;
+}
+
 .poster {
   max-width: 300px;
   border-radius: 12px;
-  margin-top: 3em;
   z-index: 3;
 }
 
