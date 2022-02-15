@@ -7,6 +7,7 @@ import {
   useActionData,
   useLoaderData,
   useNavigate,
+  useTransition,
 } from "remix";
 //import Game from "~/routes/game";
 import { db } from "~/utils/db.server";
@@ -17,7 +18,7 @@ import home from "~/assets/img/home.png";
 import like from "~/assets/img/like.png";
 import dislike from "~/assets/img/dislike.png";
 import { useEffect, useState } from "react";
-import { useInterval } from "usehooks-ts";
+// import { useInterval } from "usehooks-ts";
 import Countdown from "react-countdown";
 
 export const links = () => [{ rel: "stylesheet", href: movieStyles }];
@@ -181,6 +182,7 @@ export default function Movie() {
   const poster = IMG_URL + movie.posterPath;
   const vote = useActionData();
   const navigate = useNavigate();
+  const transition = useTransition();
 
   // const [count, setCount] = useState<number>(3);
   // const [delay, setDelay] = useState<number>(1000);
@@ -222,8 +224,8 @@ export default function Movie() {
   };
   const getSessionStorageValue = (s: string) => sessionStorage.getItem(s);
 
-  const [data, setData] = useState({ date: Date.now(), delay: 30000 });
-  const wantedDelay = 30000;
+  const [data, setData] = useState({ date: Date.now(), delay: 60000 });
+  const wantedDelay = 60000;
 
   //[START] componentDidMount
   //Code runs only one time after each reloading
@@ -246,7 +248,9 @@ export default function Movie() {
   }, []);
   //[END] componentDidMount
 
-  return (
+  return transition.submission ? (
+    Object.fromEntries(transition.submission.formData)
+  ) : (
     <>
       <div className="header">
         <div className="flex-grid">
