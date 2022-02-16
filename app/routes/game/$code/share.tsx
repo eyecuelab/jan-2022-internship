@@ -51,11 +51,11 @@ export const loader: ActionFunction = async ({ request, params }) => {
   if (!movie) throw new Error("Movie not found");
 
   const movieObj = await db.movie.findMany({
-    select: { id: true, title: true },
+    select: { id: true, title: true, tmdbid: true },
   });
 
   const allMovies = movieObj.map((item) => {
-    return item.id;
+    return item;
   });
 
   const allTitles = movieObj.map((item) => {
@@ -70,7 +70,8 @@ export const loader: ActionFunction = async ({ request, params }) => {
     allMovies.map(async (item, i) => {
       await db.movieScore.create({
         data: {
-          movieId: item,
+          movieId: item.id,
+          tmdb: item.tmdbid,
           position: i + 1,
           gameId,
           likes: 0,

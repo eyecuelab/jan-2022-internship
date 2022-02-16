@@ -18,7 +18,7 @@ export const loader: ActionFunction = async ({ request, params }) => {
 
   const data = {
     movies: await db.movie.findMany({
-      select: { id: true, title: true },
+      select: { id: true, title: true, tmdbid: true },
     }),
   };
 
@@ -50,46 +50,47 @@ export const loader: ActionFunction = async ({ request, params }) => {
   if (!movie) throw new Error("Movie not found");
 
   const movieObj = await db.movie.findMany({
-    select: { id: true, title: true },
+    select: { id: true, title: true, tmdbid: true },
   });
 
   const allMovies = movieObj.map((item) => {
-    return item.id;
+    return item;
   });
 
-  const allTitles = movieObj.map((item) => {
-    return item.title;
-  });
+  // const allTmdbIds = movieObj.map((item) => {
+  //   console.log(item.tmdbid);
+  //   return item.tmdbid;
+  // });
 
-  console.log(allTitles);
-  console.log(allMovies);
+  //console.log(allMovies[0].tmdbid);
 
-  if (!status) {
-    //insert all movies in MovieScore table
-    allMovies.map(async (item, i) => {
-      await db.movieScore.create({
-        data: {
-          //movie: { connect: { id: movieId } },
-          movieId: item,
-          position: i + 1,
-          gameId,
-          likes: 0,
-          dislikes: 0,
-        },
-        include: { movie: true },
-      });
-    });
+  // if (!status) {
+  //   //insert all movies in MovieScore table
+  //   allMovies.map(async (item, i) => {
+  //     await db.movieScore.create({
+  //       data: {
+  //         //movie: { connect: { id: movieId } },
+  //         movieId: item.id,
+  //         tmdb: item.tmdbid,
+  //         position: i + 1,
+  //         gameId,
+  //         likes: 0,
+  //         dislikes: 0,
+  //       },
+  //       include: { movie: true },
+  //     });
+  //   });
 
-    //const gameId = game.id;
-    await db.game.update({
-      where: { id: gameId },
-      data: { isStarted: true },
-    });
-  } else {
-    if (!allMovies) {
-      throw json("Movies already added.", 404);
-    }
-  }
+  //   //const gameId = game.id;
+  //   await db.game.update({
+  //     where: { id: gameId },
+  //     data: { isStarted: true },
+  //   });
+  // } else {
+  //   if (!allMovies) {
+  //     throw json("Movies already added.", 404);
+  //   }
+  // }
 
   //get current user
   const player = await requireUser(request);

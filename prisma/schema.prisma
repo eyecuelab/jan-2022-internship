@@ -13,6 +13,7 @@ datasource db {
 model Movie {
   id         String       @id @default(uuid())
   title      String
+  tmdbid     String
   overview   String
   posterPath String?
   movieScore Int          @default(0)
@@ -53,7 +54,8 @@ model MovieScore {
   //slug      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  position  Int      
+  position  Int    
+  tmdb      String?
   movieId   String
   movie     Movie    @relation(fields: [movieId], references: [id])
   game      Game     @relation("MovieScore", fields: [gameId], references: [id])

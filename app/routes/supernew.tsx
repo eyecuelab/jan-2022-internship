@@ -19,20 +19,22 @@ import { useState } from "react";
 export const loader: LoaderFunction = async () => {
   // Get movies from the movie db API:
   const BASE_URL = "https://api.themoviedb.org/3";
-  const API_URL = `${BASE_URL}/discover/movie?sort_by=popularity.desc&api_key=${process.env.API_KEY}`;
+  //const API_URL = `${BASE_URL}/discover/movie?sort_by=popularity.desc&api_key=${process.env.API_KEY}&page=2`;
+  const API_URL = `${BASE_URL}/movie/popular?sort_by=popularity.desc&api_key=${process.env.API_KEY}&page=238`;
 
   const res = await fetch(API_URL);
   const moviesFromAPI = await res.json();
 
   // Delete all movies in db and then write the newly fetched movies to database:
   //await db.movie.deleteMany({});
-  // await db.movie.createMany({
-  //   data: moviesFromAPI.results.map((movie: any) => ({
-  //     title: movie.title,
-  //     overview: movie.overview,
-  //     posterPath: movie.poster_path,
-  //   })),
-  // });
+  await db.movie.createMany({
+    data: moviesFromAPI.results.map((movie: any) => ({
+      title: movie.title,
+      tmdbid: String(movie.id),
+      overview: movie.overview,
+      posterPath: movie.poster_path,
+    })),
+  });
 
   // Get the newly written movies from the DB and return them to the client:
   const dbMovies = await db.movie.findMany();

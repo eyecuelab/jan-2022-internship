@@ -9,12 +9,14 @@ export const links = () => [{ rel: "stylesheet", href: resultStyles }];
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const slug = params.code;
+
   const game = await db.game.findUnique({
     where: { slug },
     select: { id: true },
   });
   if (!game) throw new Error("Game not found");
   const gameId = game.id;
+
   const topSelection = await db.movieScore.findMany({
     take: 5,
     where: {
@@ -25,8 +27,16 @@ export const loader: LoaderFunction = async ({ request, params }) => {
         },
       ],
     },
+    select: { movieId: true, tmdb: true, likes: true },
     orderBy: { likes: "desc" },
   });
+
+  const tmdbList = {
+    movies: await db.movie.findMany({
+      take: 5,
+      select: { id: true, tmdbid: true },
+    }),
+  };
 
   return topSelection;
 };
@@ -63,10 +73,10 @@ export default function Results() {
           <div>
             <ul>
               {topSelection.map((item) => (
-                <li key={item.id}>
+                <li key={item.movieId}>
                   <button className="movie-btn">
-                    {/* Movie ID: {item.movieId} - total likes: {item.likes} */}
-                    Movie ID: total likes: {item.likes}
+                    TMDB: {item.tmdb} - likes: {item.likes}
+                    {/* Movie ID: total likes: {item.likes} */}
                   </button>
                 </li>
               ))}
