@@ -10,11 +10,10 @@
     "build": "remix build",
     "dev": "remix dev ",
     "lint": "TIMING=1 eslint \"{app,lib,test}/**/*.{ts,tsx}\" --fix",
-    "postinstall": "remix setup node && prisma generate --schema=prisma/schema.prisma",
+    "postinstall": "remix setup node",
+    "deploy": "flyctl deploy --build-arg SESSION_SECRET=${SESSION_SECRET}",
     "start": "remix-serve build",
-    "prepare": "husky install",
-    "vercel-build": "prisma generate && prisma migrate deploy && remix build",
-    "prisma:generate": "prisma generate"
+    "prepare": "husky install"
   },
   "dependencies": {
     "@prisma/client": "^3.8.1",
