@@ -1,14 +1,12 @@
-# fly.toml file generated for billowing-sea-4089 on 2022-02-15T21:36:20-08:00
+# fly.toml file generated for purple-cloud-7291 on 2022-02-16T14:00:02-08:00
 
-app = "billowing-sea-4089"
+app = "purple-cloud-7291"
 
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
 [env]
-  DATABASE_URL = "postgresql://postgres:123123@localhost:5432/mydb"
-  NODE_ENV = "production"
 
 [experimental]
   allowed_public_ports = []

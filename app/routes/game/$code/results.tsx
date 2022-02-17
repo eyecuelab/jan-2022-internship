@@ -17,7 +17,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (!game) throw new Error("Game not found");
   const gameId = game.id;
 
-  const topSelection = await db.movieScore.findMany({
+  const data = await db.movieScore.findMany({
     take: 5,
     where: {
       game: { id: gameId },
@@ -38,12 +38,27 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     }),
   };
 
-  return topSelection;
+  console.log(tmdbList);
+
+  const BASE_URL = "https://api.themoviedb.org/3";
+  //const API_URL = `${BASE_URL}/discover/movie?sort_by=popularity.desc&api_key=${process.env.API_KEY}&page=2`;
+  //const API_URL = `${BASE_URL}/movie/${tmdbList.movies[0].tmdbid}/recommendations?api_key=${process.env.API_KEY}&vote_average.gte=5.0&vote_average.lte=8.0&vote_count.gte=1000`;
+  const API_URL = `${BASE_URL}/movie/${tmdbList.movies[0].tmdbid}/recommendations?api_key=${process.env.API_KEY}&vote_average.gte=5.0&vote_average.lte=8.0&vote_count.gte=1000&page=2`;
+  const res = await fetch(API_URL);
+  const movie1 = await res.json();
+  console.log(movie1);
+
+  return { data, movie1, tmdbList };
 };
 
 export default function Results() {
-  const topSelection = useLoaderData();
-  console.log(topSelection);
+  const rand20 = Math.round(Math.random() * 20);
+  const { data, movie1, tmdbList } = useLoaderData();
+  //console.log(tmdbList.movies[0].tmdbid);
+
+  console.log(movie1.results[rand20]);
+  const IMG_URL = "https://image.tmdb.org/t/p/w500";
+  //const poster = IMG_URL + data[value].posterPath;
 
   return (
     <>
@@ -72,7 +87,7 @@ export default function Results() {
         <div className="item2">
           <div>
             <ul>
-              {topSelection.map((item) => (
+              {data.map((item) => (
                 <li key={item.movieId}>
                   <button className="movie-btn">
                     TMDB: {item.tmdb} - likes: {item.likes}
