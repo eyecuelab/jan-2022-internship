@@ -1,4 +1,11 @@
-import { ActionFunction, json, Link, useLoaderData, useParams } from "remix";
+import {
+  ActionFunction,
+  json,
+  Link,
+  LoaderFunction,
+  useLoaderData,
+  useParams,
+} from "remix";
 import Game from "~/routes/game";
 import { db } from "~/utils/db.server";
 import { requireUser } from "~/utils/session.server";
@@ -12,7 +19,7 @@ import ReactTooltip from "react-tooltip";
 
 export const links = () => [{ rel: "stylesheet", href: shareStyles }];
 
-export const loader: ActionFunction = async ({ request, params }) => {
+export const loader: LoaderFunction = async ({ request, params }) => {
   const slug = params.code;
   //const { slug } = params;
   console.log(slug);

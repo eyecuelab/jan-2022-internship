@@ -212,6 +212,7 @@ export default function Movie() {
   const renderer = ({ hours, minutes, seconds, completed }) => {
     if (completed) {
       // Render a complete state
+      sessionStorage.clear();
       return <TimesUp />;
     } else {
       // Render a countdown
@@ -224,8 +225,8 @@ export default function Movie() {
   };
   const getSessionStorageValue = (s: string) => sessionStorage.getItem(s);
 
-  const [data, setData] = useState({ date: Date.now(), delay: 60000 });
-  const wantedDelay = 60000;
+  const [data, setData] = useState({ date: Date.now(), delay: 3000 });
+  const wantedDelay = 3000;
 
   //[START] componentDidMount
   //Code runs only one time after each reloading

@@ -9,15 +9,15 @@ export const links = () => [{ rel: "stylesheet", href: newStyles }];
 
 export const loader: LoaderFunction = async ({ request }) => {
   //const { slug } = request;
-  const data = {
-    movies: await db.movie.findMany({
-      take: 7,
-      select: { id: true, title: true },
-    }),
-  };
+  // const data = {
+  //   movies: await db.movie.findMany({
+  //     take: 7,
+  //     select: { id: true, title: true },
+  //   }),
+  // };
 
   const player = await getPlayer(request);
-  return { data, player };
+  return { player };
 };
 
 export const action: ActionFunction = async ({ request, params }) => {

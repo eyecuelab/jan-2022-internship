@@ -6,11 +6,8 @@ import {
   LoaderFunction,
   Form,
   json,
-  useCatch,
 } from "remix";
 import { db } from "~/utils/db.server";
-//import Swiper, { SwiperOptions, SwiperSlide } from 'swiper';
-//import { Swiper, SwiperSlide } from "swiper/react";
 
 // importing React icons.
 import { BsArrowRight } from "react-icons/bs";
@@ -22,16 +19,23 @@ import { useState } from "react";
 export const loader: LoaderFunction = async () => {
   // Get movies from the movie db API:
   const BASE_URL = "https://api.themoviedb.org/3";
-  const API_URL = `${BASE_URL}/discover/movie?sort_by=popularity.desc&api_key=${process.env.API_KEY}`;
+  //const API_URL = `${BASE_URL}/discover/movie?sort_by=popularity.desc&api_key=${process.env.API_KEY}&page=2`;
+  const rand50 = Math.round(Math.random() * 50);
+  const API_URL = `${BASE_URL}/movie/popular?sort_by=popularity.desc&api_key=${process.env.API_KEY}&page=${rand50}`;
 
   const res = await fetch(API_URL);
   const moviesFromAPI = await res.json();
 
   // Delete all movies in db and then write the newly fetched movies to database:
-  //await db.movie.deleteMany({});
+  await db.playersInGames.deleteMany({});
+  await db.movieScore.deleteMany({});
+  await db.game.deleteMany({});
+  await db.user.deleteMany({});
+  await db.movie.deleteMany({});
   await db.movie.createMany({
     data: moviesFromAPI.results.map((movie: any) => ({
       title: movie.title,
+      tmdbid: String(movie.id),
       overview: movie.overview,
       posterPath: movie.poster_path,
     })),
@@ -55,19 +59,6 @@ export const action: ActionFunction = async ({ request }) => {
     if (typeof id !== "string") {
       throw new Error(`No action type found in form data.`);
     }
-
-    // const updatedTaste = await db.movie.update({
-    //   where: { id: id },
-    //   data: {
-    //     tasteProfile: { increment: parseInt(actionType) },
-    //     //data: { tasteProfile: actionType },
-    //   },
-    // });
-
-    console.log(form);
-    console.log(updatedTaste);
-
-    return updatedTaste;
   } catch (e) {
     console.error(e);
     return json("Sorry, we couldn't post that", {
@@ -126,8 +117,8 @@ export default function Movies() {
         </div>
       </Form>
       <img src={poster} alt={data[value].posterPath} />
-      <h2>{data[value].id}</h2>
-      <h3>{data[value].title}</h3>
+      {/* <h2>{data[value].id}</h2>
+      <h3>{data[value].title}</h3> */}
       <div>
         {actionData?.errors ? (
           <p style={{ color: "red" }}>{actionData.errors}</p>

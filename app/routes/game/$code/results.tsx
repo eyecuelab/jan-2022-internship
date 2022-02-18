@@ -9,7 +9,6 @@ export const links = () => [{ rel: "stylesheet", href: resultStyles }];
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const slug = params.code;
-
   const game = await db.game.findUnique({
     where: { slug },
     select: { id: true },
@@ -17,7 +16,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (!game) throw new Error("Game not found");
   const gameId = game.id;
 
-  const data = await db.movieScore.findMany({
+  const topFive = await db.movieScore.findMany({
     take: 5,
     where: {
       game: { id: gameId },
@@ -31,34 +30,32 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     orderBy: { likes: "desc" },
   });
 
-  const tmdbList = {
-    movies: await db.movie.findMany({
-      take: 5,
-      select: { id: true, tmdbid: true },
-    }),
-  };
+  async function callApi(tmdbId: string) {
+    const BASE_URL = "https://api.themoviedb.org/3";
+    const API_URL = `${BASE_URL}/movie/${tmdbId}/recommendations?api_key=${process.env.API_KEY}&vote_average.gte=5.0&vote_average.lte=8.0&vote_count.gte=1000`;
+    const res = await fetch(API_URL);
+    const movieData = await res.json();
+    return movieData;
+  }
 
-  console.log(tmdbList);
+  const movie1 = await callApi(topFive[0].tmdb);
+  const movie2 = await callApi(topFive[1].tmdb);
+  const movie3 = await callApi(topFive[2].tmdb);
+  const movie4 = await callApi(topFive[3].tmdb);
+  const movie5 = await callApi(topFive[4].tmdb);
 
-  const BASE_URL = "https://api.themoviedb.org/3";
-  //const API_URL = `${BASE_URL}/discover/movie?sort_by=popularity.desc&api_key=${process.env.API_KEY}&page=2`;
-  //const API_URL = `${BASE_URL}/movie/${tmdbList.movies[0].tmdbid}/recommendations?api_key=${process.env.API_KEY}&vote_average.gte=5.0&vote_average.lte=8.0&vote_count.gte=1000`;
-  const API_URL = `${BASE_URL}/movie/${tmdbList.movies[0].tmdbid}/recommendations?api_key=${process.env.API_KEY}&vote_average.gte=5.0&vote_average.lte=8.0&vote_count.gte=1000&page=2`;
-  const res = await fetch(API_URL);
-  const movie1 = await res.json();
-  console.log(movie1);
+  console.log(movie1.results[0].title);
+  console.log(movie2.results[0].title);
+  console.log(movie3.results[0].title);
+  console.log(movie4.results[0].title);
+  console.log(movie5.results[0].title);
 
-  return { data, movie1, tmdbList };
+  return { topFive, movie1, movie2, movie3, movie4, movie5 };
 };
 
 export default function Results() {
-  const rand20 = Math.round(Math.random() * 20);
-  const { data, movie1, tmdbList } = useLoaderData();
-  //console.log(tmdbList.movies[0].tmdbid);
-
-  console.log(movie1.results[rand20]);
+  const { movie1, movie2, movie3, movie4, movie5 } = useLoaderData();
   const IMG_URL = "https://image.tmdb.org/t/p/w500";
-  //const poster = IMG_URL + data[value].posterPath;
 
   return (
     <>
@@ -87,15 +84,31 @@ export default function Results() {
         <div className="item2">
           <div>
             <ul>
-              {data.map((item) => (
+              <li>
+                <button className="movie-btn">{movie1.results[0].title}</button>
+              </li>
+              <li>
+                <button className="movie-btn">{movie2.results[0].title}</button>
+              </li>
+              <li>
+                <button className="movie-btn">{movie3.results[0].title}</button>
+              </li>
+              <li>
+                <button className="movie-btn">{movie4.results[0].title}</button>
+              </li>
+              <li>
+                <button className="movie-btn">{movie5.results[0].title}</button>
+              </li>
+            </ul>
+            {/* <ul>
+              {topFive.map((item) => (
                 <li key={item.movieId}>
                   <button className="movie-btn">
                     TMDB: {item.tmdb} - likes: {item.likes}
-                    {/* Movie ID: total likes: {item.likes} */}
                   </button>
                 </li>
               ))}
-            </ul>
+            </ul> */}
           </div>
         </div>
       </div>
