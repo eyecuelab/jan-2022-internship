@@ -145,7 +145,7 @@ export default function Lobby() {
       <div className="header">
         <div className="flex-grid">
           <div className="col1">
-            <Link to="/">
+            <Link to={`/game/${slug}/share`}>
               <img src={back} alt="back button" />
             </Link>
           </div>

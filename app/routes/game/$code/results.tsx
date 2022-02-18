@@ -50,11 +50,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   console.log(movie4.results[0].title);
   console.log(movie5.results[0].title);
 
-  return { topFive, movie1, movie2, movie3, movie4, movie5 };
+  return { topFive, slug, movie1, movie2, movie3, movie4, movie5 };
 };
 
 export default function Results() {
-  const { movie1, movie2, movie3, movie4, movie5 } = useLoaderData();
+  const { slug, movie1, movie2, movie3, movie4, movie5 } = useLoaderData();
   const IMG_URL = "https://image.tmdb.org/t/p/w500";
 
   return (
@@ -62,7 +62,7 @@ export default function Results() {
       <div className="header">
         <div className="flex-grid">
           <div className="col1">
-            <Link to="/">
+            <Link to={`/game/${slug}/lobby`}>
               <img src={back} alt="back button" />
             </Link>
           </div>

@@ -225,8 +225,8 @@ export default function Movie() {
   };
   const getSessionStorageValue = (s: string) => sessionStorage.getItem(s);
 
-  const [data, setData] = useState({ date: Date.now(), delay: 3000 });
-  const wantedDelay = 3000;
+  const [data, setData] = useState({ date: Date.now(), delay: 60000 });
+  const wantedDelay = 60000;
 
   //[START] componentDidMount
   //Code runs only one time after each reloading
@@ -256,7 +256,7 @@ export default function Movie() {
       <div className="header">
         <div className="flex-grid">
           <div className="col1">
-            <Link to="/">
+            <Link to="/lobby">
               <img src={back} alt="back button" />
             </Link>
           </div>
