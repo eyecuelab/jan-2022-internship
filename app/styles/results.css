@@ -112,4 +112,26 @@ li {list-style-type: none;}
   box-shadow: 0 5px 15px rgba(145, 92, 182, .4);
 }
 
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content-wrapper {
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  background: white;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 50px;
+}
 

@@ -4,6 +4,8 @@ import home from "~/assets/img/home.png";
 import back from "~/assets/img/back.png";
 import final from "~/assets/img/final.png";
 import resultStyles from "~/styles/results.css";
+import Modal from "react-modal";
+import { useState } from "react";
 
 export const links = () => [{ rel: "stylesheet", href: resultStyles }];
 
@@ -53,9 +55,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return { topFive, slug, movie1, movie2, movie3, movie4, movie5 };
 };
 
+//Modal.setAppElement("#root");
+
 export default function Results() {
   const { slug, movie1, movie2, movie3, movie4, movie5 } = useLoaderData();
   const IMG_URL = "https://image.tmdb.org/t/p/w500";
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   return (
     <>
@@ -85,7 +90,26 @@ export default function Results() {
           <div>
             <ul>
               <li>
-                <button className="movie-btn">{movie1.results[0].title}</button>
+                <button
+                  className="movie-btn"
+                  onClick={() => setModalIsOpen(true)}
+                >
+                  {movie1.results[0].title}
+                </button>
+                <Modal
+                  isOpen={modalIsOpen}
+                  onRequestClose={() => setModalIsOpen(false)}
+                  style={{
+                    overlay: {
+                      backgroundColor: "grey",
+                    },
+                    content: {
+                      color: "#212F52",
+                    },
+                  }}
+                >
+                  {movie1.results[0].title}
+                </Modal>
               </li>
               <li>
                 <button className="movie-btn">{movie2.results[0].title}</button>

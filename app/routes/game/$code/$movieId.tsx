@@ -17,7 +17,7 @@ import back from "~/assets/img/back.png";
 import home from "~/assets/img/home.png";
 import like from "~/assets/img/like.png";
 import dislike from "~/assets/img/dislike.png";
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 // import { useInterval } from "usehooks-ts";
 import Countdown from "react-countdown";
 
@@ -121,10 +121,6 @@ export const action: ActionFunction = async ({ request, params }) => {
     throw new Error(`No action type found in form data.`);
   }
 
-  //should return total number of movies provided in base table - Movies
-  //const totalMoviesNumber = Object.keys(data.movies).length;
-  //console.log(totalMoviesNumber);
-
   switch (actionType) {
     case "yes": {
       await db.movieScore.updateMany({
@@ -182,7 +178,7 @@ export default function Movie() {
   const poster = IMG_URL + movie.posterPath;
   const vote = useActionData();
   const navigate = useNavigate();
-  const transition = useTransition();
+  // const transition = useTransition();
 
   // const [count, setCount] = useState<number>(3);
   // const [delay, setDelay] = useState<number>(1000);
@@ -249,9 +245,7 @@ export default function Movie() {
   }, []);
   //[END] componentDidMount
 
-  return transition.submission ? (
-    Object.fromEntries(transition.submission.formData)
-  ) : (
+  return (
     <>
       <div className="header">
         <div className="flex-grid">
