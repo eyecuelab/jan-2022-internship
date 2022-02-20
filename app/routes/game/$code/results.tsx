@@ -3,11 +3,13 @@ import { db } from "~/utils/db.server";
 import home from "~/assets/img/home.png";
 import back from "~/assets/img/back.png";
 import final from "~/assets/img/final.png";
-import resultStyles from "~/styles/results.css";
-import Modal from "react-modal";
+import resultsPageStyles from "~/styles/results.css";
 import { useState } from "react";
+import MovieResult1 from "./movieresult1";
+import ReactModal from "react-modal";
+import { max } from "date-fns/esm";
 
-export const links = () => [{ rel: "stylesheet", href: resultStyles }];
+export const links = () => [{ rel: "stylesheet", href: resultsPageStyles }];
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const slug = params.code;
@@ -61,6 +63,13 @@ export default function Results() {
   const { slug, movie1, movie2, movie3, movie4, movie5 } = useLoaderData();
   const IMG_URL = "https://image.tmdb.org/t/p/w500";
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  console.log(movie1.results[0]);
+  console.log(movie1.results[0].release_date);
+
+  const date = movie1.results[0].release_date;
+  const datePattern = /(\d{4})/;
+  const year = date.match(datePattern);
+  console.log(year[0]);
 
   return (
     <>
@@ -96,20 +105,25 @@ export default function Results() {
                 >
                   {movie1.results[0].title}
                 </button>
-                <Modal
+                <ReactModal
                   isOpen={modalIsOpen}
                   onRequestClose={() => setModalIsOpen(false)}
                   style={{
                     overlay: {
-                      backgroundColor: "grey",
+                      backgroundColor: "#0A1039",
                     },
                     content: {
+                      margin: "auto",
                       color: "#212F52",
+                      maxWidth: "600px",
+                      height: "95vh",
+                      // overflow: "scroll",
                     },
                   }}
                 >
-                  {movie1.results[0].title}
-                </Modal>
+                  {/* {movie1.results[0].title} */}
+                  <MovieResult1 />
+                </ReactModal>
               </li>
               <li>
                 <button className="movie-btn">{movie2.results[0].title}</button>
