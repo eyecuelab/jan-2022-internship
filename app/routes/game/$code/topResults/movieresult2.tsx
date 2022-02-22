@@ -35,8 +35,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       const movieData = await res.json();
       return movieData;
     } catch (err) {
-      throw err;
       console.log(err);
+      throw err;
     }
   }
 
@@ -48,8 +48,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       const movieData = await res.json();
       return movieData;
     } catch (err) {
-      throw err;
       console.log(err);
+      throw err;
     }
   }
 
@@ -61,31 +61,31 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       const movieData = await res.json();
       return movieData;
     } catch (err) {
-      throw err;
       console.log(err);
+      throw err;
     }
   }
 
-  const movie1 = await callApi(topFive[0].tmdb);
-  const movie1Details = await callApiGetDetails(topFive[0].tmdb);
-  console.log(movie1Details);
-  const movie1Cast = await callApiGetCredits(topFive[0].tmdb);
-  console.log(movie1Cast);
+  const movie2 = await callApi(topFive[1].tmdb);
+  const movie2Details = await callApiGetDetails(String(movie2.results[0].id));
+  const movie2Cast = await callApiGetCredits(String(movie2.results[0].id));
 
-  return { topFive, slug, movie1, movie1Details, movie1Cast };
+  return { topFive, slug, movie2, movie2Details, movie2Cast };
 };
 
 //Modal.setAppElement("#root");
 
-export default function MovieResult1() {
-  const { slug, movie1, movie1Details, movie1Cast } = useLoaderData();
+export default function MovieResult2() {
+  const { slug, movie2, movie2Details, movie2Cast } = useLoaderData();
+
   const IMG_URL = "https://image.tmdb.org/t/p/w500";
-  const poster = IMG_URL + movie1.results[0].poster_path;
-  console.log(movie1);
-  const date = movie1.results[0].release_date;
+  const poster = IMG_URL + movie2.results[0].poster_path;
+  const date = movie2.results[0].release_date;
   const datePattern = /(\d{4})/;
   const year = date.match(datePattern);
-  console.log(movie1Cast);
+  console.log(movie2);
+  console.log(movie2Details);
+  console.log(movie2Cast);
 
   return (
     <>
@@ -98,7 +98,7 @@ export default function MovieResult1() {
         <button className="modal-btn-number ">1</button>
         <ul style={{ paddingLeft: 12 }}>
           <li>
-            <h2>{movie1.results[0].title}</h2>
+            <h2>{movie2.results[0].title}</h2>
           </li>
           <li>
             <p>{year[0]}</p>
@@ -123,7 +123,7 @@ export default function MovieResult1() {
         </div>
         <div className="grid-item">
           <h5>SYNOPSIS</h5>
-          <p>{movie1.results[0].overview}</p>
+          <p>{movie2.results[0].overview}</p>
         </div>
         <div className="grid-item">
           <h5>TRAILER</h5>

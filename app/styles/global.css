@@ -260,6 +260,7 @@ input:focus::placeholder {
   align-items: left;
   justify-content: start; 
   width: 70vw;
+  margin-left: 0em;
   background-color: #fff;
   height: 15vh;
   /* padding: 2rem 4rem 1rem 4rem; */
@@ -335,3 +336,72 @@ html {
 /* ::-webkit-scrollbar-thumb {
   background: #FF0000;
 }  */
+
+#modal-score {
+  text-align: right;
+}
+
+#modal-runtime {
+  text-align: right;
+}
+
+#modal-director {
+  text-align: right;
+}
+
+#modal-actors {
+  text-align: right;
+}
+
+#modal-revenue {
+  text-align: right;
+}
+#modal-budget {
+  text-align: right;
+}
+
+.video-responsive {
+  overflow: hidden;
+  padding-bottom: 56.25%;
+  position: relative;
+  height: 0;
+}
+
+.video-responsive iframe {
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.modal-logo {
+  width: 45px;
+  height: 45px;
+  border-radius: 8px;
+}
+
+.modal-row {
+  width: 100%;
+  text-align: left; 
+}
+
+.modal-block {
+  width: 60px;
+  margin-top: 10px;
+  display: inline-block;
+}​
+
+.modal-number {
+  text-align: left;
+}
+
+.row-button {
+  width: 100%;
+  text-align: left;
+}
+
+.number-block {
+  width: 100px;
+  display: inline-block;
+}
