@@ -391,7 +391,7 @@ export default function Results() {
             to={`/`}
             style={{ textDecoration: "none", color: "#fff" }}
           >
-            Show More
+            Play Again
           </Link>
         </button>
       </div>

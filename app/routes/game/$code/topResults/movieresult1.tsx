@@ -79,7 +79,7 @@ export default function MovieResult1() {
 
   const trailerArr: any[] = [];
   movie1Details.videos.results.forEach(function (entry) {
-    if (entry.name.includes("Official")) {
+    if (entry.name.includes("Trailer")) {
       trailerArr.push(entry.key);
     }
   });
@@ -87,8 +87,21 @@ export default function MovieResult1() {
   const trailerKey = trailerArr[0];
 
   // const revenue = movie1Details.revenue.toLocaleString("en-US");
-  const revenue = Math.round(movie1Details.revenue / 1000000);
-  const budget = Math.round(movie1Details.budget / 1000000);
+  //const revenue = Math.round(movie1Details.revenue / 1000000);
+  let revenue;
+  if (movie1Details.revenue === 0 || !movie1Details.budget) {
+    revenue = "N/A";
+  } else {
+    revenue = `$ ${Math.round(movie1Details.revenue / 1000000)} millions`;
+  }
+
+  //const budget = Math.round(movie1Details.budget / 1000000);
+  let budget;
+  if (movie1Details.budget === 0 || !movie1Details.budget) {
+    budget = "N/A";
+  } else {
+    budget = `$ ${Math.round(movie1Details.budget / 1000000)} millions`;
+  }
 
   console.log(movie1WatchProviders);
 
@@ -124,7 +137,7 @@ export default function MovieResult1() {
   return (
     <>
       <div className="navigation">
-        <Link to={`/game/${slug}/results`}>
+        <Link to="/">
           <img src={back} alt="back button" />
         </Link>
       </div>
@@ -178,12 +191,12 @@ export default function MovieResult1() {
 
           <div className="row-bio">
             <div className="col-bio modal-title">REVENUE</div>
-            <div className="col-bio modal-info">$ {revenue} millions</div>
+            <div className="col-bio modal-info">{revenue}</div>
           </div>
 
           <div className="row-bio">
             <div className="col-bio modal-title">BUDGET</div>
-            <div className="col-bio modal-info">$ {budget} millions</div>
+            <div className="col-bio modal-info">{budget}</div>
           </div>
 
           <div className="row-bio">
@@ -224,24 +237,23 @@ export default function MovieResult1() {
           <li>
             STREAM
             <div className="modal-row">
-              {movie1WatchProviders.results.US?.flatrate?.map((entry, i) => (
-                <div key={entry.logo_path} className="modal-block">
-                  <img
-                    src={LOGO_URL + entry.logo_path}
-                    className="modal-logo"
-                  ></img>
-                </div>
-              ))}
+              {movie1WatchProviders.results.US.ads?.flatrate?.map(
+                (entry, i) => (
+                  <div key={entry.logo_path} className="modal-block">
+                    <img
+                      src={LOGO_URL + entry.logo_path}
+                      className="modal-logo"
+                    ></img>
+                  </div>
+                )
+              )}
             </div>
           </li>
           <li>
             BUY
             <div className="modal-row">
-              {movie1WatchProviders.results.US.buy.map((entry, i) => (
-                <div
-                  key={movie1WatchProviders.results.US.buy[i].logo_path}
-                  className="modal-block"
-                >
+              {movie1WatchProviders.results.US.buy?.map((entry, i) => (
+                <div key={entry.logo_path} className="modal-block">
                   <img
                     src={LOGO_URL + entry.logo_path}
                     className="modal-logo"
@@ -253,11 +265,8 @@ export default function MovieResult1() {
           <li>
             RENT
             <div className="modal-row">
-              {movie1WatchProviders.results.US.rent.map((entry, i) => (
-                <div
-                  key={movie1WatchProviders.results.US.rent[i].logo_path}
-                  className="modal-block"
-                >
+              {movie1WatchProviders.results.US.rent?.map((entry, i) => (
+                <div key={entry.logo_path} className="modal-block">
                   <img
                     src={LOGO_URL + entry.logo_path}
                     className="modal-logo"

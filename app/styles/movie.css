@@ -1,8 +1,3 @@
-.movies {
-  position: relative;
-  display: grid;
-  justify-content: center;
-}
 
 .counter {
   text-align: center;
@@ -29,6 +24,12 @@
   font-size: 1.8em;
   padding: 15px 10px 0;
   margin-top: auto;
+}
+
+.movies {
+  position: relative;
+  display: grid;
+  justify-content: center;
 }
 
 /* .btn-select {

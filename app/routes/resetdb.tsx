@@ -19,9 +19,8 @@ import { useState } from "react";
 export const loader: LoaderFunction = async () => {
   // Get movies from the movie db API:
   const BASE_URL = "https://api.themoviedb.org/3";
-  //const API_URL = `${BASE_URL}/discover/movie?sort_by=popularity.desc&api_key=${process.env.API_KEY}&page=2`;
-  const rand50 = Math.round(Math.random() * 50);
-  const API_URL = `${BASE_URL}/movie/popular?sort_by=popularity.desc&api_key=${process.env.API_KEY}&page=${rand50}`;
+  const rand130 = Math.round(Math.random() * 130);
+  const API_URL = `${BASE_URL}/movie/popular?&api_key=${process.env.API_KEY}&vote_average.gte=6.0&vote_count.gte=1000&original_language=en&page=${rand130}`;
 
   const res = await fetch(API_URL);
   const moviesFromAPI = await res.json();
