@@ -128,8 +128,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   };
 };
 
-//Modal.setAppElement("#root");
-
 export default function Results() {
   const { slug, movie1, movie2, movie3, movie4, movie5 } = useLoaderData();
   const [modalIsOpen1, setModalIsOpen1] = useState(false);
@@ -212,7 +210,7 @@ export default function Results() {
                     },
                   }}
                 >
-                  <MovieResult1 />
+                  <MovieResult1 onRequestClose={() => setModalIsOpen1(false)} />
                 </Modal>
               </li>
               <li>

@@ -3,7 +3,7 @@ import { db } from "~/utils/db.server";
 import back from "~/assets/img/back_blue.png";
 import tmdbLogo from "~/assets/svg/tmdb_logo.svg";
 import { YoutubeEmbed } from "./trailer";
-import { useState } from "react";
+import { MouseEventHandler, useState } from "react";
 
 //export const links = () => [{ rel: "stylesheet", href: modalResult }];
 
@@ -35,7 +35,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 //Modal.setAppElement("#root");
 
-export default function MovieResult1() {
+export default function MovieResult1(props: {
+  onRequestClose: MouseEventHandler<HTMLButtonElement> | undefined;
+}) {
   const { slug, movie1, movie1Details, movie1Cast, movie1WatchProviders } =
     useLoaderData();
 
@@ -86,8 +88,6 @@ export default function MovieResult1() {
 
   const trailerKey = trailerArr[0];
 
-  // const revenue = movie1Details.revenue.toLocaleString("en-US");
-  //const revenue = Math.round(movie1Details.revenue / 1000000);
   let revenue;
   if (movie1Details.revenue === 0 || !movie1Details.budget) {
     revenue = "N/A";
@@ -95,7 +95,6 @@ export default function MovieResult1() {
     revenue = `$ ${Math.round(movie1Details.revenue / 1000000)} millions`;
   }
 
-  //const budget = Math.round(movie1Details.budget / 1000000);
   let budget;
   if (movie1Details.budget === 0 || !movie1Details.budget) {
     budget = "N/A";
@@ -134,12 +133,20 @@ export default function MovieResult1() {
   // const rentProviders = rentProviderArr.slice(0, 3);
   // console.log(rentProviders);
 
+  // const [modalIsOpen1, setModalIsOpen1] = useState(false);
+
   return (
     <>
       <div className="navigation">
-        <Link to="/">
+        {/* <Link to="/">
           <img src={back} alt="back button" />
-        </Link>
+        </Link> */}
+        <button
+          onClick={props.onRequestClose}
+          style={{ border: "none", background: "transparent" }}
+        >
+          <img src={back} alt="back button" />
+        </button>
       </div>
       <header className="modal-header">
         <button className="modal-btn-number ">1</button>
