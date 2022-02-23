@@ -3,6 +3,7 @@ import { db } from "~/utils/db.server";
 import back from "~/assets/img/back_blue.png";
 import tmdbLogo from "~/assets/svg/tmdb_logo.svg";
 import { YoutubeEmbed } from "./trailer";
+import { useState } from "react";
 
 //export const links = () => [{ rel: "stylesheet", href: modalResult }];
 
@@ -123,7 +124,7 @@ export default function MovieResult1() {
   return (
     <>
       <div className="navigation">
-        <Link to="/">
+        <Link to={`/game/${slug}/results`}>
           <img src={back} alt="back button" />
         </Link>
       </div>

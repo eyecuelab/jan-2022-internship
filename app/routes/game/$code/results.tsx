@@ -212,9 +212,7 @@ export default function Results() {
                     },
                   }}
                 >
-                  {/* {movie1.results[0].title} */}
                   <MovieResult1 />
-                  {/* <TestCall /> */}
                 </Modal>
               </li>
               <li>
@@ -272,7 +270,7 @@ export default function Results() {
                     </div>
                     <div className="title-in-button">
                       {movie3.results[0].title}
-                      <p>{yearMade2[0]}</p>
+                      <p>{yearMade3[0]}</p>
                     </div>
                   </div>
                 </button>
