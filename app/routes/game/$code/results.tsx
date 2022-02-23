@@ -132,24 +132,19 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export default function Results() {
   const { slug, movie1, movie2, movie3, movie4, movie5 } = useLoaderData();
-  const IMG_URL = "https://image.tmdb.org/t/p/w500";
   const [modalIsOpen1, setModalIsOpen1] = useState(false);
   const [modalIsOpen2, setModalIsOpen2] = useState(false);
   const [modalIsOpen3, setModalIsOpen3] = useState(false);
   const [modalIsOpen4, setModalIsOpen4] = useState(false);
   const [modalIsOpen5, setModalIsOpen5] = useState(false);
 
-  // console.log(movie1.results[0]);
-  // console.log(movie1.results[0].release_date);
-  // console.log(movie1Details);
-  // console.log(movie1Cast);
-  //console.log(movie1Details);
-  //console.log(movie2Details);
-
-  const date = movie1.results[0].release_date;
+  //const date = movie1.results[0].release_date;
   const datePattern = /(\d{4})/;
-  const year = date.match(datePattern);
-  console.log(year[0]);
+  const yearMade1 = movie1.results[0].release_date.match(datePattern);
+  const yearMade2 = movie2.results[0].release_date.match(datePattern);
+  const yearMade3 = movie3.results[0].release_date.match(datePattern);
+  const yearMade4 = movie4.results[0].release_date.match(datePattern);
+  const yearMade5 = movie5.results[0].release_date.match(datePattern);
   const LOGO_URL = "https://image.tmdb.org/t/p/h100";
 
   return (
@@ -181,7 +176,7 @@ export default function Results() {
             <ul>
               <li>
                 <button
-                  className="movie-btn"
+                  className="movie-btn  glow-on-hover"
                   onClick={() => setModalIsOpen1(true)}
                 >
                   <div className="btn-items">
@@ -195,6 +190,7 @@ export default function Results() {
                     </div>
                     <div className="title-in-button">
                       {movie1.results[0].title}
+                      <p>{yearMade1[0]}</p>
                     </div>
                   </div>
                 </button>
@@ -223,7 +219,7 @@ export default function Results() {
               </li>
               <li>
                 <button
-                  className="movie-btn"
+                  className="movie-btn glow-on-hover"
                   onClick={() => setModalIsOpen2(true)}
                 >
                   <div className="btn-items">
@@ -237,6 +233,7 @@ export default function Results() {
                     </div>
                     <div className="title-in-button">
                       {movie2.results[0].title}
+                      <p>{yearMade2[0]}</p>
                     </div>
                   </div>
                 </button>
@@ -275,6 +272,7 @@ export default function Results() {
                     </div>
                     <div className="title-in-button">
                       {movie3.results[0].title}
+                      <p>{yearMade2[0]}</p>
                     </div>
                   </div>
                 </button>
@@ -299,7 +297,7 @@ export default function Results() {
               </li>
               <li>
                 <button
-                  className="movie-btn"
+                  className="movie-btn glow-on-hover"
                   onClick={() => setModalIsOpen4(true)}
                 >
                   <div className="btn-items">
@@ -313,6 +311,7 @@ export default function Results() {
                     </div>
                     <div className="title-in-button">
                       {movie4.results[0].title}
+                      <p>{yearMade4[0]}</p>
                     </div>
                   </div>
                 </button>
@@ -337,7 +336,7 @@ export default function Results() {
               </li>
               <li>
                 <button
-                  className="movie-btn"
+                  className="movie-btn glow-on-hover"
                   onClick={() => setModalIsOpen5(true)}
                 >
                   <div className="btn-items">
@@ -351,6 +350,7 @@ export default function Results() {
                     </div>
                     <div className="title-in-button">
                       {movie5.results[0].title}
+                      <p> {yearMade5[0]}</p>
                     </div>
                   </div>
                 </button>

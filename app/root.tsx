@@ -8,6 +8,7 @@ import {
 } from "remix";
 //import globalStyles from "~/styles/global.css";
 import type { MetaFunction } from "remix";
+import Modal from "react-modal";
 import globalStyles from "~/styles/global.css";
 
 export const links = () => [{ rel: "stylesheet", href: globalStyles }];
@@ -15,6 +16,8 @@ export const links = () => [{ rel: "stylesheet", href: globalStyles }];
 export const meta: MetaFunction = () => {
   return { title: "New Remix App" };
 };
+
+Modal.setAppElement("body");
 
 export default function App() {
   return (

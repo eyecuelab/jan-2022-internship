@@ -73,8 +73,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return { topFive, slug, movie2, movie2Details, movie2Cast };
 };
 
-//Modal.setAppElement("#root");
-
 export default function MovieResult2() {
   const { slug, movie2, movie2Details, movie2Cast } = useLoaderData();
 

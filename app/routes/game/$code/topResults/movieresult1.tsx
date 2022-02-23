@@ -1,6 +1,7 @@
 import { Link, LoaderFunction, useLoaderData } from "remix";
 import { db } from "~/utils/db.server";
 import back from "~/assets/img/back_blue.png";
+import tmdbLogo from "~/assets/svg/tmdb_logo.svg";
 import { YoutubeEmbed } from "./trailer";
 
 //export const links = () => [{ rel: "stylesheet", href: modalResult }];
@@ -85,25 +86,29 @@ export default function MovieResult1() {
   const trailerKey = trailerArr[0];
 
   // const revenue = movie1Details.revenue.toLocaleString("en-US");
-  const revenue = movie1Details.revenue / 1000000;
-  const budget = movie1Details.budget / 1000000;
+  const revenue = Math.round(movie1Details.revenue / 1000000);
+  const budget = Math.round(movie1Details.budget / 1000000);
+
+  console.log(movie1WatchProviders);
 
   const LOGO_URL = "https://image.tmdb.org/t/p/h50";
-  const streamProviderArr: any[] = [];
-  movie1WatchProviders.results.US.flatrate.forEach(function (entry) {
-    if (entry.provider_name) {
-      streamProviderArr.push(entry.provider_name);
-    }
-  });
-  const streamingProviders = streamProviderArr.slice(0, 3);
+  // const streamProviderArr: any[] = [];
+  // movie1WatchProviders.results.US?.flatrate?.ads.forEach(function (entry) {
+  //   if (entry === undefined) {
+  //     return null;
+  //   } else {
+  //     streamProviderArr.push(entry.ads.provider_name);
+  //   }
+  // });
+  // const streamingProviders = streamProviderArr.slice(0, 3);
 
-  const buyProviderArr: any[] = [];
-  movie1WatchProviders.results.US.buy.forEach(function (entry) {
-    if (entry.provider_name) {
-      buyProviderArr.push(entry.provider_name);
-    }
-  });
-  const buyProviders = buyProviderArr.slice(0, 3);
+  // const buyProviderArr: any[] = [];
+  // movie1WatchProviders.results.US.buy.forEach(function (entry) {
+  //   if (entry.provider_name) {
+  //     buyProviderArr.push(entry.provider_name);
+  //   }
+  // });
+  // const buyProviders = buyProviderArr.slice(0, 3);
 
   // const rentProviderArr: any[] = [];
   // movie1WatchProviders.results.US.rent.forEach(function (entry) {
@@ -126,7 +131,7 @@ export default function MovieResult1() {
         <button className="modal-btn-number ">1</button>
         <ul style={{ paddingLeft: 12 }}>
           <li>
-            <h2>{movie1.results[0].title}</h2>
+            <div className="modal-movie-title">{movie1.results[0].title}</div>
           </li>
           <li>
             <p>{year[0]}</p>
@@ -136,57 +141,90 @@ export default function MovieResult1() {
       <div>
         <img src={poster} alt="poster" className="modal-img" />
       </div>
+
       <div className="modal-grid-container">
-        <div className="modal-grid-item">
-          <ul>
-            <li>
-              GENRES <span>{genres}</span>
-            </li>
-            <li>
-              SCORE <span id="modal-score">{score}</span>
-            </li>
-            <li>
-              RUNTIME
-              <span id="modal-runtime">{movie1Details.runtime} min</span>
-            </li>
-            <li>
-              REVENUE
-              <span id="modal-revenue">
-                $ {revenue} millions of paper money
+        <div className="bio-page-wrapper">
+          <div className="row-bio">
+            <div className="col-bio modal-title">GENRES</div>
+            <div className="col-bio modal-info">
+              <div>
+                {genres.map((genre, i) => (
+                  <button key={i} className="modal-btn-genre">
+                    {genre}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="row-bio">
+            <div className="col-bio modal-title">SCORE</div>
+            <div className="col-bio modal-info">
+              <span>
+                <img src={tmdbLogo} alt="TMDB Logo" style={{ width: "60px" }} />
+                <span> </span>
+                {score}
               </span>
-            </li>
-            <li>
-              BUDGET
-              <span id="modal-budget">$ {budget} </span>
-            </li>
-            <li>
-              DIRECTOR <span id="modal-director">{directors}</span>
-            </li>
-            <li>
-              CAST <span id="modal-actors">{actors}</span>
-            </li>
-          </ul>
-        </div>
-        <div className="grid-item">
-          <h5>SYNOPSIS</h5>
-          <p>{movie1.results[0].overview}</p>
-        </div>
-        <div className="grid-item">
-          <h5>TRAILER</h5>
-          <YoutubeEmbed embedId={trailerKey} />
+            </div>
+          </div>
+
+          <div className="row-bio">
+            <div className="col-bio modal-title">RUNTIME</div>
+            <div className="col-bio modal-info ">
+              {movie1Details.runtime} min
+            </div>
+          </div>
+
+          <div className="row-bio">
+            <div className="col-bio modal-title">REVENUE</div>
+            <div className="col-bio modal-info">$ {revenue} millions</div>
+          </div>
+
+          <div className="row-bio">
+            <div className="col-bio modal-title">BUDGET</div>
+            <div className="col-bio modal-info">$ {budget} millions</div>
+          </div>
+
+          <div className="row-bio">
+            <div className="col-bio modal-title">DIRECTOR</div>
+            <div className="col-bio modal-info">{directors}</div>
+          </div>
+
+          <div className="row-bio">
+            <div className="col-bio modal-title">ACTORS</div>
+            <div className="col-bio" id="modal-actors">
+              <ul>
+                {actors.map((actor, i) => (
+                  <li key={i}>{actor}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className="row-bio">
+            <div className="col-bio modal-title top-offset">SYNOPSIS</div>
+          </div>
+
+          <div className="row-bio">
+            <div className="col-bio">
+              <p style={{ color: "#fff" }}>{movie1.results[0].overview}</p>
+            </div>
+          </div>
+
+          <div className="modal-title top-offset">TRAILER</div>
+          <div id="trailer">
+            <YoutubeEmbed embedId={trailerKey} />
+          </div>
         </div>
       </div>
       <footer className="modal-footer ">
-        <h5>WHERE TO WATCH</h5>
-        <ul>
+        <div className="modal-title">WHERE TO WATCH</div>
+        <ul style={{ color: "#fff", marginTop: "1em" }}>
           <li>
             STREAM
             <div className="modal-row">
-              {movie1WatchProviders.results.US.flatrate.map((entry, i) => (
-                <div
-                  key={movie1WatchProviders.results.US.flatrate[i].logo_path}
-                  className="modal-block"
-                >
+              {movie1WatchProviders.results.US?.flatrate?.map((entry, i) => (
+                <div key={entry.logo_path} className="modal-block">
                   <img
                     src={LOGO_URL + entry.logo_path}
                     className="modal-logo"
