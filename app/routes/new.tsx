@@ -1,21 +1,17 @@
 import { ActionFunction, Form, Link, LoaderFunction, redirect } from "remix";
 import { db } from "~/utils/db.server";
 import { createMovieGame } from "~/utils/movieGame.server";
-import { getPlayer, requirePlayerId } from "~/utils/session.server";
+import {
+  getPlayer,
+  requirePlayerId,
+  requireUser,
+} from "~/utils/session.server";
 import banner from "~/assets/svg/banner3.png";
 import newStyles from "~/styles/new.css";
 
 export const links = () => [{ rel: "stylesheet", href: newStyles }];
 
 export const loader: LoaderFunction = async ({ request }) => {
-  //const { slug } = request;
-  // const data = {
-  //   movies: await db.movie.findMany({
-  //     take: 7,
-  //     select: { id: true, title: true },
-  //   }),
-  // };
-
   const player = await getPlayer(request);
   return { player };
 };
@@ -25,14 +21,6 @@ export const action: ActionFunction = async ({ request, params }) => {
   const game = await createMovieGame({
     playerId,
   });
-
-  // const gameId = game.id;
-
-  // const gameStatus = await db.game.update({
-  //   where: { id: gameId },
-  //   data: { isStarted: true },
-  // });
-
   return redirect(`/game/${game.slug}/share`);
 };
 

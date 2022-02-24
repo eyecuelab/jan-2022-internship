@@ -1,8 +1,10 @@
 import {
   ActionFunction,
+  Form,
   json,
   Link,
   LoaderFunction,
+  NavLink,
   useLoaderData,
   useParams,
 } from "remix";
@@ -223,14 +225,9 @@ export default function Lobby() {
         </ReactTooltip>
       </div>
       <div id="footer">
-        <button className="btn-lobby glow-button">
-          <Link
-            to={`/game/${slug}/lobby`}
-            style={{ textDecoration: "none", color: "#fff" }}
-          >
-            Got to Lobby
-          </Link>
-        </button>
+        <NavLink to={`/game/${slug}/lobby`}>
+          <button className="btn-lobby glow-button">Got to Lobby</button>
+        </NavLink>
       </div>
     </>
   );

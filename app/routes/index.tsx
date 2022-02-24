@@ -83,7 +83,6 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   //Create user sessioni
-  //return createUserSession(user.id, "/new");
   return createUserSession(user.id, "/new");
 };
 

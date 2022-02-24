@@ -1,5 +1,6 @@
 import {
   ActionFunction,
+  Form,
   json,
   Link,
   LoaderFunction,
@@ -221,8 +222,8 @@ export default function Movie() {
   };
   const getSessionStorageValue = (s: string) => sessionStorage.getItem(s);
 
-  const [data, setData] = useState({ date: Date.now(), delay: 60000 });
-  const wantedDelay = 60000;
+  const [data, setData] = useState({ date: Date.now(), delay: 3000 });
+  const wantedDelay = 3000;
 
   //[START] componentDidMount
   //Code runs only one time after each reloading
@@ -302,12 +303,12 @@ export default function Movie() {
           <div id="footer">
             <div className="flex-grid">
               <div className="col1-footer">
-                <form method="post">
+                <Form method="post">
                   <input type="hidden" name="actionType" value="no" />
                   <button type="submit" className="btn glow-button">
                     <img src={dislike} alt="dislike button" />
                   </button>
-                </form>
+                </Form>
               </div>
               <div className="col2-footer">
                 <button disabled className="btn-slide-n">
@@ -315,12 +316,12 @@ export default function Movie() {
                 </button>
               </div>
               <div className="col3-footer"></div>
-              <form method="post">
+              <Form method="post">
                 <input type="hidden" name="actionType" value="yes" />
                 <button type="submit" className="btn glow-button">
                   <img src={like} alt="like button" />
                 </button>
-              </form>
+              </Form>
             </div>
           </div>
         </>

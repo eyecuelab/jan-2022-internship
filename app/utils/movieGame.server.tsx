@@ -26,6 +26,24 @@ export async function createMovieGame({
   });
 }
 
+export async function createMovieGameNonHost({
+  playerId,
+}: MovieGameData): Promise<Game> {
+  return db.game.create({
+    data: {
+      slug: nanoid(4),
+      players: {
+        create: [
+          {
+            player: { connect: { id: playerId } },
+            isHost: false,
+          },
+        ],
+      },
+    },
+  });
+}
+
 export async function requireGame(slug: string): Promise<Game> {
   const game = await db.game.findUnique({
     where: { slug },

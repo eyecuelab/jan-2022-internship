@@ -1,4 +1,4 @@
-import { Link, LoaderFunction, useLoaderData } from "remix";
+import { Link, LoaderFunction, NavLink, useLoaderData } from "remix";
 import { db } from "~/utils/db.server";
 import home from "~/assets/img/home.png";
 import back from "~/assets/img/back.png";
@@ -126,6 +126,27 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     movie5Details,
     movie5Cast,
   };
+
+  // const movie1 = await callApi(topFive[0].tmdb);
+  // const movie2 = await callApi(topFive[1].tmdb);
+  // const movie3 = await callApi(topFive[2].tmdb);
+  // const movie4 = await callApi(topFive[3].tmdb);
+  // const movie5 = await callApi(topFive[4].tmdb);
+
+  // const movieArr = [movie1, movie2, movie3, movie4, movie5];
+
+  // const movieDetails = await callApiGetDetails(movie1.results[0].id);
+  // const movieCast = await callApiGetCredits(movie1.results[0].id);
+  // const movieWatchProviders = await callApiGetProviders(movie1.results[0].id);
+
+  // return {
+  //   topFive,
+  //   slug,
+  //   movie1,
+  //   movieDetails,
+  //   movieCast,
+  //   movieWatchProviders,
+  // };
 };
 
 export default function Results() {
@@ -197,7 +218,6 @@ export default function Results() {
                   onRequestClose={() => setModalIsOpen1(false)}
                   style={{
                     overlay: {
-                      //backgroundColor: "#0A1039",
                       backgroundColor: "#0A1039",
                     },
                     content: {
@@ -205,8 +225,6 @@ export default function Results() {
                       color: "#212F52",
                       maxWidth: "600px",
                       height: "90vh",
-                      // background: "#0A1039",
-                      // overflow: "scroll",
                     },
                   }}
                 >
@@ -245,7 +263,6 @@ export default function Results() {
                       color: "#212F52",
                       maxWidth: "600px",
                       height: "95vh",
-                      // overflow: "scroll",
                     },
                   }}
                 >
@@ -284,7 +301,6 @@ export default function Results() {
                       color: "#212F52",
                       maxWidth: "600px",
                       height: "95vh",
-                      // overflow: "scroll",
                     },
                   }}
                 >
@@ -323,7 +339,6 @@ export default function Results() {
                       color: "#212F52",
                       maxWidth: "600px",
                       height: "95vh",
-                      // overflow: "scroll",
                     },
                   }}
                 >
@@ -362,7 +377,6 @@ export default function Results() {
                       color: "#212F52",
                       maxWidth: "600px",
                       height: "95vh",
-                      // overflow: "scroll",
                     },
                   }}
                 >
@@ -370,28 +384,13 @@ export default function Results() {
                 </Modal>
               </li>
             </ul>
-            {/* <ul>
-              {topFive.map((item) => (
-                <li key={item.movieId}>
-                  <button className="movie-btn">
-                    TMDB: {item.tmdb} - likes: {item.likes}
-                  </button>
-                </li>
-              ))}
-            </ul> */}
           </div>
         </div>
       </div>
       <div id="footer">
-        <button className="btn-more glow-button">
-          <Link
-            //to={`/game/${slug}/lobby`}
-            to={`/`}
-            style={{ textDecoration: "none", color: "#fff" }}
-          >
-            Play Again
-          </Link>
-        </button>
+        <NavLink to={`/`}>
+          <button className="btn-more glow-button">Play Again</button>
+        </NavLink>
       </div>
     </>
   );

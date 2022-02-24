@@ -1,4 +1,11 @@
-import { ActionFunction, json, Link, useLoaderData, useParams } from "remix";
+import {
+  ActionFunction,
+  json,
+  Link,
+  NavLink,
+  useLoaderData,
+  useParams,
+} from "remix";
 import Game from "~/routes/game";
 import { db } from "~/utils/db.server";
 import { requireUser } from "~/utils/session.server";
@@ -177,14 +184,9 @@ export default function Lobby() {
         </div>
       </div>
       <div id="footer">
-        <button className="btn-lobby glow-button">
-          <Link
-            to={`/game/${slug}/${data.movies[0].id}`}
-            style={{ textDecoration: "none", color: "#fff" }}
-          >
-            Begin Game
-          </Link>
-        </button>
+        <NavLink to={`/game/${slug}/${data.movies[0].id}`}>
+          <button className="btn-lobby glow-button">Begin Game</button>
+        </NavLink>
       </div>
     </>
   );

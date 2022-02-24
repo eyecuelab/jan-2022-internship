@@ -244,16 +244,14 @@ export default function MovieResult1(props: {
           <li>
             STREAM
             <div className="modal-row">
-              {movie1WatchProviders.results.US.ads?.flatrate?.map(
-                (entry, i) => (
-                  <div key={entry.logo_path} className="modal-block">
-                    <img
-                      src={LOGO_URL + entry.logo_path}
-                      className="modal-logo"
-                    ></img>
-                  </div>
-                )
-              )}
+              {movie1WatchProviders.results.US.flatrate?.map((entry, i) => (
+                <div key={entry.logo_path} className="modal-block">
+                  <img
+                    src={LOGO_URL + entry.logo_path}
+                    className="modal-logo"
+                  ></img>
+                </div>
+              ))}
             </div>
           </li>
           <li>
