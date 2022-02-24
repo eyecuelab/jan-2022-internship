@@ -8,7 +8,6 @@ import {
   useActionData,
   useLoaderData,
   useNavigate,
-  useTransition,
 } from "remix";
 //import Game from "~/routes/game";
 import { db } from "~/utils/db.server";
@@ -18,9 +17,9 @@ import back from "~/assets/img/back.png";
 import home from "~/assets/img/home.png";
 import like from "~/assets/img/like.png";
 import dislike from "~/assets/img/dislike.png";
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // import { useInterval } from "usehooks-ts";
-import Countdown from "react-countdown";
+// import Countdown from "react-countdown";
 
 export const links = () => [{ rel: "stylesheet", href: movieStyles }];
 
@@ -64,11 +63,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   console.log(totalMoviesNumber);
   console.log("Current movie position:");
   console.log(currMoviePosition[0].position);
-  // console.log(currMoviePosition[0]);
-  // const nextPosition = currMoviePosition[0].position + 1;
-  // console.log("next position");
-  // console.log(nextPosition);
-  //console.log(Object.keys(movieList.movies).length);
 
   const moviesLeft = totalMoviesNumber - currMoviePosition[0].position;
   console.log(moviesLeft);
@@ -179,72 +173,27 @@ export default function Movie() {
   const poster = IMG_URL + movie.posterPath;
   const vote = useActionData();
   const navigate = useNavigate();
-  // const transition = useTransition();
 
-  // const [count, setCount] = useState<number>(3);
-  // const [delay, setDelay] = useState<number>(1000);
-  // const [isPlaying, setPlaying] = useState<boolean>(true);
-
-  // useInterval(
-  //   () => {
-  //     // Your custom logic here
-  //     if (count === 0) {
-  //       console.log("time is out");
-  //       navigate(`/game/${slug}/results`, { replace: true });
-  //     } else {
-  //       setCount(count - 1);
-  //     }
-  //   },
-  //   // Delay in milliseconds or null to stop it
-  //   isPlaying ? delay : null
-  // );
-
-  const TimesUp = () => (
-    <span>
-      <h1>Time is up!</h1>
-    </span>
-  );
-
-  // Renderer callback with condition
-  const renderer = ({ hours, minutes, seconds, completed }) => {
-    if (completed) {
-      // Render a complete state
-      sessionStorage.clear();
-      return <TimesUp />;
-    } else {
-      // Render a countdown
-      return (
-        <span>
-          <h1>:{seconds}</h1>
-        </span>
-      );
-    }
+  //Timer countdown
+  const [timer, setTimer] = useState(59);
+  const id = useRef(null);
+  const clear = () => {
+    window.clearInterval(id.current);
   };
-  const getSessionStorageValue = (s: string) => sessionStorage.getItem(s);
 
-  const [data, setData] = useState({ date: Date.now(), delay: 3000 });
-  const wantedDelay = 3000;
-
-  //[START] componentDidMount
-  //Code runs only one time after each reloading
   useEffect(() => {
-    const savedTime = getSessionStorageValue("end_time");
-    if (savedTime != null && !isNaN(savedTime)) {
-      const currentTime = Date.now();
-      const delta = parseInt(savedTime, 10) - currentTime;
-
-      //Do you reach the end?
-      if (delta > wantedDelay) {
-        //Yes we clear uour saved end date
-        if (sessionStorage.getItem("end_time").length > 0)
-          sessionStorage.removeItem("end_time");
-      } else {
-        //No update the end date with the current date
-        setData({ date: currentTime, delay: delta });
-      }
-    }
+    id.current = window.setInterval(() => {
+      setTimer((time) => time - 1);
+    }, 1000);
+    return () => clear();
   }, []);
-  //[END] componentDidMount
+
+  useEffect(() => {
+    if (timer === 0) {
+      clear();
+      navigate(`/game/${slug}/results`, { replace: true });
+    }
+  }, [timer]);
 
   return (
     <>
@@ -268,29 +217,9 @@ export default function Movie() {
         </p>
       </div>
       <div className="container">
-        <div>
-          <div className="movies">
-            <div className="counter">
-              <Countdown
-                date={data.date + data.delay}
-                renderer={renderer}
-                onStart={(delta) => {
-                  //Save the end date
-                  if (sessionStorage.getItem("end_time") == null)
-                    sessionStorage.setItem(
-                      "end_time",
-                      JSON.stringify(data.date + data.delay)
-                    );
-                }}
-                onComplete={() => {
-                  if (sessionStorage.getItem("end_time") != null)
-                    sessionStorage.removeItem("end_time");
-                  navigate(`/game/${slug}/results`, { replace: true });
-                }}
-              />
-            </div>
-            <img src={poster} className="poster" />
-          </div>
+        <div className="movies">
+          <div className="counter">0 : {timer}</div>
+          <img src={poster} className="poster" />
           <div>
             {vote?.errors ? (
               <p style={{ color: "red" }}>{vote.errors}</p>

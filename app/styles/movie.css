@@ -1,6 +1,8 @@
 
 .counter {
   text-align: center;
+  font-weight: 800;
+  font-size: 36px;
 }
 
 .poster {
@@ -23,7 +25,7 @@
 .movies h3 h1 {
   font-size: 1.8em;
   padding: 15px 10px 0;
-  margin-top: auto;
+  /* margin-top: auto; */
 }
 
 .movies {
@@ -37,16 +39,6 @@
   justify-content: center;
 } */
 
-
-.container {
-  display: flex;
-  flex-direction: column;
-  height: 60vh;
-  overflow: auto;
-  position: relative;
-}
-
-
 .header {
   /* display: flex; */
   flex-direction: column;
@@ -58,6 +50,15 @@
   height: 25vh;
   /* padding: 2rem 4rem 1rem 4rem; */
   padding: 1rem 2rem 1rem 2rem;
+}
+
+.container {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  height: 65vh;
+  overflow: auto;
+  padding-bottom: 
 }
 
 .play {
@@ -94,8 +95,7 @@ img {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* background-color: #1A2448; */
-  height: 15vh;
+  height: 10vh;
 }
 
 .btn {
@@ -117,7 +117,6 @@ img {
 }
 
 .btn-slide-n {
-  /* background-color: #1A2448; */
   background-color: #0A1039;
   color: #fff;
   padding: 15px 32px;
@@ -129,7 +128,6 @@ img {
   margin: 4px 2px;
   cursor: default;
   border: none;
-
   width: 60px;
   transition: all 0.2s ease-in-out;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
@@ -149,9 +147,9 @@ img {
 }
 
 /* custom scrollbar */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 20px;
-}
+} */
 
 ::-webkit-scrollbar-track {
   background-color: transparent;
