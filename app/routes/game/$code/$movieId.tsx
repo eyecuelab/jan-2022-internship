@@ -193,7 +193,7 @@ export default function Movie() {
       clear();
       navigate(`/game/${slug}/results`, { replace: true });
     }
-  }, [timer]);
+  }, [navigate, slug, timer]);
 
   return (
     <>

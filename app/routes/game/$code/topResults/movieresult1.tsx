@@ -106,7 +106,7 @@ export default function MovieResult1(props: {
 
   const LOGO_URL = "https://image.tmdb.org/t/p/h50";
   // const streamProviderArr: any[] = [];
-  // movie1WatchProviders.results.US?.flatrate?.ads.forEach(function (entry) {
+  // movie1WatchProviders.results.US.ads?.forEach(function (entry) {
   //   if (entry === undefined) {
   //     return null;
   //   } else {
@@ -244,20 +244,22 @@ export default function MovieResult1(props: {
           <li>
             STREAM
             <div className="modal-row">
-              {movie1WatchProviders.results.US.flatrate?.map((entry, i) => (
-                <div key={entry.logo_path} className="modal-block">
-                  <img
-                    src={LOGO_URL + entry.logo_path}
-                    className="modal-logo"
-                  ></img>
-                </div>
-              ))}
+              {movie1WatchProviders.results.US.flatrate?.ads?.map(
+                (entry, i) => (
+                  <div key={entry.logo_path} className="modal-block">
+                    <img
+                      src={LOGO_URL + entry.logo_path}
+                      className="modal-logo"
+                    ></img>
+                  </div>
+                )
+              )}
             </div>
           </li>
           <li>
             BUY
             <div className="modal-row">
-              {movie1WatchProviders.results.US.buy?.map((entry, i) => (
+              {movie1WatchProviders.results?.US?.buy?.map((entry, i) => (
                 <div key={entry.logo_path} className="modal-block">
                   <img
                     src={LOGO_URL + entry.logo_path}
@@ -270,7 +272,7 @@ export default function MovieResult1(props: {
           <li>
             RENT
             <div className="modal-row">
-              {movie1WatchProviders.results.US.rent?.map((entry, i) => (
+              {movie1WatchProviders.results?.US?.rent?.map((entry, i) => (
                 <div key={entry.logo_path} className="modal-block">
                   <img
                     src={LOGO_URL + entry.logo_path}
