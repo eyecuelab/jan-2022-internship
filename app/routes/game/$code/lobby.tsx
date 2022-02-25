@@ -1,28 +1,19 @@
-import {
-  ActionFunction,
-  json,
-  Link,
-  NavLink,
-  useLoaderData,
-  useParams,
-} from "remix";
-import Game from "~/routes/game";
+import { ActionFunction, Link, LoaderFunction, useLoaderData } from "remix";
 import { db } from "~/utils/db.server";
-import { requireUser } from "~/utils/session.server";
+import { requirePlayerId, requireUser } from "~/utils/session.server";
 import { usePolling } from "~/hooks";
 import players from "~/assets/img/players.png";
 import check from "~/assets/img/check.png";
 import lobbyStyles from "~/styles/lobby.css";
 import back from "~/assets/img/back.png";
 import home from "~/assets/img/home.png";
+import { Form } from "remix";
+import { redirect } from "remix";
 
 export const links = () => [{ rel: "stylesheet", href: lobbyStyles }];
 
-export const loader: ActionFunction = async ({ request, params }) => {
+export const loader: LoaderFunction = async ({ request, params }) => {
   const slug = params.code;
-  //const { slug } = params;
-  console.log(slug);
-
   const data = {
     movies: await db.movie.findMany({
       select: { id: true, title: true, tmdbid: true },
@@ -34,7 +25,6 @@ export const loader: ActionFunction = async ({ request, params }) => {
     where: { slug },
     select: { id: true, isStarted: true },
   });
-
   if (!game) throw new Error("Game not found");
 
   //get all players in the game
@@ -45,59 +35,22 @@ export const loader: ActionFunction = async ({ request, params }) => {
     },
   });
 
-  const gameId = game.id;
+  const playerId = await requirePlayerId(request);
+  const adminPlayer = await db.playersInGames.findUnique({
+    where: { playerId },
+    select: {
+      isHost: true,
+    },
+  });
+
   const gameStatus = game.isStarted;
   const status = gameStatus;
-  console.log(status);
 
   //get movie's unique id
   const movie = await db.movie.findUnique({
     where: { id: data.movies[0].id },
   });
   if (!movie) throw new Error("Movie not found");
-
-  const movieObj = await db.movie.findMany({
-    select: { id: true, title: true, tmdbid: true },
-  });
-
-  const allMovies = movieObj.map((item) => {
-    return item;
-  });
-
-  // const allTmdbIds = movieObj.map((item) => {
-  //   console.log(item.tmdbid);
-  //   return item.tmdbid;
-  // });
-
-  //console.log(allMovies[0].tmdbid);
-
-  // if (!status) {
-  //   //insert all movies in MovieScore table
-  //   allMovies.map(async (item, i) => {
-  //     await db.movieScore.create({
-  //       data: {
-  //         //movie: { connect: { id: movieId } },
-  //         movieId: item.id,
-  //         tmdb: item.tmdbid,
-  //         position: i + 1,
-  //         gameId,
-  //         likes: 0,
-  //         dislikes: 0,
-  //       },
-  //       include: { movie: true },
-  //     });
-  //   });
-
-  //   //const gameId = game.id;
-  //   await db.game.update({
-  //     where: { id: gameId },
-  //     data: { isStarted: true },
-  //   });
-  // } else {
-  //   if (!allMovies) {
-  //     throw json("Movies already added.", 404);
-  //   }
-  // }
 
   //get current user
   const player = await requireUser(request);
@@ -108,44 +61,79 @@ export const loader: ActionFunction = async ({ request, params }) => {
       players: { ...playersObj },
     },
   } = gamePlayers;
+
   const playersArr = Object.values(playersObj);
 
-  //get ordered list of movies
-  const movieList = {
-    movies: await db.movieScore.findMany({
-      where: { game },
-      select: { id: true, position: true },
-      orderBy: {
-        position: "asc",
-      },
+  const gameId = game.id;
+  const startTheGame = await db.game.findUnique({
+    where: { id: gameId },
+    select: { isKickedOff: true },
+  });
+
+  const isAdminHost = adminPlayer?.isHost;
+  const gameKickedOff = startTheGame?.isKickedOff;
+
+  if (isAdminHost === false && gameKickedOff === true) {
+    return redirect(`/game/${slug}/${data.movies[0].id}`);
+  }
+
+  return {
+    data,
+    player,
+    slug,
+    playersArr,
+    status,
+    gameId,
+    isAdminHost,
+    gameKickedOff,
+  };
+};
+
+export const action: ActionFunction = async ({ request, params }) => {
+  const slug = params.code;
+  const data = {
+    movies: await db.movie.findMany({
+      select: { id: true, title: true, tmdbid: true },
     }),
   };
 
-  const movieQueue = await db.movieScore.findMany({
-    where: {
-      game: { id: game.id },
-      AND: [
-        {
-          movie: { id: params.movieId },
-        },
-      ],
-    },
+  const game = await db.game.findUnique({
+    where: { slug },
+    select: { id: true, isStarted: true },
   });
 
-  console.log("current movie position:");
-  console.log(movieQueue[0].position);
+  if (!game) throw new Error("Game not found");
 
-  return { data, player, slug, playersArr, status };
+  const gameId = game.id;
+
+  await db.game.update({
+    where: { id: gameId },
+    data: { isKickedOff: true },
+  });
+
+  return redirect(`/game/${slug}/${data.movies[0].id}`);
 };
 
 export default function Lobby() {
   const { slug } = useLoaderData();
+
   //  const { slug } = useParams();
-  const { data, player, playersArr, status } = usePolling<LoaderData>(
+  const { playersArr, isAdminHost } = usePolling<LoaderData>(
     `/game/${slug}/lobby`,
     useLoaderData<LoaderData>(),
     1000
   );
+
+  let button;
+  if (isAdminHost === true) {
+    button = <button className="btn-lobby glow-button">Begin Game</button>;
+  } else {
+    button = (
+      <button disabled className="btn-lobby glow-button">
+        Wait for admin...
+      </button>
+    );
+  }
 
   return (
     <>
@@ -184,9 +172,7 @@ export default function Lobby() {
         </div>
       </div>
       <div id="footer">
-        <NavLink to={`/game/${slug}/${data.movies[0].id}`}>
-          <button className="btn-lobby glow-button">Begin Game</button>
-        </NavLink>
+        <Form method="post">{button}</Form>
       </div>
     </>
   );

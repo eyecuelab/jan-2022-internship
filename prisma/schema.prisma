@@ -41,6 +41,7 @@ model Game {
   slug         String?          @unique
   //createdBy    User             @relation(name: "GamesOwned", fields: [id], references: id)
   isStarted    Boolean          @default(false)
+  isKickedOff  Boolean          @default(false)           
   startedAt    DateTime?
   endedAt      DateTime?
   currentRound Int              @default(0)

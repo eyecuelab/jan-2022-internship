@@ -157,28 +157,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 export const action = async ({ request }) => {
-  // const BASE_URL = "https://api.themoviedb.org/3";
-  // const rand130 = Math.round(Math.random() * 130);
-  // const API_URL = `${BASE_URL}/movie/popular?&api_key=${process.env.API_KEY}&vote_average.gte=6.0&vote_count.gte=1000&original_language=en&page=${rand130}`;
-
-  // const res = await fetch(API_URL);
-  // const moviesFromAPI = await res.json();
-
-  // Delete all movies in db and then write the newly fetched movies to database:
-  // await db.playersInGames.deleteMany({});
-  // await db.movieScore.deleteMany({});
-  // await db.game.deleteMany({});
-  // await db.user.deleteMany({});
-  // await db.movie.deleteMany({});
-  // await db.movie.createMany({
-  //   data: moviesFromAPI.results.map((movie: any) => ({
-  //     title: movie.title,
-  //     tmdbid: String(movie.id),
-  //     overview: movie.overview,
-  //     posterPath: movie.poster_path,
-  //   })),
-  // });
-
   return redirect("/");
 };
 

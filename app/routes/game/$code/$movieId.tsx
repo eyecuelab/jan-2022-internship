@@ -18,8 +18,6 @@ import home from "~/assets/img/home.png";
 import like from "~/assets/img/like.png";
 import dislike from "~/assets/img/dislike.png";
 import { useEffect, useRef, useState } from "react";
-// import { useInterval } from "usehooks-ts";
-// import Countdown from "react-countdown";
 
 export const links = () => [{ rel: "stylesheet", href: movieStyles }];
 
