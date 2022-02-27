@@ -103,57 +103,44 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const movie2Details = await callApiGetDetails(movie2.results[0].id);
   const movie2Cast = await callApiGetCredits(movie2.results[0].id);
+  const movie2WatchProviders = await callApiGetProviders(movie2.results[0].id);
 
   const movie3Details = await callApiGetDetails(movie3.results[0].id);
   const movie3Cast = await callApiGetCredits(movie3.results[0].id);
+  const movie3WatchProviders = await callApiGetProviders(movie3.results[0].id);
 
   const movie4Details = await callApiGetDetails(movie4.results[0].id);
   const movie4Cast = await callApiGetCredits(movie4.results[0].id);
+  const movie4WatchProviders = await callApiGetProviders(movie4.results[0].id);
 
   const movie5Details = await callApiGetDetails(movie5.results[0].id);
   const movie5Cast = await callApiGetCredits(movie5.results[0].id);
+  const movie5WatchProviders = await callApiGetProviders(movie5.results[0].id);
 
   return {
     topFive,
     slug,
     movie1,
-    movie2,
-    movie3,
-    movie4,
-    movie5,
     movie1Details,
     movie1Cast,
     movie1WatchProviders,
+    movie2,
     movie2Details,
     movie2Cast,
+    movie2WatchProviders,
+    movie3,
     movie3Details,
     movie3Cast,
+    movie3WatchProviders,
+    movie4,
     movie4Details,
     movie4Cast,
+    movie4WatchProviders,
+    movie5,
     movie5Details,
     movie5Cast,
+    movie5WatchProviders,
   };
-
-  // const movie1 = await callApi(topFive[0].tmdb);
-  // const movie2 = await callApi(topFive[1].tmdb);
-  // const movie3 = await callApi(topFive[2].tmdb);
-  // const movie4 = await callApi(topFive[3].tmdb);
-  // const movie5 = await callApi(topFive[4].tmdb);
-
-  // const movieArr = [movie1, movie2, movie3, movie4, movie5];
-
-  // const movieDetails = await callApiGetDetails(movie1.results[0].id);
-  // const movieCast = await callApiGetCredits(movie1.results[0].id);
-  // const movieWatchProviders = await callApiGetProviders(movie1.results[0].id);
-
-  // return {
-  //   topFive,
-  //   slug,
-  //   movie1,
-  //   movieDetails,
-  //   movieCast,
-  //   movieWatchProviders,
-  // };
 };
 
 export const action = async ({ request }) => {
@@ -277,7 +264,7 @@ export default function Results() {
                     },
                   }}
                 >
-                  <MovieResult2 />
+                  <MovieResult2 onRequestClose={() => setModalIsOpen2(false)} />
                 </Modal>
               </li>
               <li>
@@ -315,7 +302,7 @@ export default function Results() {
                     },
                   }}
                 >
-                  <MovieResult3 />
+                  <MovieResult3 onRequestClose={() => setModalIsOpen3(false)} />
                 </Modal>
               </li>
               <li>
@@ -353,7 +340,7 @@ export default function Results() {
                     },
                   }}
                 >
-                  <MovieResult4 />
+                  <MovieResult4 onRequestClose={() => setModalIsOpen4(false)} />
                 </Modal>
               </li>
               <li>
@@ -391,7 +378,7 @@ export default function Results() {
                     },
                   }}
                 >
-                  <MovieResult5 />
+                  <MovieResult5 onRequestClose={() => setModalIsOpen5(false)} />
                 </Modal>
               </li>
             </ul>

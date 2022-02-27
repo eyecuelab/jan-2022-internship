@@ -42,9 +42,10 @@ model Game {
   //createdBy    User             @relation(name: "GamesOwned", fields: [id], references: id)
   isStarted    Boolean          @default(false)
   isKickedOff  Boolean          @default(false)           
-  startedAt    DateTime?
-  endedAt      DateTime?
-  currentRound Int              @default(0)
+  hasEnded     Boolean          @default(false)
+  // startedAt    DateTime?
+  // endedAt      DateTime?
+  // currentRound Int              @default(0)
   Participants User[]
   MovieScore   MovieScore[]     @relation(name: "MovieScore")
   players      PlayersInGames[]
@@ -71,6 +72,7 @@ model PlayersInGames {
   game     Game    @relation(fields: [gameId], references: [id])
   gameId   String
   isHost   Boolean
+  hasVoted Boolean @default(false)
   User     User?   @relation("PlayersInGames", fields: [userId], references: [id])
   userId   String?
 

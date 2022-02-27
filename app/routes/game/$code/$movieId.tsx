@@ -11,13 +11,14 @@ import {
 } from "remix";
 //import Game from "~/routes/game";
 import { db } from "~/utils/db.server";
-import { getPlayer } from "~/utils/session.server";
+import { getPlayer, requireUser } from "~/utils/session.server";
 import movieStyles from "~/styles/movie.css";
 import back from "~/assets/img/back.png";
 import home from "~/assets/img/home.png";
 import like from "~/assets/img/like.png";
 import dislike from "~/assets/img/dislike.png";
 import { useEffect, useRef, useState } from "react";
+import "reactjs-popup/dist/index.css";
 
 export const links = () => [{ rel: "stylesheet", href: movieStyles }];
 
@@ -114,6 +115,14 @@ export const action: ActionFunction = async ({ request, params }) => {
     throw new Error(`No action type found in form data.`);
   }
 
+  const user = await requireUser(request);
+  if (!user) {
+    return null;
+  }
+
+  console.log(user.id);
+  const playerId = user.id;
+
   switch (actionType) {
     case "yes": {
       await db.movieScore.updateMany({
@@ -132,7 +141,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
       const nextMovie = data.movies[nextPosition];
       if (nextMovie === undefined) {
-        throw redirect(`/game/${slug}/results`);
+        throw redirect(`/game/${slug}/spinner`);
       } else {
         throw redirect(`/game/${slug}/${data.movies[nextPosition].id}`);
       }
@@ -154,7 +163,13 @@ export const action: ActionFunction = async ({ request, params }) => {
 
       const nextMovie = data.movies[nextPosition];
       if (nextMovie === undefined) {
-        throw redirect(`/game/${slug}/results`);
+        // await db.playersInGames.update({
+        //   where: { playerId },
+        //   data: {
+        //     hasVoted: true,
+        //   },
+        // });
+        throw redirect(`/game/${slug}/spinner`);
       } else {
         throw redirect(`/game/${slug}/${data.movies[nextPosition].id}`);
       }
@@ -189,7 +204,7 @@ export default function Movie() {
   useEffect(() => {
     if (timer === 0) {
       clear();
-      navigate(`/game/${slug}/results`, { replace: true });
+      navigate(`/game/${slug}/spinner`, { replace: true });
     }
   }, [navigate, slug, timer]);
 
@@ -214,10 +229,11 @@ export default function Movie() {
           what type of movie you feel like watching.
         </p>
       </div>
+
       <div className="container">
         <div className="movies">
           <div className="counter">0 : {timer}</div>
-          <img src={poster} className="poster" />
+          <img src={poster} className="poster swiper-slide" />
           <div>
             {vote?.errors ? (
               <p style={{ color: "red" }}>{vote.errors}</p>

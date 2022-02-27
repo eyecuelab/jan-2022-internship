@@ -1,14 +1,4 @@
-import {
-  ActionFunction,
-  Form,
-  json,
-  Link,
-  LoaderFunction,
-  NavLink,
-  useLoaderData,
-  useParams,
-} from "remix";
-import Game from "~/routes/game";
+import { json, Link, LoaderFunction, NavLink, useLoaderData } from "remix";
 import { db } from "~/utils/db.server";
 import { requireUser } from "~/utils/session.server";
 import { usePolling } from "~/hooks";
@@ -23,8 +13,6 @@ export const links = () => [{ rel: "stylesheet", href: shareStyles }];
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const slug = params.code;
-  //const { slug } = params;
-  console.log(slug);
 
   const data = {
     movies: await db.movie.findMany({
@@ -142,7 +130,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export default function Lobby() {
   const { slug } = useLoaderData();
-  //  const { slug } = useParams();
   const { data, player, playersArr, status } = usePolling<LoaderData>(
     `/game/${slug}/lobby`,
     useLoaderData<LoaderData>(),
@@ -231,8 +218,4 @@ export default function Lobby() {
       </div>
     </>
   );
-}
-
-function getAllMovies(): import("react").EffectCallback {
-  throw new Error("Function not implemented.");
 }

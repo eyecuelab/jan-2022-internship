@@ -1,6 +1,9 @@
-import { Link, LoaderFunction, useLoaderData } from "remix";
+import { LoaderFunction, useLoaderData } from "remix";
 import { db } from "~/utils/db.server";
 import back from "~/assets/img/back_blue.png";
+import tmdbLogo from "~/assets/svg/tmdb_logo.svg";
+import { YoutubeEmbed } from "./trailer";
+import { MouseEventHandler } from "react";
 
 //export const links = () => [{ rel: "stylesheet", href: modalResult }];
 
@@ -27,78 +30,92 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     orderBy: { likes: "desc" },
   });
 
-  async function callApi(tmdbId: string) {
-    const BASE_URL = "https://api.themoviedb.org/3";
-    const API_URL = `${BASE_URL}/movie/${tmdbId}/recommendations?api_key=${process.env.API_KEY}&vote_average.gte=5.0&vote_average.lte=8.0&vote_count.gte=1000`;
-    try {
-      const res = await fetch(API_URL);
-      const movieData = await res.json();
-      return movieData;
-    } catch (err) {
-      console.log(err);
-      throw err;
-    }
-  }
-
-  async function callApiGetDetails(tmdbId: string) {
-    const BASE_URL = "https://api.themoviedb.org/3";
-    const API_URL = `${BASE_URL}/movie/${tmdbId}?api_key=${process.env.API_KEY}&append_to_response=videos,runtime,revenue,budget`;
-    try {
-      const res = await fetch(API_URL);
-      const movieData = await res.json();
-      return movieData;
-    } catch (err) {
-      console.log(err);
-      throw err;
-    }
-  }
-
-  async function callApiGetCredits(tmdbId: string) {
-    const BASE_URL = "https://api.themoviedb.org/3";
-    const API_URL = `${BASE_URL}/movie/${tmdbId}/credits?api_key=${process.env.API_KEY}`;
-    try {
-      const res = await fetch(API_URL);
-      const movieData = await res.json();
-      return movieData;
-    } catch (err) {
-      console.log(err);
-      throw err;
-    }
-  }
-
-  const movie4 = await callApi(topFive[3].tmdb);
-  const movie4Details = await callApiGetDetails(String(movie4.results[0].id));
-  const movie4Cast = await callApiGetCredits(String(movie4.results[0].id));
-
-  return { topFive, slug, movie4, movie4Details, movie4Cast };
+  return { topFive, slug };
 };
 
-//Modal.setAppElement("#root");
-
-export default function MovieResult4() {
-  const { slug, movie4, movie4Details, movie4Cast } = useLoaderData();
+export default function MovieResult1(props: {
+  onRequestClose: MouseEventHandler<HTMLButtonElement> | undefined;
+}) {
+  const { slug, movie4, movie4Details, movie4Cast, movie4WatchProviders } =
+    useLoaderData();
 
   const IMG_URL = "https://image.tmdb.org/t/p/w500";
   const poster = IMG_URL + movie4.results[0].poster_path;
   const date = movie4.results[0].release_date;
   const datePattern = /(\d{4})/;
   const year = date.match(datePattern);
-  console.log(movie4);
-  console.log(movie4Details);
-  console.log(movie4Cast);
+
+  const genresArr: any[] = [];
+  movie4Details.genres.forEach(function (entry) {
+    if (entry.name) {
+      genresArr.push(entry.name);
+    }
+  });
+  const genres = genresArr.slice(0, 3);
+
+  const directors: any[] = [];
+  movie4Cast.crew.forEach(function (entry) {
+    if (entry.job === "Director") {
+      directors.push(entry.name);
+    }
+  });
+
+  const actorsArr: any[] = [];
+  movie4Cast.cast.forEach(function (entry) {
+    if (entry.name) {
+      actorsArr.push(entry.name);
+    }
+  });
+  const actors = actorsArr.slice(0, 5);
+
+  const subScore = movie4Details.vote_average;
+  const totalVotes = movie4Details.vote_count;
+  const votes = (totalVotes / 1000).toFixed(0);
+  const score = `${subScore}  (${votes}K)`;
+
+  const trailerArr: any[] = [];
+  movie4Details.videos.results.forEach(function (entry) {
+    if (entry.name.includes("Trailer")) {
+      trailerArr.push(entry.key);
+    }
+  });
+
+  const trailerKey = trailerArr[0];
+
+  let revenue;
+  if (movie4Details.revenue === 0 || !movie4Details.budget) {
+    revenue = "N/A";
+  } else {
+    revenue = `$ ${Math.round(movie4Details.revenue / 1000000)} millions`;
+  }
+
+  let budget;
+  if (movie4Details.budget === 0 || !movie4Details.budget) {
+    budget = "N/A";
+  } else {
+    budget = `$ ${Math.round(movie4Details.budget / 1000000)} millions`;
+  }
+
+  const LOGO_URL = "https://image.tmdb.org/t/p/h50";
 
   return (
     <>
       <div className="navigation">
-        <Link to="/">
+        {/* <Link to="/">
           <img src={back} alt="back button" />
-        </Link>
+        </Link> */}
+        <button
+          onClick={props.onRequestClose}
+          style={{ border: "none", background: "transparent" }}
+        >
+          <img src={back} alt="back button" />
+        </button>
       </div>
       <header className="modal-header">
         <button className="modal-btn-number ">1</button>
         <ul style={{ paddingLeft: 12 }}>
           <li>
-            <h2>{movie4.results[0].title}</h2>
+            <div className="modal-movie-title">{movie4.results[0].title}</div>
           </li>
           <li>
             <p>{year[0]}</p>
@@ -108,35 +125,132 @@ export default function MovieResult4() {
       <div>
         <img src={poster} alt="poster" className="modal-img" />
       </div>
+
       <div className="modal-grid-container">
-        <div className="modal-grid-item">
-          <ul>
-            <li>
-              GENRES <span></span>
-            </li>
-            <li>SCORE</li>
-            <li>RUNTIME</li>
-            <li>RATED</li>
-            <li>DIRECTOR</li>
-            <li>CAST</li>
-          </ul>
+        <div className="bio-page-wrapper">
+          <div className="row-bio">
+            <div className="col-bio modal-title">GENRES</div>
+            <div className="col-bio modal-info">
+              <div>
+                {genres.map((genre, i) => (
+                  <button key={i} className="modal-btn-genre">
+                    {genre}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="row-bio">
+            <div className="col-bio modal-title">SCORE</div>
+            <div className="col-bio modal-info">
+              <span>
+                <img src={tmdbLogo} alt="TMDB Logo" style={{ width: "60px" }} />
+                <span> </span>
+                {score}
+              </span>
+            </div>
+          </div>
+
+          <div className="row-bio">
+            <div className="col-bio modal-title">RUNTIME</div>
+            <div className="col-bio modal-info ">
+              {movie4Details.runtime} min
+            </div>
+          </div>
+
+          <div className="row-bio">
+            <div className="col-bio modal-title">REVENUE</div>
+            <div className="col-bio modal-info">{revenue}</div>
+          </div>
+
+          <div className="row-bio">
+            <div className="col-bio modal-title">BUDGET</div>
+            <div className="col-bio modal-info">{budget}</div>
+          </div>
+
+          <div className="row-bio">
+            <div className="col-bio modal-title">DIRECTOR</div>
+            <div className="col-bio modal-info">{directors}</div>
+          </div>
+
+          <div className="row-bio">
+            <div className="col-bio modal-title">ACTORS</div>
+            <div className="col-bio" id="modal-actors">
+              <ul>
+                {actors.map((actor, i) => (
+                  <li key={i}>{actor}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className="row-bio">
+            <div className="col-bio modal-title top-offset">SYNOPSIS</div>
+          </div>
+
+          <div className="row-bio">
+            <div className="col-bio">
+              <p style={{ color: "#fff" }}>{movie4.results[0].overview}</p>
+            </div>
+          </div>
+
+          <div className="modal-title top-offset">TRAILER</div>
+          <div id="trailer">
+            <YoutubeEmbed embedId={trailerKey} />
+          </div>
         </div>
-        <div className="grid-item">
-          <h5>SYNOPSIS</h5>
-          <p>{movie4.results[0].overview}</p>
-        </div>
-        <div className="grid-item">
-          <h5>TRAILER</h5>
-          <p>Trailer goes here</p>
-        </div>
-        <div className="grid-item">5</div>
       </div>
       <footer className="modal-footer ">
-        <h5>WHERE TO WATCH</h5>
-        <ul>
-          <li>STREAM</li>
-          <li>RENT</li>
-          <li>BUY</li>
+        <div className="modal-title">WHERE TO WATCH</div>
+        <ul style={{ color: "#fff", marginTop: "1em" }}>
+          <li>
+            STREAM
+            <div className="modal-row">
+              {movie4WatchProviders.results.US?.ads?.map((entry, i) => (
+                <div key={entry.logo_path} className="modal-block">
+                  <img
+                    src={LOGO_URL + entry.logo_path}
+                    className="modal-logo"
+                  ></img>
+                </div>
+              ))}
+              {movie4WatchProviders.results?.US?.flatrate?.map((entry, i) => (
+                <div key={entry.logo_path} className="modal-block">
+                  <img
+                    src={LOGO_URL + entry.logo_path}
+                    className="modal-logo"
+                  ></img>
+                </div>
+              ))}
+            </div>
+          </li>
+          <li>
+            BUY
+            <div className="modal-row">
+              {movie4WatchProviders.results?.US?.buy?.map((entry, i) => (
+                <div key={entry.logo_path} className="modal-block">
+                  <img
+                    src={LOGO_URL + entry.logo_path}
+                    className="modal-logo"
+                  ></img>
+                </div>
+              ))}
+            </div>
+          </li>
+          <li>
+            RENT
+            <div className="modal-row">
+              {movie4WatchProviders.results?.US?.rent?.map((entry, i) => (
+                <div key={entry.logo_path} className="modal-block">
+                  <img
+                    src={LOGO_URL + entry.logo_path}
+                    className="modal-logo"
+                  ></img>
+                </div>
+              ))}
+            </div>
+          </li>
         </ul>
       </footer>
     </>

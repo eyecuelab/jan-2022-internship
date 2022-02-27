@@ -14,7 +14,7 @@ import globalStyles from "~/styles/global.css";
 export const links = () => [{ rel: "stylesheet", href: globalStyles }];
 
 export const meta: MetaFunction = () => {
-  return { title: "New Remix App" };
+  return { title: "Watch This!" };
 };
 
 Modal.setAppElement("body");
