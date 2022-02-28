@@ -1,20 +1,12 @@
-import {
-  Form,
-  Link,
-  LoaderFunction,
-  NavLink,
-  redirect,
-  useLoaderData,
-} from "remix";
+import { Link, LoaderFunction, redirect, useLoaderData } from "remix";
 import { db } from "~/utils/db.server";
 import home from "~/assets/img/home.png";
-import back from "~/assets/img/back.png";
-import final from "~/assets/img/final.png";
-import resultsPageStyles from "~/styles/results.css";
+import spinnerStyles from "~/styles/spinner.css";
 import moment from "moment";
 import { usePolling } from "~/hooks";
-import ReactSpinnerTimer from "react-spinner-timer";
-import { useState } from "react";
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
+
+export const links = () => [{ rel: "stylesheet", href: spinnerStyles }];
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const slug = params.code;
@@ -44,6 +36,20 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return { slug, timeDiffSec, oneTimeDiff };
 };
 
+const renderTime = ({ remainingTime }) => {
+  if (remainingTime === 0) {
+    return <div className="timer">Almost done...</div>;
+  }
+
+  return (
+    <div className="timer">
+      <div className="text">Remaining</div>
+      <div className="value">{remainingTime}</div>
+      <div className="text">seconds</div>
+    </div>
+  );
+};
+
 export default function Spinner() {
   const { slug, oneTimeDiff } = useLoaderData();
   const { timeDiffSec } = usePolling<LoaderData>(
@@ -52,22 +58,35 @@ export default function Spinner() {
     1000
   );
 
-  const handleChange = (lap) => {
-    if (lap.isFinish) console.log("Finished!!");
-    else console.log("Running!! Lap:", lap.actualLap);
-  };
-
   return (
     <>
-      <h2>Please wait for everyone to finish voting!!</h2>
-      <h3>{59 - timeDiffSec}</h3>
-      <ReactSpinnerTimer
-        timeInSeconds={oneTimeDiff}
-        totalLaps={1}
-        isRefresh={false}
-        onLapInteraction={handleChange}
-        isPause={false}
-      />
+      <div className="header">
+        <div className="flex-grid">
+          <div className="col2">
+            <Link to="/">
+              <img src={home} alt="home button" />
+            </Link>
+          </div>
+        </div>
+        <h1 style={{ textAlign: "center" }}>We Read Your Mind</h1>
+      </div>
+      <div className="container">
+        <h2>
+          Calculating Your Vibe!
+          <br />
+        </h2>
+        <div className="timer-wrapper">
+          <CountdownCircleTimer
+            isPlaying
+            duration={oneTimeDiff}
+            colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+            colorsTime={[10, 6, 3, 0]}
+            onComplete={() => ({ shouldRepeat: false, delay: 5 })}
+          >
+            {renderTime}
+          </CountdownCircleTimer>
+        </div>
+      </div>
     </>
   );
 }
