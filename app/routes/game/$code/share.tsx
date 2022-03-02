@@ -47,6 +47,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   });
   if (!movie) throw new Error("Movie not found");
 
+  // const movieObjFromBaseTable = await db.moviebase.findMany({
+  //   select: { id: true, title: true, tmdbid: true },
+  // });
+
   const movieObj = await db.movie.findMany({
     select: { id: true, title: true, tmdbid: true },
   });
@@ -191,12 +195,14 @@ export default function Lobby() {
             data-for="registerTip"
             className="btn-share"
           >
-            <h5>
+            <div className="your-code">
               Your code
-              <img src={copy} alt="copy icon" className="copy-icon" />
-            </h5>
-
-            <h2 className="code">{slug}</h2>
+              <span>
+                <img src={copy} alt="copy icon" className="copy-icon" />
+              </span>
+            </div>
+            <div></div>
+            <div className="code">{slug}</div>
           </button>
         </div>
         <div className="item2">

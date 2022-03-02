@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Catamaran&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Catamaran:wght@100;200;300;400;500;600;700;800;900&family=Quicksand:wght@600;700&display=swap');
 
 * {
   margin: 0;
@@ -16,8 +16,12 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-weight:900;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 45px
 }
+
 
 .flex-grid {
   display: flex;
@@ -76,7 +80,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 26px;
   font-weight: 800;
   text-overflow: ellipsis;
-  max-width: 300px;
+  max-width: 375px;
   justify-items: start;
 }
  

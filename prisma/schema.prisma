@@ -29,7 +29,6 @@ model User {
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   Games          Game[]
-  //GamesOwned     Game[]           @relation(name: "GamesOwned")
   playersInGames PlayersInGames[] @relation(name: "PlayersInGames")
   PlayersInGames PlayersInGames[]
 }
@@ -39,13 +38,9 @@ model Game {
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   slug         String?          @unique
-  //createdBy    User             @relation(name: "GamesOwned", fields: [id], references: id)
   isStarted    Boolean          @default(false)
   isKickedOff  Boolean          @default(false)           
   hasEnded     Boolean          @default(false)
-  // startedAt    DateTime?
-  // endedAt      DateTime?
-  // currentRound Int              @default(0)
   Participants User[]
   MovieScore   MovieScore[]     @relation(name: "MovieScore")
   players      PlayersInGames[]
@@ -53,7 +48,6 @@ model Game {
 
 model MovieScore {
   id        String   @id @default(uuid())
-  //slug      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   position  Int    
@@ -75,6 +69,4 @@ model PlayersInGames {
   hasVoted Boolean @default(false)
   User     User?   @relation("PlayersInGames", fields: [userId], references: [id])
   userId   String?
-
-  //@@id([playerId, gameId])
 }

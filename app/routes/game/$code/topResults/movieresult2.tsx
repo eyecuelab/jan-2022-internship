@@ -33,7 +33,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return { topFive, slug };
 };
 
-export default function MovieResult1(props: {
+export default function MovieResult2(props: {
   onRequestClose: MouseEventHandler<HTMLButtonElement> | undefined;
 }) {
   const { slug, movie2, movie2Details, movie2Cast, movie2WatchProviders } =
@@ -112,10 +112,12 @@ export default function MovieResult1(props: {
         </button>
       </div>
       <header className="modal-header">
-        <button className="modal-btn-number ">1</button>
+        <button className="modal-btn-number ">2</button>
         <ul style={{ paddingLeft: 12 }}>
           <li>
-            <div className="modal-movie-title">{movie2.results[0].title}</div>
+            <div className="modal-movie-title" title={movie2.results[0].title}>
+              {movie2.results[0].title}
+            </div>
           </li>
           <li>
             <p>{year[0]}</p>

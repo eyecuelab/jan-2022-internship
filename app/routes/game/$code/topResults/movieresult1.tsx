@@ -152,7 +152,9 @@ export default function MovieResult1(props: {
         <button className="modal-btn-number ">1</button>
         <ul style={{ paddingLeft: 12 }}>
           <li>
-            <div className="modal-movie-title">{movie1.results[0].title}</div>
+            <div className="modal-movie-title" title={movie1.results[0].title}>
+              {movie1.results[0].title}
+            </div>
           </li>
           <li>
             <p>{year[0]}</p>

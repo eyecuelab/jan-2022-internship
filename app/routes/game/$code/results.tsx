@@ -11,13 +11,14 @@ import home from "~/assets/img/home.png";
 import back from "~/assets/img/back.png";
 import final from "~/assets/img/final.png";
 import resultsPageStyles from "~/styles/results.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MovieResult1 from "./topResults/movieresult1";
 import MovieResult2 from "./topResults/movieresult2";
 import MovieResult3 from "./topResults/movieresult3";
 import Modal from "react-modal";
 import MovieResult4 from "./topResults/movieresult4";
 import MovieResult5 from "./topResults/movieresult5";
+import ConfettiExplosion from "react-confetti-explosion";
 
 export const links = () => [{ rel: "stylesheet", href: resultsPageStyles }];
 
@@ -164,9 +165,25 @@ export default function Results() {
   const yearMade5 = movie5.results[0].release_date.match(datePattern);
   const LOGO_URL = "https://image.tmdb.org/t/p/h100";
 
+  const [isExploding, setIsExploding] = useState(false);
+
+  useEffect(() => {
+    setIsExploding(true);
+  }, []);
+
   return (
     <>
       <div className="header">
+        <div className="cannon">
+          {isExploding && (
+            <ConfettiExplosion
+              duration={5000}
+              floorWidth={2000}
+              floorHeight={2000}
+              particleCount={200}
+            />
+          )}
+        </div>
         <div className="flex-grid">
           <div className="col1">
             <Link to={`/game/${slug}/lobby`}>
@@ -181,6 +198,7 @@ export default function Results() {
         </div>
         <img src={final} alt="final icon" />
         <h2>Watch This!</h2>
+
         <p>
           Everyone has voted and you’re ready for movie night. Click a title to
           see more info about the movie. Enjoy!
@@ -193,8 +211,10 @@ export default function Results() {
             <ul>
               <li>
                 <button
-                  className="movie-btn  glow-on-hover"
-                  onClick={() => setModalIsOpen1(true)}
+                  className="movie-btn"
+                  onClick={() => {
+                    setModalIsOpen1(true), setIsExploding(false);
+                  }}
                 >
                   <div className="btn-items">
                     <div className="number-in-button">1</div>
@@ -205,7 +225,10 @@ export default function Results() {
                         className="poster-in-button"
                       />
                     </div>
-                    <div className="title-in-button">
+                    <div
+                      className="title-in-button"
+                      title={movie1.results[0].title}
+                    >
                       {movie1.results[0].title}
                       <p>{yearMade1[0]}</p>
                     </div>
@@ -231,8 +254,10 @@ export default function Results() {
               </li>
               <li>
                 <button
-                  className="movie-btn glow-on-hover"
-                  onClick={() => setModalIsOpen2(true)}
+                  className="movie-btn"
+                  onClick={() => {
+                    setModalIsOpen2(true), setIsExploding(false);
+                  }}
                 >
                   <div className="btn-items">
                     <div className="number-in-button">2</div>
@@ -243,7 +268,10 @@ export default function Results() {
                         className="poster-in-button"
                       />
                     </div>
-                    <div className="title-in-button">
+                    <div
+                      className="title-in-button"
+                      title={movie2.results[0].title}
+                    >
                       {movie2.results[0].title}
                       <p>{yearMade2[0]}</p>
                     </div>
@@ -269,8 +297,10 @@ export default function Results() {
               </li>
               <li>
                 <button
-                  className="movie-btn glow-on-hover"
-                  onClick={() => setModalIsOpen3(true)}
+                  className="movie-btn"
+                  onClick={() => {
+                    setModalIsOpen3(true), setIsExploding(false);
+                  }}
                 >
                   <div className="btn-items">
                     <div className="number-in-button">3</div>
@@ -281,7 +311,10 @@ export default function Results() {
                         className="poster-in-button"
                       />
                     </div>
-                    <div className="title-in-button">
+                    <div
+                      className="title-in-button"
+                      title={movie3.results[0].title}
+                    >
                       {movie3.results[0].title}
                       <p>{yearMade3[0]}</p>
                     </div>
@@ -307,8 +340,10 @@ export default function Results() {
               </li>
               <li>
                 <button
-                  className="movie-btn glow-on-hover"
-                  onClick={() => setModalIsOpen4(true)}
+                  className="movie-btn"
+                  onClick={() => {
+                    setModalIsOpen4(true), setIsExploding(false);
+                  }}
                 >
                   <div className="btn-items">
                     <div className="number-in-button">4</div>
@@ -319,7 +354,10 @@ export default function Results() {
                         className="poster-in-button"
                       />
                     </div>
-                    <div className="title-in-button">
+                    <div
+                      className="title-in-button"
+                      title={movie4.results[0].title}
+                    >
                       {movie4.results[0].title}
                       <p>{yearMade4[0]}</p>
                     </div>
@@ -345,8 +383,10 @@ export default function Results() {
               </li>
               <li>
                 <button
-                  className="movie-btn glow-on-hover"
-                  onClick={() => setModalIsOpen5(true)}
+                  className="movie-btn"
+                  onClick={() => {
+                    setModalIsOpen5(true), setIsExploding(false);
+                  }}
                 >
                   <div className="btn-items">
                     <div className="number-in-button">5</div>
@@ -357,7 +397,10 @@ export default function Results() {
                         className="poster-in-button"
                       />
                     </div>
-                    <div className="title-in-button">
+                    <div
+                      className="title-in-button"
+                      title={movie5.results[0].title}
+                    >
                       {movie5.results[0].title}
                       <p> {yearMade5[0]}</p>
                     </div>
@@ -390,7 +433,12 @@ export default function Results() {
           <button className="btn-more glow-button">Play Again</button>
         </NavLink> */}
         <Form method="post">
-          <button className="btn-more glow-button">Play Again</button>
+          <button
+            className="btn-more glow-button"
+            onClick={() => setIsExploding(false)}
+          >
+            Play Again
+          </button>
         </Form>
       </div>
     </>

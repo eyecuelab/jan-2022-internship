@@ -2,28 +2,27 @@
 .container {
   display: flex;
   flex-direction: column;
-  height: 60vh;
   overflow: auto;
   position: relative;
+  height: 60vh;
 }
 
-
 .header {
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
   align-items: center;
   justify-content: center; 
-  width: 100vw;
+  max-width: 100vw;
   display: grid;
   background-color: #1A2448;
   height: 25vh;
-  /* padding: 2rem 4rem 1rem 4rem; */
   padding: 1rem 2rem 1rem 2rem;
 }
 
 .play {
   padding-top: 1em;
 }
+
 
 .header > .btn-home {
   align-items: right;

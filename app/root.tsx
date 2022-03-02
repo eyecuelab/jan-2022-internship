@@ -37,3 +37,13 @@ export default function App() {
     </html>
   );
 }
+
+export function ErrorBoundary({ error }) {
+  console.log(error);
+  return (
+    <div>
+      <h1>Error</h1>
+      <p>{error}</p>
+    </div>
+  );
+}

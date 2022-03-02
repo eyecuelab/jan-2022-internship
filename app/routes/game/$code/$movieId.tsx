@@ -6,8 +6,10 @@ import {
   LoaderFunction,
   redirect,
   useActionData,
+  useFormAction,
   useLoaderData,
   useNavigate,
+  useSubmit,
 } from "remix";
 //import Game from "~/routes/game";
 import { db } from "~/utils/db.server";
@@ -18,7 +20,7 @@ import home from "~/assets/img/home.png";
 import like from "~/assets/img/like.png";
 import dislike from "~/assets/img/dislike.png";
 import { useEffect, useRef, useState } from "react";
-import "reactjs-popup/dist/index.css";
+import { useSwipeable } from "react-swipeable";
 
 export const links = () => [{ rel: "stylesheet", href: movieStyles }];
 
@@ -82,7 +84,6 @@ export const action: ActionFunction = async ({ request, params }) => {
   const formData = await request.formData();
   const actionType = formData.get("actionType");
   const slug = params.code;
-
   const game = await db.game.findUnique({
     where: { slug },
     select: { id: true },
@@ -109,6 +110,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     }),
   };
   if (!data) throw new Error("Game not found");
+
   const gameId = game.id;
 
   if (typeof actionType !== "string") {
@@ -119,9 +121,6 @@ export const action: ActionFunction = async ({ request, params }) => {
   if (!user) {
     return null;
   }
-
-  console.log(user.id);
-  const playerId = user.id;
 
   switch (actionType) {
     case "yes": {
@@ -188,7 +187,7 @@ export default function Movie() {
   const navigate = useNavigate();
 
   //Timer countdown
-  const [timer, setTimer] = useState(59);
+  const [timer, setTimer] = useState(559);
   const id = useRef(null);
   const clear = () => {
     window.clearInterval(id.current);
@@ -208,8 +207,28 @@ export default function Movie() {
     }
   }, [navigate, slug, timer]);
 
+  const submit = useSubmit();
+  const slideRight = () => {
+    console.log("swiped right");
+    submit({ actionType: "yes" });
+  };
+
+  const slideLeft = () => {
+    console.log("swiped left");
+    submit({ actionType: "no" });
+  };
+
+  const handlers = useSwipeable({
+    onSwiped: (eventData) => console.log("User Swiped!", eventData),
+    onSwipedLeft: () => slideLeft(),
+    onSwipedRight: () => slideRight(),
+    // preventDefaultTouchmoveEvent: true,
+    // trackMouse: true,
+  });
+
   return (
     <>
+      {/* <div> You can swipe here </div> */}
       <div className="header">
         <div className="flex-grid">
           <div className="col1">
@@ -230,17 +249,19 @@ export default function Movie() {
         </p>
       </div>
 
-      <div className="container">
-        <div className="movies">
-          <div className="counter">0 : {timer}</div>
-          <img src={poster} className="poster swiper-slide" />
-          <div>
-            {vote?.errors ? (
-              <p style={{ color: "red" }}>{vote.errors}</p>
-            ) : null}
-          </div>
+      {/* <div className="container"> */}
+      <div className="movies">
+        <div className="counter">0 : {timer}</div>
+        <Form method="post">
+          <input type="hidden" name="actionType" />
+          <img src={poster} className="poster" {...handlers} />
+        </Form>
+
+        <div>
+          {vote?.errors ? <p style={{ color: "red" }}>{vote.errors}</p> : null}
         </div>
       </div>
+      {/* </div> */}
       {movie.id && (
         <>
           <div id="footer">
