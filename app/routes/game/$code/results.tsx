@@ -216,7 +216,7 @@ export default function Results() {
                     setModalIsOpen1(true), setIsExploding(false);
                   }}
                 >
-                  <div className="btn-items">
+                  <div className="btn-items" style={{ borderRadius: "0px" }}>
                     <div className="number-in-button">1</div>
                     <div>
                       <img

@@ -98,6 +98,7 @@ li {list-style-type: none;}
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   justify-items: start;
   align-items: start;
+
   border: 1px solid #fff;
   border-left: 8px dashed #111;
 	border-right: 8px dashed #111;
@@ -166,10 +167,7 @@ li {list-style-type: none;}
 
 /* ButtonHover Glow Effect */
 
-.glow-on-hover {
-  /* width: 220px;
-  height: 50px; */
-  /* border: none; */
+/* .glow-on-hover {
   outline: none;
   border: 1px solid rgba(133, 205, 237, 0.2);
   color: #111;
@@ -199,7 +197,7 @@ li {list-style-type: none;}
 
 .glow-on-hover:active {
   color: #000
-}
+} */
 
 /* .glow-on-hover:active:after {
   background: transparent;
@@ -209,7 +207,7 @@ li {list-style-type: none;}
   opacity: 1;
 }
 
-.glow-on-hover:after {
+/* .glow-on-hover:after {
   z-index: -1;
   content: '';
   position: absolute;
@@ -220,7 +218,7 @@ li {list-style-type: none;}
   left: 0;
   top: 0;
   border-radius: 10px;
-}
+} */
 
 @keyframes glowing {
   0% { background-position: 0 0; }

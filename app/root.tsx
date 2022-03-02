@@ -3,15 +3,22 @@ import {
   LiveReload,
   Meta,
   Outlet,
+  redirect,
   Scripts,
   ScrollRestoration,
+  useCatch,
 } from "remix";
 //import globalStyles from "~/styles/global.css";
 import type { MetaFunction } from "remix";
 import Modal from "react-modal";
 import globalStyles from "~/styles/global.css";
+import errStyles from "~/styles/err.css";
+import { FC } from "react";
 
-export const links = () => [{ rel: "stylesheet", href: globalStyles }];
+export const links = () => [
+  { rel: "stylesheet", href: globalStyles },
+  { rel: "stylesheet", href: errStyles },
+];
 
 export const meta: MetaFunction = () => {
   return { title: "Watch This!" };
@@ -38,12 +45,114 @@ export default function App() {
   );
 }
 
-export function ErrorBoundary({ error }) {
-  console.log(error);
+export const ErrorBoundary: FC<{ error: Error }> = ({ error }) => {
   return (
-    <div>
+    <div className="root-err">
       <h1>Error</h1>
-      <p>{error}</p>
+      <p>{error.message}</p>
     </div>
   );
+};
+
+export function CatchBoundary() {
+  const caught = useCatch();
+  console.log(caught.status);
+
+  let err404;
+  if (caught.status === 404) {
+    err404 = caught.status;
+  }
+
+  let err500;
+  if (caught.status === 500) {
+    err500 = caught.status;
+  }
+
+  return (
+    <html>
+      <head>
+        <title>Oops!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        {/* <h1>
+          {caught.status} {caught.statusText}
+        </h1> */}
+        {err404 && (
+          <div>
+            <div className="code-area">
+              <span
+                style={{
+                  color: "#777",
+                  fontStyle: "italic",
+                }}
+              >
+                {"// 404 page not found."}
+              </span>
+              <span>
+                <span style={{ color: "#d65562" }}>if</span>(
+                <span style={{ color: "#4ca8ef" }}>!</span>
+                <span style={{ fontStyle: "italic", color: "#bdbdbd" }}>
+                  found
+                </span>
+                )
+              </span>
+              {"{"}
+              <span>
+                <span style={{ paddingLeft: "15px", color: "#2796ec" }}>
+                  <i style={{ width: "10px", display: "inline-block" }}></i>
+                  throw
+                </span>
+                <span>
+                  (<span style={{ color: "#a6a61f" }}>{'"(╯°□°)╯︵ ┻━┻"'}</span>
+                  );
+                </span>
+                <span style={{ display: "block" }}>{"}"} </span>
+                <span style={{ color: "#777", fontStyle: "italic" }}>
+                  {"//"} <a href="/">Go home!</a>
+                </span>
+              </span>
+            </div>
+          </div>
+        )}
+        {err500 && redirect("/error")}
+        <Scripts />
+      </body>
+    </html>
+  );
 }
+
+// export async function loader({ params }) {
+//   const page = await db.page.findOne({
+//     where: { slug: params.slug },
+//   });
+
+//   if (!page) {
+//     throw new Response("Not Found", {
+//       status: 404,
+//     });
+//   }
+
+//   return page;
+// }
+
+// export function CatchBoundary() {
+//   // this returns { status, statusText, data }
+//   const caught = useCatch<ThrownResponse>();
+
+//   switch (caught.status) {
+//     case 401:
+//       return (
+//         <div>
+//           <p>You don't have access to this page.</p>
+//         </div>
+//       );
+//     case 404:
+//       return redirect("/");
+//   }
+
+//   // You could also `throw new Error("Unknown status in catch boundary")`.
+//   // This will be caught by the closest `ErrorBoundary`.
+//   return <div>Something went wrong</div>;
+// }

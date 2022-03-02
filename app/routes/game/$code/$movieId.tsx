@@ -5,8 +5,6 @@ import {
   Link,
   LoaderFunction,
   redirect,
-  useActionData,
-  useFormAction,
   useLoaderData,
   useNavigate,
   useSubmit,
@@ -15,6 +13,7 @@ import {
 import { db } from "~/utils/db.server";
 import { getPlayer, requireUser } from "~/utils/session.server";
 import movieStyles from "~/styles/movie.css";
+import w3Styles from "~/styles/w3.css";
 import back from "~/assets/img/back.png";
 import home from "~/assets/img/home.png";
 import like from "~/assets/img/like.png";
@@ -22,7 +21,10 @@ import dislike from "~/assets/img/dislike.png";
 import { useEffect, useRef, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 
-export const links = () => [{ rel: "stylesheet", href: movieStyles }];
+export const links = () => [
+  { rel: "stylesheet", href: movieStyles },
+  { rel: "stylesheet", href: w3Styles },
+];
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const slug = params.code;
@@ -183,11 +185,11 @@ export default function Movie() {
   const { movie, moviesLeft, slug } = useLoaderData();
   const IMG_URL = "https://image.tmdb.org/t/p/w500";
   const poster = IMG_URL + movie.posterPath;
-  const vote = useActionData();
+  // const vote = useActionData();
   const navigate = useNavigate();
 
   //Timer countdown
-  const [timer, setTimer] = useState(559);
+  const [timer, setTimer] = useState(59);
   const id = useRef(null);
   const clear = () => {
     window.clearInterval(id.current);
@@ -208,14 +210,15 @@ export default function Movie() {
   }, [navigate, slug, timer]);
 
   const submit = useSubmit();
+
   const slideRight = () => {
     console.log("swiped right");
-    submit({ actionType: "yes" });
+    submit({ actionType: "yes" }, { method: "post" });
   };
 
   const slideLeft = () => {
     console.log("swiped left");
-    submit({ actionType: "no" });
+    submit({ actionType: "no" }, { method: "post" });
   };
 
   const handlers = useSwipeable({
@@ -250,16 +253,16 @@ export default function Movie() {
       </div>
 
       {/* <div className="container"> */}
-      <div className="movies">
+      <div className="movies w3-content w3-section">
         <div className="counter">0 : {timer}</div>
-        <Form method="post">
+        <Form>
           <input type="hidden" name="actionType" />
-          <img src={poster} className="poster" {...handlers} />
+          <img src={poster} className="poster w3-animate-zoom" {...handlers} />
         </Form>
 
-        <div>
+        {/* <div>
           {vote?.errors ? <p style={{ color: "red" }}>{vote.errors}</p> : null}
-        </div>
+        </div> */}
       </div>
       {/* </div> */}
       {movie.id && (

@@ -29,7 +29,9 @@ export const action: ActionFunction = async ({ request, params }) => {
     include: { players: true },
   });
   if (!game) {
-    throw new Error(`No game found for slug: ${slug}`);
+    throw new Response(`No game found for slug: ${slug}`, {
+      status: 404,
+    });
   }
 
   const data = await db.playersInGames.create({
@@ -76,25 +78,5 @@ export default function Join() {
         </Form>
       </div>
     </div>
-
-    // <form method="post">
-    //   <p>
-    //     <label>
-    //       Enter the code: <input name="code" type="text" />
-    //     </label>
-    //   </p>
-    //   <p>
-    //     <label>
-    //       Let's Go!
-    //       <br />
-    //       <text name="description" />
-    //     </label>
-    //   </p>
-    //   <p>
-    //     <button type="submit" className="btn">
-    //       Join!
-    //     </button>
-    //   </p>
-    // </form>
   );
 }
