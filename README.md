@@ -44,7 +44,7 @@
 Movie Selecting App - shortens the process of movie selection by narrowing down individual user or group viewing preferences.
 
 ## Screenshots <a id="screenshots"></a>
-[https://github.com/eyecuelab/jan-2022-internship/blob/main/docs/movie.gif]
+![](./docs/movie.gif)
 ## Setup/Installation Requirements <a id="installation-requirements"></a>
 
 ### Requirements to Run <a id="requirements-to-run"></a>
