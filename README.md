@@ -1,10 +1,42 @@
-#### _Project started: 12.19.2021_
+<br>
+<p align="center">
+  <u><big>|| <b>Watch This Movie</b> ||</big></u>
+</p>
+<p align="center">
+    <!-- Project Avatar/Logo -->
+    <br>
+    <a href="https://github.com/romankolivashko">
+        <img src="https://github.com/eyecuelab/jan-2022-internship/blob/main/docs/movie_logo.png">
+    </a>
+    </p>
+    <p align="center">
+      ___________________________
+    </p>
+    <!-- GitHub Link -->
+    <p align="center">
+        <a href="https://github.com/romankolivashko/romankolivashko">
+            <strong>Roman Kolivashko</strong>
+        </a>
+    </p>
+    <!-- Project Shields -->
+   
 
-#### By _**Roman Kolivashko**_
+<p align="center">
+  <small>Initiated January 22nd, 2022. Updated March 4th, 2022.</small>
+</p>
+
+<!-- Project Links -->
+<p align="center">
+    <a href="https://github.com/eyecuelab/jan-2022-internship/wiki"><big>Project Docs</big></a> ·
+    <a href="https://github.com/eyecuelab/jan-2022-internship/issues"><big>Report Bug</big></a> ·
+    <a href="https://github.com/eyecuelab/jan-2022-internship/issues"><big>Request Feature</big></a>
+</p>
+
+------------------------------
 
 <html>
 <!-- Project Shields -->
-    <p align="left">
+    <p align="center">
         <a href="https://github.com/eyecuelab/jan-2022-internship">
             <img src="https://img.shields.io/github/repo-size/eyecuelab/jan-2022-internship?style=plastic">
         </a>
