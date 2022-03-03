@@ -1,11 +1,13 @@
-import { ActionFunction, Form, Link, LoaderFunction, redirect } from "remix";
-import { db } from "~/utils/db.server";
-import { createMovieGame } from "~/utils/movieGame.server";
 import {
-  getPlayer,
-  requirePlayerId,
-  requireUser,
-} from "~/utils/session.server";
+  ActionFunction,
+  Form,
+  Link,
+  LoaderFunction,
+  redirect,
+  useCatch,
+} from "remix";
+import { createMovieGame } from "~/utils/movieGame.server";
+import { getPlayer, requirePlayerId } from "~/utils/session.server";
 import banner from "~/assets/svg/banner3.png";
 import newStyles from "~/styles/new.css";
 
@@ -16,12 +18,19 @@ export const loader: LoaderFunction = async ({ request }) => {
   return { player };
 };
 
-export const action: ActionFunction = async ({ request, params }) => {
+export const action: ActionFunction = async ({ request }) => {
   const playerId = await requirePlayerId(request);
   const game = await createMovieGame({
     playerId,
   });
-  return redirect(`/game/${game.slug}/share`);
+
+  if (!game) {
+    throw new Response(`No game found for slug: ${slug}`, {
+      status: 404,
+    });
+  } else {
+    return redirect(`/game/${game.slug}/share`);
+  }
 };
 
 export default function New() {
@@ -57,5 +66,23 @@ export default function New() {
         </div>
       </div>
     </div>
+  );
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+  console.log(caught);
+
+  return (
+    <html>
+      <head>
+        <title>Oops!</title>
+      </head>
+      <body>
+        <h1>
+          {caught.status} {caught.statusText}
+        </h1>
+      </body>
+    </html>
   );
 }

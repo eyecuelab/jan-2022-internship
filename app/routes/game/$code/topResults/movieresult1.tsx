@@ -5,9 +5,7 @@ import tmdbLogo from "~/assets/svg/tmdb_logo.svg";
 import { YoutubeEmbed } from "./trailer";
 import { MouseEventHandler } from "react";
 
-//export const links = () => [{ rel: "stylesheet", href: modalResult }];
-
-export const loader: LoaderFunction = async ({ request, params }) => {
+export const loader: LoaderFunction = async ({ params }) => {
   const slug = params.code;
   const game = await db.game.findUnique({
     where: { slug },
@@ -33,12 +31,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return { topFive, slug };
 };
 
-//Modal.setAppElement("#root");
-
 export default function MovieResult1(props: {
   onRequestClose: MouseEventHandler<HTMLButtonElement> | undefined;
 }) {
-  const { slug, movie1, movie1Details, movie1Cast, movie1WatchProviders } =
+  const { movie1, movie1Details, movie1Cast, movie1WatchProviders } =
     useLoaderData();
 
   const IMG_URL = "https://image.tmdb.org/t/p/w500";
@@ -46,13 +42,9 @@ export default function MovieResult1(props: {
   const date = movie1.results[0].release_date;
   const datePattern = /(\d{4})/;
   const year = date.match(datePattern);
-  console.log(movie1);
-  console.log(movie1Details);
-  console.log(movie1Cast);
-  console.log(movie1WatchProviders.results.US);
 
   const genresArr: any[] = [];
-  movie1Details.genres.forEach(function (entry) {
+  movie1Details.genres.forEach(function (entry: { name: string }) {
     if (entry.name) {
       genresArr.push(entry.name);
     }
@@ -60,14 +52,14 @@ export default function MovieResult1(props: {
   const genres = genresArr.slice(0, 3);
 
   const directors: any[] = [];
-  movie1Cast.crew.forEach(function (entry) {
+  movie1Cast.crew.forEach(function (entry: { job: string; name: string }) {
     if (entry.job === "Director") {
       directors.push(entry.name);
     }
   });
 
   const actorsArr: any[] = [];
-  movie1Cast.cast.forEach(function (entry) {
+  movie1Cast.cast.forEach(function (entry: { name: string }) {
     if (entry.name) {
       actorsArr.push(entry.name);
     }
@@ -80,7 +72,10 @@ export default function MovieResult1(props: {
   const score = `${subScore}  (${votes}K)`;
 
   const trailerArr: any[] = [];
-  movie1Details.videos.results.forEach(function (entry) {
+  movie1Details.videos.results.forEach(function (entry: {
+    key: string;
+    name: string;
+  }) {
     if (entry.name.includes("Trailer")) {
       trailerArr.push(entry.key);
     }
@@ -102,38 +97,7 @@ export default function MovieResult1(props: {
     budget = `$ ${Math.round(movie1Details.budget / 1000000)} millions`;
   }
 
-  console.log(movie1WatchProviders);
-
   const LOGO_URL = "https://image.tmdb.org/t/p/h50";
-  // const streamProviderArr: any[] = [];
-  // movie1WatchProviders.results.US.ads?.forEach(function (entry) {
-  //   if (entry === undefined) {
-  //     return null;
-  //   } else {
-  //     streamProviderArr.push(entry.ads.provider_name);
-  //   }
-  // });
-  // const streamingProviders = streamProviderArr.slice(0, 3);
-
-  // const buyProviderArr: any[] = [];
-  // movie1WatchProviders.results.US.buy.forEach(function (entry) {
-  //   if (entry.provider_name) {
-  //     buyProviderArr.push(entry.provider_name);
-  //   }
-  // });
-  // const buyProviders = buyProviderArr.slice(0, 3);
-
-  // const rentProviderArr: any[] = [];
-  // movie1WatchProviders.results.US.rent.forEach(function (entry) {
-  //   if (entry.provider_name) {
-  //     const logo = fetch(`${LOGO_URL + entry.logo_path}`);
-  //     return logo;
-  //   }
-  // });
-  // const rentProviders = rentProviderArr.slice(0, 3);
-  // console.log(rentProviders);
-
-  // const [modalIsOpen1, setModalIsOpen1] = useState(false);
 
   return (
     <>
@@ -246,48 +210,56 @@ export default function MovieResult1(props: {
           <li>
             STREAM
             <div className="modal-row">
-              {movie1WatchProviders.results?.US?.ads?.map((entry, i) => (
-                <div key={entry.logo_path} className="modal-block">
-                  <img
-                    src={LOGO_URL + entry.logo_path}
-                    className="modal-logo"
-                  ></img>
-                </div>
-              ))}
-              {movie1WatchProviders.results?.US?.flatrate?.map((entry, i) => (
-                <div key={entry.logo_path} className="modal-block">
-                  <img
-                    src={LOGO_URL + entry.logo_path}
-                    className="modal-logo"
-                  ></img>
-                </div>
-              ))}
+              {movie1WatchProviders.results?.US?.ads?.map(
+                (entry: { logo_path: string }) => (
+                  <div key={entry.logo_path} className="modal-block">
+                    <img
+                      src={LOGO_URL + entry.logo_path}
+                      className="modal-logo"
+                    ></img>
+                  </div>
+                )
+              )}
+              {movie1WatchProviders.results?.US?.flatrate?.map(
+                (entry: { logo_path: string }) => (
+                  <div key={entry.logo_path} className="modal-block">
+                    <img
+                      src={LOGO_URL + entry.logo_path}
+                      className="modal-logo"
+                    ></img>
+                  </div>
+                )
+              )}
             </div>
           </li>
           <li>
             BUY
             <div className="modal-row">
-              {movie1WatchProviders.results?.US?.buy?.map((entry, i) => (
-                <div key={entry.logo_path} className="modal-block">
-                  <img
-                    src={LOGO_URL + entry.logo_path}
-                    className="modal-logo"
-                  ></img>
-                </div>
-              ))}
+              {movie1WatchProviders.results?.US?.buy?.map(
+                (entry: { logo_path: string }) => (
+                  <div key={entry.logo_path} className="modal-block">
+                    <img
+                      src={LOGO_URL + entry.logo_path}
+                      className="modal-logo"
+                    ></img>
+                  </div>
+                )
+              )}
             </div>
           </li>
           <li>
             RENT
             <div className="modal-row">
-              {movie1WatchProviders.results?.US?.rent?.map((entry, i) => (
-                <div key={entry.logo_path} className="modal-block">
-                  <img
-                    src={LOGO_URL + entry.logo_path}
-                    className="modal-logo"
-                  ></img>
-                </div>
-              ))}
+              {movie1WatchProviders.results?.US?.rent?.map(
+                (entry: { logo_path: string }) => (
+                  <div key={entry.logo_path} className="modal-block">
+                    <img
+                      src={LOGO_URL + entry.logo_path}
+                      className="modal-logo"
+                    ></img>
+                  </div>
+                )
+              )}
             </div>
           </li>
         </ul>

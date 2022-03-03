@@ -1,53 +1,95 @@
-# Welcome to Remix!
+#### _Project started: 12.19.2021_
 
-- [Remix Docs](https://remix.run/docs)
+#### By _**Roman Kolivashko**_
 
-## Development
+<html>
+<!-- Project Shields -->
+    <p align="left">
+        <a href="https://github.com/eyecuelab/jan-2022-internship">
+            <img src="https://img.shields.io/github/repo-size/eyecuelab/jan-2022-internship?style=plastic">
+        </a>
+		  ¨
+        <a href="https://github.com/eyecuelab/jan-2022-internship/commits/main">
+            <img src="https://img.shields.io/github/last-commit/eyecuelab/jan-2022-internship?color=yellow&style=plastic">
+        </a>
+        ¨
+        <a href="https://github.com/eyecuelab/jan-2022-internship/stargazers">
+            <img src="https://img.shields.io/github/stars/eyecuelab/jan-2022-internship?color=yellow&style=plastic">
+        </a>
+        ¨
+        <a href="https://github.com/eyecuelab/jan-2022-internship/issues">
+           <img src="https://img.shields.io/github/issues/eyecuelab/jan-2022-internship?color=yellow&style=plastic">
+        </a>
+        ¨
+        <a href="https://linkedin.com/in/rkolivashko">
+            <img src="https://img.shields.io/badge/-LinkedIn-black.svg?style=plastic&logo=linkedin&colorB=2867B2">
+        </a>
+    </p> 
+</html>
 
-From your terminal:
+---
+## Table of Contents
+* [Description](#description)
+* [Screenshots](#screenshots)
+* [Setup/Installation Requirements](#installation-requirements)
+    - [Requirements to Run](#requirements-to-run)
+    - [Instructions](#instructions)
+    - [Other Technologies Used](#other-technologies-used)
+* [How to access the app from the web](#web-access)
+* [Known Bugs](#known-bugs)
+* [Support and Contact Details](#support-and-contact-details)
+* [License](#license)
+---
+## Description <a id="description"></a>
+Movie Selecting App - shortens the process of movie selection by narrowing down individual user or group viewing preferences.
 
-```sh
-npm run dev
-```
+## Screenshots <a id="screenshots"></a>
+[[https://github.com/eyecuelab/jan-2022-internship/blob/main/docs/movie.gif]]
+## Setup/Installation Requirements <a id="installation-requirements"></a>
 
-This starts your app in development mode, rebuilding assets on file changes.
+### Requirements to Run <a id="requirements-to-run"></a>
+* _Web Browser_
+* _ESbuild_
+* _Node.js_
+* _NPM_
 
-## Deployment
+### Instructions <a id="instructions"></a>
 
-First, build your app for production:
+1. Download and install Node.js from the [official website](https://nodejs.org/en/download/)
+2. Clone the repository: `$git clone https://github.com/eyecuelab/jan-2022-internship.git`
+3. Use command line/Bash to move to the project directory with `cd project-directory`
+4. Run `npm install` to get all dependencies. 
+5. Run `npm run start` to start up the project
 
-```sh
-npm run build
-```
 
-Then run the app in production mode:
+## Other Technologies Used <a id="other-technologies-used"></a>
 
-```sh
-npm start
-```
+* _React_
+* _Remix_
+* _Typescript_
+* _Prisma v3_
+* _PostgreSQL_
+* _HTML5_
+* _CSS3_
+* _ESbuild_
+* _Fly.io_
 
-Now you'll need to pick a host to deploy it to.
 
-### DIY
 
-If you're familiar with deploying node applications, the built-in Remix app server is production-ready.
+## How to access the app from the web <a id="web-access"></a>
+* _Follow the link [here](https://still-darkness-1691.fly.dev/)_ 
 
-Make sure to deploy the output of `remix build`
+## Known Bugs <a id="known-bugs"></a>
 
-- `build/`
-- `public/build/`
+There are currently no known bugs in this program.
+If found, please report it here - [Issues](https://github.com/eyecuelab/jan-2022-internship/issues)
 
-### Using a Template
+## Support and contact details <a id="support-and-contact-details"></a>
 
-When you ran `npx create-remix@latest` there were a few choices for hosting. You can run that again to create a new project, then copy over your `app/` folder to the new project that's pre-configured for your target server.
+_If there are any question or concerns please contact me at my [email](mailto:rkolivashko@gmail.com). Thank you._
 
-```sh
-cd ..
-# create a new project, and pick a pre-configured host
-npx create-remix@latest
-cd my-new-remix-app
-# remove the new project's app (not the old one!)
-rm -rf app
-# copy your app over
-cp -R ../my-old-remix-app/app app
-```
+
+
+### License <a id="license"></a>
+
+*This software is licensed under the MIT license*

@@ -9,6 +9,7 @@ import back from "~/assets/img/back.png";
 import home from "~/assets/img/home.png";
 import { Form } from "remix";
 import { redirect } from "remix";
+import { Key } from "react";
 
 export const links = () => [{ rel: "stylesheet", href: lobbyStyles }];
 
@@ -89,7 +90,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   };
 };
 
-export const action: ActionFunction = async ({ request, params }) => {
+export const action: ActionFunction = async ({ params }) => {
   const slug = params.code;
   const data = {
     movies: await db.movie.findMany({
@@ -118,9 +119,9 @@ export default function Lobby() {
   const { slug } = useLoaderData();
 
   //  const { slug } = useParams();
-  const { playersArr, isAdminHost } = usePolling<LoaderData>(
+  const { playersArr, isAdminHost } = usePolling(
     `/game/${slug}/lobby`,
-    useLoaderData<LoaderData>(),
+    useLoaderData(),
     1000
   );
 
@@ -158,15 +159,20 @@ export default function Lobby() {
         <div className="container">
           <div className="list-item">
             <ul>
-              {playersArr.map((player, i) => (
-                <li
-                  key={player.playerId}
-                  style={{ textDecoration: "none", color: "#fff" }}
-                >
-                  <img src={check} alt="check mark" />
-                  {playersArr[i].player.username}
-                </li>
-              ))}
+              {playersArr.map(
+                (
+                  player: { playerId: Key | null | undefined },
+                  i: string | number
+                ) => (
+                  <li
+                    key={player.playerId}
+                    style={{ textDecoration: "none", color: "#fff" }}
+                  >
+                    <img src={check} alt="check mark" />
+                    {playersArr[i].player.username}
+                  </li>
+                )
+              )}
             </ul>
           </div>
         </div>

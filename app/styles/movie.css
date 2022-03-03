@@ -8,6 +8,7 @@
 .poster {
   max-width: 300px;
   border-radius: 12px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, .75));
   z-index: 3;
 }
 
@@ -34,11 +35,6 @@
   justify-content: center;
 }
 
-/* .btn-select {
-  display: grid;
-  justify-content: center;
-} */
-
 .header {
   /* display: flex; */
   flex-direction: column;
@@ -48,7 +44,6 @@
   display: grid;
   background-color: #1A2448;
   height: 25vh;
-  /* padding: 2rem 4rem 1rem 4rem; */
   padding: 1rem 2rem 1rem 2rem;
 }
 

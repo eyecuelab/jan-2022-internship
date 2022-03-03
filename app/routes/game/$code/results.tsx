@@ -1,11 +1,4 @@
-import {
-  Form,
-  Link,
-  LoaderFunction,
-  NavLink,
-  redirect,
-  useLoaderData,
-} from "remix";
+import { Form, Link, LoaderFunction, redirect, useLoaderData } from "remix";
 import { db } from "~/utils/db.server";
 import home from "~/assets/img/home.png";
 import back from "~/assets/img/back.png";
@@ -22,7 +15,7 @@ import ConfettiExplosion from "react-confetti-explosion";
 
 export const links = () => [{ rel: "stylesheet", href: resultsPageStyles }];
 
-export const loader: LoaderFunction = async ({ request, params }) => {
+export const loader: LoaderFunction = async ({ params }) => {
   const slug = params.code;
   const game = await db.game.findUnique({
     where: { slug },
@@ -61,7 +54,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       const movieData = await res.json();
       return movieData;
     } catch (err) {
-      console.log(err);
       throw err;
     }
   }
@@ -74,7 +66,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       const movieData = await res.json();
       return movieData;
     } catch (err) {
-      console.log(err);
       throw err;
     }
   }
@@ -87,7 +78,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       const movieData = await res.json();
       return movieData;
     } catch (err) {
-      console.log(err);
       throw err;
     }
   }
@@ -144,7 +134,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   };
 };
 
-export const action = async ({ request }) => {
+export const action = async () => {
   return redirect("/");
 };
 
@@ -170,6 +160,10 @@ export default function Results() {
   useEffect(() => {
     setIsExploding(true);
   }, []);
+
+  const handlesReset = () => {
+    reset;
+  };
 
   return (
     <>
@@ -200,8 +194,9 @@ export default function Results() {
         <h2>Watch This!</h2>
 
         <p>
-          Everyone has voted and you’re ready for movie night. Click a title to
-          see more info about the movie. Enjoy!
+          Everyone has voted and you’re ready for movie night. Movies below are
+          based on your likes. Click a title to see more info about the movie.
+          Enjoy!
         </p>
       </div>
       <div className="container">
@@ -254,7 +249,7 @@ export default function Results() {
               </li>
               <li>
                 <button
-                  className="movie-btn"
+                  className="movie-btn easter-egg"
                   onClick={() => {
                     setModalIsOpen2(true), setIsExploding(false);
                   }}
@@ -435,7 +430,9 @@ export default function Results() {
         <Form method="post">
           <button
             className="btn-more glow-button"
-            onClick={() => setIsExploding(false)}
+            onClick={() => {
+              setIsExploding(false), handlesReset();
+            }}
           >
             Play Again
           </button>

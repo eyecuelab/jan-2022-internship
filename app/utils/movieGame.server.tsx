@@ -1,7 +1,7 @@
 import type { Game } from "@prisma/client";
 //import { addSeconds } from 'date-fns';
 import { nanoid } from "nanoid";
-import { json, redirect } from "remix";
+import { json } from "remix";
 import { db } from "./db.server";
 
 export type MovieGameData = {

@@ -56,7 +56,6 @@ export const ErrorBoundary: FC<{ error: Error }> = ({ error }) => {
 
 export function CatchBoundary() {
   const caught = useCatch();
-  console.log(caught.status);
 
   let err404;
   if (caught.status === 404) {
@@ -122,37 +121,3 @@ export function CatchBoundary() {
     </html>
   );
 }
-
-// export async function loader({ params }) {
-//   const page = await db.page.findOne({
-//     where: { slug: params.slug },
-//   });
-
-//   if (!page) {
-//     throw new Response("Not Found", {
-//       status: 404,
-//     });
-//   }
-
-//   return page;
-// }
-
-// export function CatchBoundary() {
-//   // this returns { status, statusText, data }
-//   const caught = useCatch<ThrownResponse>();
-
-//   switch (caught.status) {
-//     case 401:
-//       return (
-//         <div>
-//           <p>You don't have access to this page.</p>
-//         </div>
-//       );
-//     case 404:
-//       return redirect("/");
-//   }
-
-//   // You could also `throw new Error("Unknown status in catch boundary")`.
-//   // This will be caught by the closest `ErrorBoundary`.
-//   return <div>Something went wrong</div>;
-// }

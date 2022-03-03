@@ -141,7 +141,9 @@ export const action: ActionFunction = async ({ request, params }) => {
       });
 
       const nextMovie = data.movies[nextPosition];
+      //const nextMovie = currMoviePosition[0].position;
       if (nextMovie === undefined) {
+        //if (nextPosition < 0) {
         throw redirect(`/game/${slug}/spinner`);
       } else {
         throw redirect(`/game/${slug}/${data.movies[nextPosition].id}`);

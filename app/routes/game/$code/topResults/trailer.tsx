@@ -1,3 +1,4 @@
+import { type } from "os";
 import PropTypes from "prop-types";
 
 export const YoutubeEmbed = ({ embedId }) => (

@@ -3,11 +3,11 @@ import { db } from "~/utils/db.server";
 import back from "~/assets/img/back_blue.png";
 import tmdbLogo from "~/assets/svg/tmdb_logo.svg";
 import { YoutubeEmbed } from "./trailer";
-import { MouseEventHandler } from "react";
+import { Key, MouseEventHandler } from "react";
 
 //export const links = () => [{ rel: "stylesheet", href: modalResult }];
 
-export const loader: LoaderFunction = async ({ request, params }) => {
+export const loader: LoaderFunction = async ({ params }) => {
   const slug = params.code;
   const game = await db.game.findUnique({
     where: { slug },
@@ -46,7 +46,7 @@ export default function MovieResult5(props: {
   const year = date.match(datePattern);
 
   const genresArr: any[] = [];
-  movie5Details.genres.forEach(function (entry: string) {
+  movie5Details.genres.forEach(function (entry: { name: string }) {
     if (entry.name) {
       genresArr.push(entry.name);
     }
@@ -54,14 +54,14 @@ export default function MovieResult5(props: {
   const genres = genresArr.slice(0, 3);
 
   const directors: any[] = [];
-  movie5Cast.crew.forEach(function (entry: string) {
+  movie5Cast.crew.forEach(function (entry: { job: string; name: string }) {
     if (entry.job === "Director") {
       directors.push(entry.name);
     }
   });
 
   const actorsArr: any[] = [];
-  movie5Cast.cast.forEach(function (entry: string) {
+  movie5Cast.cast.forEach(function (entry: { name: string }) {
     if (entry.name) {
       actorsArr.push(entry.name);
     }
@@ -74,7 +74,10 @@ export default function MovieResult5(props: {
   const score = `${subScore}  (${votes}K)`;
 
   const trailerArr: any[] = [];
-  movie5Details.videos.results.forEach(function (entry) {
+  movie5Details.videos.results.forEach(function (entry: {
+    name: string | string[];
+    key: any;
+  }) {
     if (entry.name.includes("Trailer")) {
       trailerArr.push(entry.key);
     }
@@ -209,48 +212,56 @@ export default function MovieResult5(props: {
           <li>
             STREAM
             <div className="modal-row">
-              {movie5WatchProviders.results.US?.ads?.map((entry, i) => (
+              {movie5WatchProviders.results.US?.ads?.map(
+                (entry: { logo_path: Key | null | undefined }) => (
+                  <div key={entry.logo_path} className="modal-block">
+                    <img
+                      src={LOGO_URL + entry.logo_path}
+                      className="modal-logo"
+                    ></img>
+                  </div>
+                )
+              )}
+            </div>
+            {movie5WatchProviders.results?.US?.flatrate?.map(
+              (entry: { logo_path: Key | null | undefined }) => (
                 <div key={entry.logo_path} className="modal-block">
                   <img
                     src={LOGO_URL + entry.logo_path}
                     className="modal-logo"
                   ></img>
                 </div>
-              ))}
-            </div>
-            {movie5WatchProviders.results?.US?.flatrate?.map((entry, i) => (
-              <div key={entry.logo_path} className="modal-block">
-                <img
-                  src={LOGO_URL + entry.logo_path}
-                  className="modal-logo"
-                ></img>
-              </div>
-            ))}
+              )
+            )}
           </li>
           <li>
             BUY
             <div className="modal-row">
-              {movie5WatchProviders.results?.US?.buy?.map((entry, i) => (
-                <div key={entry.logo_path} className="modal-block">
-                  <img
-                    src={LOGO_URL + entry.logo_path}
-                    className="modal-logo"
-                  ></img>
-                </div>
-              ))}
+              {movie5WatchProviders.results?.US?.buy?.map(
+                (entry: { logo_path: Key | null | undefined }) => (
+                  <div key={entry.logo_path} className="modal-block">
+                    <img
+                      src={LOGO_URL + entry.logo_path}
+                      className="modal-logo"
+                    ></img>
+                  </div>
+                )
+              )}
             </div>
           </li>
           <li>
             RENT
             <div className="modal-row">
-              {movie5WatchProviders.results?.US?.rent?.map((entry, i) => (
-                <div key={entry.logo_path} className="modal-block">
-                  <img
-                    src={LOGO_URL + entry.logo_path}
-                    className="modal-logo"
-                  ></img>
-                </div>
-              ))}
+              {movie5WatchProviders.results?.US?.rent?.map(
+                (entry: { logo_path: Key | null | undefined }) => (
+                  <div key={entry.logo_path} className="modal-block">
+                    <img
+                      src={LOGO_URL + entry.logo_path}
+                      className="modal-logo"
+                    ></img>
+                  </div>
+                )
+              )}
             </div>
           </li>
         </ul>

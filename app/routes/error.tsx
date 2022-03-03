@@ -7,7 +7,7 @@ export default function err500() {
         <h1>500 Internal Server Error</h1>
         <p>Sorry, something went wrong.</p>
         <p>
-          Here's the link to get you safe <Link to="/">HOME</Link>
+          Here&apos;s the link to get you safe <Link to="/">HOME</Link>
         </p>
         <p>
           A team of highly trained monkeys has been dispatched to deal with this

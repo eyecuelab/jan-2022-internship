@@ -1,21 +1,14 @@
 import { ActionFunction, Form, redirect, useActionData } from "remix";
 import { db } from "~/utils/db.server";
 import { createMovieGame } from "~/utils/movieGame.server";
-import {
-  getPlayerId,
-  requirePlayerId,
-  requireUser,
-} from "~/utils/session.server";
+import { requireUser } from "~/utils/session.server";
 import banner from "~/assets/svg/banner3.png";
 import joinStyles from "~/styles/join.css";
 
 export const links = () => [{ rel: "stylesheet", href: joinStyles }];
 
-export const action: ActionFunction = async ({ request, params }) => {
+export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
-  // const user = await requireUser(request);
-  // console.log(user.id);
-
   const user = await requireUser(request);
   if (!user) {
     return null;

@@ -1,22 +1,14 @@
 import {
   useActionData,
-  redirect,
   json,
   Form,
   LoaderFunction,
   ActionFunction,
 } from "remix";
-import { db } from "~/utils/db.server";
-import { createMovieGame } from "~/utils/movieGame.server";
-import {
-  register,
-  createUserSession,
-  requirePlayerId,
-  getPlayer,
-  getPlayerId,
-} from "~/utils/session.server";
+import { register, createUserSession, getPlayer } from "~/utils/session.server";
 import banner from "~/assets/svg/banner3.png";
 import landingStyles from "~/styles/landing.css";
+import { db } from "~/utils/db.server";
 
 export const links = () => [{ rel: "stylesheet", href: landingStyles }];
 
@@ -58,20 +50,6 @@ export const action: ActionFunction = async ({ request }) => {
       return badRequest({ fieldErrors, fields });
     }
   }
-
-  //Check if user exists
-  // const userExists = await db.user.findFirst({
-  //   where: {
-  //     username,
-  //   },
-  // });
-
-  // if (userExists) {
-  //   return badRequest({
-  //     fields,
-  //     fieldErrors: { username: `User ${username} already exists` },
-  //   });
-  // }
 
   //Create user
   const user = await register({ username, password });

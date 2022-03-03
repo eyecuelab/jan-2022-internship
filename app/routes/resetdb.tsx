@@ -2,7 +2,6 @@ import {
   useActionData,
   useLoaderData,
   ActionFunction,
-  redirect,
   LoaderFunction,
   Form,
   json,
@@ -76,7 +75,6 @@ export default function Movies() {
   const poster = IMG_URL + data[value].posterPath;
 
   function handleDbUpdateLike() {
-    console.log("Yes");
     if (value === 0) {
       setValue(data.length - 1);
     } else {
@@ -85,7 +83,6 @@ export default function Movies() {
   }
 
   async function handleDbUpdateDisLike() {
-    console.log("No");
     if (value === 0) {
       setValue(data.length - 1);
     } else {

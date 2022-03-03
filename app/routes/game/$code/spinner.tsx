@@ -8,24 +8,18 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
 export const links = () => [{ rel: "stylesheet", href: spinnerStyles }];
 
-export const loader: LoaderFunction = async ({ request, params }) => {
+export const loader: LoaderFunction = async ({ params }) => {
   const slug = params.code;
   const gameLastUpdated = await db.game.findUnique({
     where: { slug },
     select: { updatedAt: true },
   });
-  //if (!gameLastUpdated) throw new Error("Game not found");
 
-  console.log(slug);
-
+  if (!gameLastUpdated) throw new Error("Game has not been updated");
   const a = moment(new Date());
   const b = moment(gameLastUpdated.updatedAt);
 
   const timeDiffSec = a.diff(b, "seconds");
-  const timeDiffMin = a.diff(b, "minutes");
-
-  console.log(timeDiffSec);
-  console.log(timeDiffMin);
 
   const oneTimeDiff = 59 - timeDiffSec;
 
@@ -52,11 +46,7 @@ const renderTime = ({ remainingTime }) => {
 
 export default function Spinner() {
   const { slug, oneTimeDiff } = useLoaderData();
-  const { timeDiffSec } = usePolling<LoaderData>(
-    `/game/${slug}/spinner`,
-    useLoaderData<LoaderData>(),
-    1000
-  );
+  usePolling(`/game/${slug}/spinner`, useLoaderData(), 1000);
 
   return (
     <>

@@ -39,17 +39,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const gameId = game.id;
   const gameStatus = game.isStarted;
   const status = gameStatus;
-  console.log(status);
 
   //get movie's unique id
   const movie = await db.movie.findUnique({
     where: { id: data.movies[0].id },
   });
   if (!movie) throw new Error("Movie not found");
-
-  // const movieObjFromBaseTable = await db.moviebase.findMany({
-  //   select: { id: true, title: true, tmdbid: true },
-  // });
 
   const movieObj = await db.movie.findMany({
     select: { id: true, title: true, tmdbid: true },
@@ -58,13 +53,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const allMovies = movieObj.map((item) => {
     return item;
   });
-
-  const allTitles = movieObj.map((item) => {
-    return item.title;
-  });
-
-  console.log(allTitles);
-  console.log(allMovies);
 
   if (!status) {
     //insert all movies in MovieScore table
@@ -104,41 +92,34 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   } = gamePlayers;
   const playersArr = Object.values(playersObj);
 
-  //get ordered list of movies
-  const movieList = {
-    movies: await db.movieScore.findMany({
-      where: { game },
-      select: { id: true, position: true },
-      orderBy: {
-        position: "asc",
-      },
-    }),
-  };
+  // //get ordered list of movies
+  // const movieList = {
+  //   movies: await db.movieScore.findMany({
+  //     where: { game },
+  //     select: { id: true, position: true },
+  //     orderBy: {
+  //       position: "asc",
+  //     },
+  //   }),
+  // };
 
-  const movieQueue = await db.movieScore.findMany({
-    where: {
-      game: { id: game.id },
-      AND: [
-        {
-          movie: { id: params.movieId },
-        },
-      ],
-    },
-  });
-
-  console.log("current movie position:");
-  console.log(movieQueue[0].position);
+  // const movieQueue = await db.movieScore.findMany({
+  //   where: {
+  //     game: { id: game.id },
+  //     AND: [
+  //       {
+  //         movie: { id: params.movieId },
+  //       },
+  //     ],
+  //   },
+  // });
 
   return { data, player, slug, playersArr, status };
 };
 
 export default function Lobby() {
   const { slug } = useLoaderData();
-  const { data, player, playersArr, status } = usePolling<LoaderData>(
-    `/game/${slug}/lobby`,
-    useLoaderData<LoaderData>(),
-    1000
-  );
+  usePolling(`/game/${slug}/lobby`, useLoaderData(), 1000);
 
   const handleShareButton = () => {
     // Check if navigator.share is supported by the browser
@@ -146,9 +127,6 @@ export default function Lobby() {
       console.log("Congrats! Your browser supports Web Share API");
       navigator
         .share({
-          //get link game lobby
-          //url: `/game/${slug}/lobby`,
-          //only code for now
           title: `Your token: ${slug}`,
           text: "Follow the link, join the game, enter the token.",
           url: `/`,
